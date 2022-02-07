@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">birds-of-a-feather-team-20</string>
+    <string name="enter_name">Enter Name</string>
+
+    <string name="enter_url">Enter Photo URL</string>
+    <string name="home">Home</string>
+
+
+
 </resources>

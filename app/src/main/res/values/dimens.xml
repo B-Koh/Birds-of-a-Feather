@@ -1,3 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="small">20sp</dimen>
+    <dimen name="medium">40sp</dimen>
+    <dimen name="large">55sp</dimen>
+    <dimen name="regular">35sp</dimen>
+
 </resources>
