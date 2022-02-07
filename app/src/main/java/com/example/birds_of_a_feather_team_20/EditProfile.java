@@ -16,9 +16,6 @@ public class EditProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         getNameAndURL();;
-//        MyProfile myProfile = new MyProfile(name, photoURL);
-//        myProfile.setName(name);
-//        myProfile.setPhotoURL(photoURL);
 
     }
     public void onHomeClicked(View view) {
