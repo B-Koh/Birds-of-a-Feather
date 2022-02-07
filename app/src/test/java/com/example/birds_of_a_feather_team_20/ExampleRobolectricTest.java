@@ -43,8 +43,8 @@ public class ExampleRobolectricTest {
         });*/
     }
 
-//    @Test
-//    public void testFail() {
-//        assert false;
-//    }
+    @Test
+    public void testFail() {
+        assert false;
+    }
 }
