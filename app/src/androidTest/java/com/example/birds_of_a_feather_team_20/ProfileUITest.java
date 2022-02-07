@@ -44,7 +44,7 @@ public class ProfileUITest {
     @Test
     public void profileUITest() {
         ViewInteraction materialButton = onView(
-                allOf(withId(R.id.button), withText("Launch Profile"),
+                allOf(withId(R.id.launch_profile_button), withText("Launch Profile"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -64,7 +64,7 @@ public class ProfileUITest {
         appCompatEditText.perform(replaceText("George W. Bush"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.photoURL_textview),
+                allOf(withId(R.id.photo_url_textview),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -74,7 +74,7 @@ public class ProfileUITest {
         appCompatEditText2.perform(replaceText("www.wikipedia.com"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.photoURL_textview), withText("www.wikipedia.com"),
+                allOf(withId(R.id.photo_url_textview), withText("www.wikipedia.com"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -94,7 +94,7 @@ public class ProfileUITest {
         materialButton2.perform(click());
 
         ViewInteraction materialButton3 = onView(
-                allOf(withId(R.id.button), withText("Launch Profile"),
+                allOf(withId(R.id.launch_profile_button), withText("Launch Profile"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -103,16 +103,6 @@ public class ProfileUITest {
                         isDisplayed()));
         materialButton3.perform(click());
 
-        ViewInteraction appCompatEditText4 = onView(
-                allOf(withId(R.id.name_textview), withText("George W. Bush"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatEditText4.perform(click());
-
         ViewInteraction editText = onView(
                 allOf(withId(R.id.name_textview), withText("George W. Bush"),
                         withParent(withParent(withId(android.R.id.content))),
@@ -120,7 +110,7 @@ public class ProfileUITest {
         editText.check(matches(withText("George W. Bush")));
 
         ViewInteraction editText2 = onView(
-                allOf(withId(R.id.photoURL_textview), withText("www.wikipedia.com"),
+                allOf(withId(R.id.photo_url_textview), withText("www.wikipedia.com"),
                         withParent(withParent(withId(android.R.id.content))),
                         isDisplayed()));
         editText2.check(matches(withText("www.wikipedia.com")));

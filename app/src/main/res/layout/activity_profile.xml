@@ -22,7 +22,7 @@
         app:layout_constraintVertical_bias="0.389" />
 
     <EditText
-        android:id="@+id/photoURL_textview"
+        android:id="@+id/photo_url_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"

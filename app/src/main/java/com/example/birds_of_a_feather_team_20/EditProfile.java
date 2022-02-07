@@ -1,7 +1,6 @@
 package com.example.birds_of_a_feather_team_20;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -17,7 +16,9 @@ public class EditProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        getNameAndURL();
+
+        getNameAndURL();;
+
     }
 
     public void onHomeClicked(View view) {
@@ -37,10 +38,10 @@ public class EditProfile extends AppCompatActivity {
         name = MyProfile.singleton(getApplicationContext()).getName();
         nameView.setText(name);
 
-        TextView urlView = (TextView)findViewById(R.id.photoURL_textview);
+
+        TextView urlView = (TextView)findViewById(R.id.photo_url_textview);
         photoURL = MyProfile.singleton(getApplicationContext()).getPhotoURL();
         urlView.setText(photoURL);
-
     }
 
 
@@ -49,11 +50,8 @@ public class EditProfile extends AppCompatActivity {
         name = nameView.getText().toString();
         MyProfile.singleton(getApplicationContext()).setName(name);
 
-        TextView urlView = (TextView)findViewById(R.id.photoURL_textview);
+        TextView urlView = (TextView)findViewById(R.id.photo_url_textview);
         photoURL = urlView.getText().toString();
         MyProfile.singleton(getApplicationContext()).setPhotoURL(photoURL);
-
     }
-
-
 }
