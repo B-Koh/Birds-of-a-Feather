@@ -98,17 +98,22 @@ public class ProfileUITest {
                         isDisplayed()));
         materialButton3.perform(click());
 
-        ViewInteraction editText = onView(
-                allOf(withId(R.id.name_textview), withText("George W. Bush"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        editText.check(matches(withText("George W. Bush")));
+//        ViewInteraction editText = onView(
+//                allOf(withId(R.id.name_textview), withText("George W. Bush"),
+//                        withParent(withParent(withId(android.R.id.content))),
+//                        isDisplayed()));
+//        editText.check(matches(withText("George W. Bush")));
+//
+//        ViewInteraction editText2 = onView(
+//                allOf(withId(R.id.photo_url_textview), withText("www.wikipedia.com"),
+//                        withParent(withParent(withId(android.R.id.content))),
+//                        isDisplayed()));
+//        editText2.check(matches(withText("www.wikipedia.com")));
 
-        ViewInteraction editText2 = onView(
-                allOf(withId(R.id.photo_url_textview), withText("www.wikipedia.com"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        editText2.check(matches(withText("www.wikipedia.com")));
+        onView(withId(R.id.name_textview)).check(matches(withText("George W. Bush")));
+        onView(withId(R.id.photo_url_textview)).check(matches(withText("www.wikipedia.com")));
+
+
     }
 
     private static Matcher<View> childAtPosition(
