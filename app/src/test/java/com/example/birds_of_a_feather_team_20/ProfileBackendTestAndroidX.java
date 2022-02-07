@@ -22,7 +22,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 @RunWith(RobolectricTestRunner.class)
-public class ExampleRobolectricTest {
+public class ProfileBackendTestAndroidX {
 //    public ActivityScenarioRule<MainActivity> scenarioRule;
 //
 //    @Before
@@ -31,23 +31,23 @@ public class ExampleRobolectricTest {
 //    }
 //
 
-    @Test
+    /*@Test
     public void testSucceed() {
         try(ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             scenario.onActivity(activity -> {
                 assert true;
             });
         }
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void testFail() {
         try(ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             scenario.onActivity(activity -> {
                 assert false;
             });
         }
-    }
+    }*/
 
     @Test
     public void testBasicProfile() {
@@ -67,33 +67,25 @@ public class ExampleRobolectricTest {
                 MyProfile.singleton(activity.getApplicationContext()).setPhotoURL("https://upload.wikimedia.org/wikipedia/commons/d/d4/George-W-Bush.jpeg");
                 assertEquals(MyProfile.singleton(activity.getApplicationContext()).getName(), "George W. Bush");
                 assertEquals(MyProfile.singleton(activity.getApplicationContext()).getPhotoURL(), "https://upload.wikimedia.org/wikipedia/commons/d/d4/George-W-Bush.jpeg");
+                MyProfile.singleton(activity.getApplicationContext()).setName(null);
+                MyProfile.singleton(activity.getApplicationContext()).setPhotoURL(null);
             });
         }
-//        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-//        MyProfile.singleton(appContext).setName("George W. Bush");
-//        MyProfile.singleton(appContext).setPhotoURL("https://upload.wikimedia.org/wikipedia/commons/d/d4/George-W-Bush.jpeg");
-//        assertEquals(MyProfile.singleton(appContext).getName(), "George W. Bush");
-//        assertEquals(MyProfile.singleton(appContext).getPhotoURL(), "https://upload.wikimedia.org/wikipedia/commons/d/d4/George-W-Bush.jpeg");
     }
     @Test
     public void testSharedPreferences() {
         try(ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             scenario.onActivity(activity -> {
-//                assert true;
                 Profile profile = MyProfile.singleton(activity.getApplicationContext());
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
                 // Check that "name" and "photo_url" keys haven't changed
-                assertEquals(profile.getName(), prefs.getString("name", null));
                 profile.setName("Barack Obama");
+                MyProfile.singleton(activity.getApplicationContext()).setName("Barack Obama");
                 assertEquals(prefs.getString("name", "default"), "Barack Obama");
                 profile.setPhotoURL("https://upload.wikimedia.org/wikipedia/commons/8/8d/President_Barack_Obama.jpg");
                 assertEquals(prefs.getString("photo_url", "default"), "https://upload.wikimedia.org/wikipedia/commons/8/8d/President_Barack_Obama.jpg");
                 assertEquals(profile.getPhotoURL(), "https://upload.wikimedia.org/wikipedia/commons/8/8d/President_Barack_Obama.jpg");
             });
         }
-
-
-//        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-
     }
 }
