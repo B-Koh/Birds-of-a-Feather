@@ -36,13 +36,13 @@ import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class ProfileUITest {
+public class ProfileUITest2 {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void profileUITest() {
+    public void profileUITest2() {
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.launch_profile_button), withText("Launch Profile"),
                         childAtPosition(
@@ -61,7 +61,7 @@ public class ProfileUITest {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("George W. Bush"), closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("George B"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.photo_url_textview),
@@ -72,16 +72,6 @@ public class ProfileUITest {
                                 1),
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("www.wikipedia.com"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.photo_url_textview), withText("www.wikipedia.com"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        appCompatEditText3.perform(pressImeActionButton());
 
         ViewInteraction materialButton2 = onView(
                 allOf(withId(R.id.home_button), withText("Home"),
@@ -103,6 +93,76 @@ public class ProfileUITest {
                         isDisplayed()));
         materialButton3.perform(click());
 
+        ViewInteraction appCompatEditText3 = onView(
+                allOf(withId(R.id.name_textview), withText("George B"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        appCompatEditText3.perform(replaceText("George W. Bush"));
+
+        ViewInteraction appCompatEditText4 = onView(
+                allOf(withId(R.id.name_textview), withText("George W. Bush"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        appCompatEditText4.perform(closeSoftKeyboard());
+
+        ViewInteraction appCompatEditText5 = onView(
+                allOf(withId(R.id.photo_url_textview), withText("www.wikipedia.com"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
+                        isDisplayed()));
+        appCompatEditText5.perform(replaceText("www.wikipedia.org"));
+
+        ViewInteraction appCompatEditText6 = onView(
+                allOf(withId(R.id.photo_url_textview), withText("www.wikipedia.org"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
+                        isDisplayed()));
+        appCompatEditText6.perform(closeSoftKeyboard());
+
+        ViewInteraction appCompatEditText7 = onView(
+                allOf(withId(R.id.photo_url_textview), withText("www.wikipedia.org"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
+                        isDisplayed()));
+        appCompatEditText7.perform(pressImeActionButton());
+
+        ViewInteraction materialButton4 = onView(
+                allOf(withId(R.id.home_button), withText("Home"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        materialButton4.perform(click());
+
+        ViewInteraction materialButton5 = onView(
+                allOf(withId(R.id.launch_profile_button), withText("Launch Profile"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        materialButton5.perform(click());
+
 //        ViewInteraction editText = onView(
 //                allOf(withId(R.id.name_textview), withText("George W. Bush"),
 //                        withParent(withParent(withId(android.R.id.content))),
@@ -110,13 +170,14 @@ public class ProfileUITest {
 //        editText.check(matches(withText("George W. Bush")));
 //
 //        ViewInteraction editText2 = onView(
-//                allOf(withId(R.id.photo_url_textview), withText("www.wikipedia.com"),
+//                allOf(withId(R.id.photo_url_textview), withText("www.wikipedia.org"),
 //                        withParent(withParent(withId(android.R.id.content))),
 //                        isDisplayed()));
-//        editText2.check(matches(withText("www.wikipedia.com")));
+//        editText2.check(matches(withText("www.wikipedia.org")));
 
         onView(withId(R.id.name_textview)).check(matches(withText("George W. Bush")));
-        onView(withId(R.id.photo_url_textview)).check(matches(withText("www.wikipedia.com")));
+        onView(withId(R.id.photo_url_textview)).check(matches(withText("www.wikipedia.org")));
+
     }
 
     private static Matcher<View> childAtPosition(
