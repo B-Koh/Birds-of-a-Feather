@@ -117,17 +117,6 @@ public class ProfileUITest {
 
         onView(withId(R.id.name_textview)).check(matches(withText("George W. Bush")));
         onView(withId(R.id.photo_url_textview)).check(matches(withText("www.wikipedia.com")));
-
-
-<<<<<<< HEAD
-=======
-        ViewInteraction editText2 = onView(
-                allOf(withId(R.id.photo_url_textview), withText("www.wikipedia.com"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        editText2.check(matches(withText("www.wikipedia.com")));
-
->>>>>>> 1cd0682f405015c6e93a2442444237d11e8c31c5
     }
 
     private static Matcher<View> childAtPosition(
