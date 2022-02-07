@@ -50,3 +50,4 @@ public class EditProfile extends AppCompatActivity {
         MyProfile.singleton(getApplicationContext()).setPhotoURL(photoURL);
     }
 }
+
