@@ -15,8 +15,7 @@ public class EditProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        getName();
-        getURL();;
+        getNameAndURL();;
 //        MyProfile myProfile = new MyProfile(name, photoURL);
 //        myProfile.setName(name);
 //        myProfile.setPhotoURL(photoURL);
@@ -33,20 +32,23 @@ public class EditProfile extends AppCompatActivity {
         saveProfile();
     }
 
-    public void getName(){
+    public void getNameAndURL(){
         TextView nameView = (TextView)findViewById(R.id.name_textview);
-        name = nameView.getText().toString();
+        name = MyProfile.singleton(getApplicationContext()).getName();
         nameView.setText(name);
-    }
 
-    public void getURL(){
         TextView urlView = (TextView)findViewById(R.id.photo_url_textview);
-        photoURL = urlView.getText().toString();
+        photoURL = MyProfile.singleton(getApplicationContext()).getPhotoURL();
         urlView.setText(photoURL);
     }
 
     public void saveProfile(){
+        TextView nameView = (TextView)findViewById(R.id.name_textview);
+        name = nameView.getText().toString();
         MyProfile.singleton(getApplicationContext()).setName(name);
+
+        TextView urlView = (TextView)findViewById(R.id.photo_url_textview);
+        photoURL = urlView.getText().toString();
         MyProfile.singleton(getApplicationContext()).setPhotoURL(photoURL);
     }
 }
