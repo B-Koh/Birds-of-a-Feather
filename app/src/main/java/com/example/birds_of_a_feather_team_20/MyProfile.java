@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * This class is an extension of Profile to represent the student using the app. For all other
  * students, use Profile. Call methods setName() and setPhotoURL() to change the profile data

@@ -2,9 +2,17 @@ package com.example.birds_of_a_feather_team_20;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.JsonReader;
+import android.util.JsonWriter;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 
 /**
  * This class is for representing student profiles. It stores the student's name and the URL to the
@@ -52,7 +60,7 @@ public class Profile {
      *
      * @return Uncompressed bitmap from URL if loading successful, null otherwise.
      */
-    public Bitmap getPhoto(){
+    public Bitmap getPhoto() {
         Bitmap photo; //Bitmap to return to user
 
         //Send provided URL to input stream
@@ -92,5 +100,64 @@ public class Profile {
         thumbnail = Bitmap.createScaledBitmap(fullPhoto, 256, 256, true);
 
         return thumbnail;
+    }
+
+    public String serialize() {
+        /*JSONObject json = new JSONObject();
+        String name = this.getName();
+        String url = this.getPhotoURL();
+        try {
+            json.put("name", name);
+            json.put("photo_url", url);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json.toString();*/
+        StringWriter out = new StringWriter();
+        JsonWriter writer = new JsonWriter(out);
+        try {
+            writer.beginObject();
+            writer.name("name").value(this.getName());
+            writer.name("photo_url").value(this.getPhotoURL());
+            writer.endObject();
+            writer.close();
+            return out.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void deserialize(String data) {
+        // https://developer.android.com/reference/android/util/JsonReader
+        StringReader in = new StringReader(data);
+        JsonReader reader = new JsonReader(in);
+        try {
+            // read name and URL
+            reader.beginObject();
+            while(reader.hasNext()) {
+                String key = reader.nextName();
+                switch (key) {
+                    case "name":
+                        this.setName(reader.nextString());
+//                        this.name = reader.nextString();
+                        break;
+                    case "photo_url":
+                        this.setPhotoURL(reader.nextString());
+//                        this.photoURL = reader.nextString();
+                        break;
+                    default:
+                        reader.skipValue();
+                        break;
+                }
+            }
+            reader.endObject();
+            // TODO read courses array
+            reader.close();
+        } catch (IOException e) {
+            // TODO Print toast notification
+            e.printStackTrace();
+        }
+        in.close();
     }
 }
