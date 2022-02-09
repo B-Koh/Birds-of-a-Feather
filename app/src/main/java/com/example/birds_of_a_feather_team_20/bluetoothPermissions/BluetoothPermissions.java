@@ -1,6 +1,7 @@
 package com.example.birds_of_a_feather_team_20.bluetoothPermissions;
 
 import static androidx.core.app.ActivityCompat.startActivityForResult;
+import static androidx.core.content.ContextCompat.checkSelfPermission;
 
 import android.Manifest;
 import android.app.Activity;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 /**
  * This class handles Bluetooth permissions when the app is launched. It should check if Bluetooth
@@ -43,7 +45,7 @@ public class BluetoothPermissions {
      */
     public boolean checkEnable() {
         // Checks if bluetooth is supported
-        if (checkSupport() == false) {
+        if (!checkSupport()) {
             return false;
         }
         return this.bt.isEnabled();
