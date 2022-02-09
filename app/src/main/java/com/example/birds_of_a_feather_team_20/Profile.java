@@ -126,7 +126,7 @@ public class Profile {
         try {
             writer.beginObject();
             writer.name("user_id").value(this.getId());
-            writer.name("name").value(this.getName()); // NOT SURE IF THIS WILL BE CALLED ON THE CHILD CLASS
+            writer.name("name").value(this.getName());
             writer.name("photo_url").value(this.getPhotoURL());
             writer.endObject();
             writer.close();
@@ -167,7 +167,6 @@ public class Profile {
             // TODO read courses array
             reader.close();
         } catch (IOException e) {
-            // TODO Print toast notification
             e.printStackTrace();
         }
         in.close();
