@@ -53,7 +53,7 @@ public class ProfileBackendTestAndroidX {
     public void testBasicProfile() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        Profile bill = new Profile("Bill Clinton", "https://upload.wikimedia.org/wikipedia/commons/d/d3/Bill_Clinton.jpg");
+        Profile bill = new Profile("Bill Clinton", "https://upload.wikimedia.org/wikipedia/commons/d/d3/Bill_Clinton.jpg", "fakeid");
         assertEquals(bill.getName(), "Bill Clinton");
         bill.setName("William Clinton");
         assertEquals(bill.getName(), "William Clinton");
@@ -92,7 +92,7 @@ public class ProfileBackendTestAndroidX {
     public void testSerialize() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        Profile bill = new Profile("Bill", "link");
+        Profile bill = new Profile("Bill", "link", "fakeid");
         assertEquals("{\"name\":\"Bill\",\"photo_url\":\"link\"}",bill.serialize());
     }
 
@@ -103,7 +103,7 @@ public class ProfileBackendTestAndroidX {
 //        Profile bill = new Profile("Bill", "link");
 //        assertEquals("{\"name\":\"Bill\",\"photo_url\":\"link\"}",bill.serialize());
 
-        Profile john = new Profile("","");
+        Profile john = new Profile("","", "fakeid");
         john.deserialize("{\"name\":\"John\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg\"}");
         assertEquals("John", john.getName());
         assertEquals("https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg", john.getPhotoURL());

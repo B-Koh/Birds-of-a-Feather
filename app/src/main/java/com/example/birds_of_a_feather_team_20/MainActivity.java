@@ -3,10 +3,18 @@ package com.example.birds_of_a_feather_team_20;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.bluetooth.BluetoothManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
+import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.messages.Message;
+import com.google.android.gms.nearby.messages.MessageListener;
+
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 //import com.google.android.gms.nearby.Nearby;
 //import com.google.android.gms.nearby.messages.Message;
@@ -21,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Find Friends");
         MyProfile.singleton(getApplicationContext());
 
+        final BluetoothManager manager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
+        String uniqueID = UUID.randomUUID().toString();
 //        setupNearbyMessage();
     }
 
@@ -29,11 +39,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /*private static final String TAG = "BIRDS OF A FEATHER!";
-    private Message mMessage;
-    private MessageListener mMessageListener;
+//    private static final String TAG = "BIRDS OF A FEATHER!";
+//    private Message mMessage;
+//    private MessageListener mMessageListener;
 
-    public void setupNearbyMessage() {
+    /*public void setupNearbyMessage() { // TODO will need to set up again (and maybe unpublish old + publish new) when the user changes their name or photoURL
         mMessageListener = new MessageListener() {
             @Override
             public void onFound(Message message) {
@@ -47,22 +57,24 @@ public class MainActivity extends AppCompatActivity {
         };
 
         // Need to construct a message with all the user's data
-        mMessage = new Message("Hello World".getBytes());
-//        mMessage = new
-    }
+        mMessage = new Message(MyProfile.singleton(getApplicationContext()).serialize()
+                .getBytes(StandardCharsets.UTF_8));
+    }*/
+
+    /* TODO
+    Need to make the serialization tests include the id thing.
+    Need to add to arraylist when the id is new.
+     */
 
     @Override
     protected void onStart() { // When is onStart invoked?
         super.onStart();
-
-        Nearby.getMessagesClient(this).publish(mMessage);
-        Nearby.getMessagesClient(this).subscribe(mMessageListener);
+        NearbyManager.startNearby(this);
     }
 
     @Override
-    protected void onStop() { // FIXME: we may want to continue publishing, per the directions
-        Nearby.getMessagesClient(this).unpublish(mMessage);
-        Nearby.getMessagesClient(this).unsubscribe(mMessageListener);
+    protected void onStop() {
+        NearbyManager.stopNearby(this);
         super.onStop();
-    }*/
+    }
 }

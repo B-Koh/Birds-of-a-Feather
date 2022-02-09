@@ -19,17 +19,22 @@ import java.io.StringWriter;
  * student's profile photo. This will eventually contain a List of the student's courses too.
  */
 public class Profile {
+    private String id;
     private String name;
     private String photoURL;
     private Bitmap thumbnail; //Compressed image from URL
     // private List<Course> courses; // TODO
 
 
-    public Profile(String name, String photoURL) {
+    public Profile(String name, String photoURL, String id) {
         this.name = name;
         this.photoURL = photoURL;
+        this.id = id;
     }
 
+    public String getId() {
+        return id;
+    }
     public String getName() {
         return name;
     }
@@ -40,6 +45,9 @@ public class Profile {
         this.name = name;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
     public void setPhotoURL(String photoURL) {
         // If url has been updated, reset the thumbnail
         if(this.photoURL == null || this.photoURL.equals(photoURL) == false) {
@@ -117,7 +125,8 @@ public class Profile {
         JsonWriter writer = new JsonWriter(out);
         try {
             writer.beginObject();
-            writer.name("name").value(this.getName());
+            writer.name("user_id").value(this.getId());
+            writer.name("name").value(this.getName()); // NOT SURE IF THIS WILL BE CALLED ON THE CHILD CLASS
             writer.name("photo_url").value(this.getPhotoURL());
             writer.endObject();
             writer.close();
@@ -138,6 +147,9 @@ public class Profile {
             while(reader.hasNext()) {
                 String key = reader.nextName();
                 switch (key) {
+                    case "user_id":
+                        this.setId(reader.nextString());
+                        break;
                     case "name":
                         this.setName(reader.nextString());
 //                        this.name = reader.nextString();

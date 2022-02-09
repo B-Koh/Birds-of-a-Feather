@@ -53,5 +53,6 @@ public class EditProfile extends AppCompatActivity {
         TextView urlView = (TextView)findViewById(R.id.photo_url_textview);
         photoURL = urlView.getText().toString();
         MyProfile.singleton(getApplicationContext()).setPhotoURL(photoURL);
+        //getApplicationContext().update
     }
 }
