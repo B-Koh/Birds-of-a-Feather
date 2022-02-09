@@ -12,14 +12,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 
 public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapter.ViewHolder> {
     private final List<Profile> profiles;
+    private static MainActivity mainContext;
 
     public ProfilesViewAdapter(List<Profile> profilesList) {
         super();
         this.profiles = profilesList;
+    }
+
+    public static void update(MainActivity main) {
+        mainContext = main;
     }
 
     @NonNull
@@ -66,11 +74,20 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
         }
 
         public void setProfile(Profile profile, int index) {
-            this.index = index;
-            this.profile = profile;
-            this.profileNameText.setText(profile.getName());
-            this.urlText.setText(profile.getPhotoURL());
-            this.photo.setImageBitmap(profile.getThumbnail());
+            ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
+
+            // Refresh on background thread
+            Future<Void> future = backgroundThreadExecutor.submit(() -> {
+                profile.getThumbnail();
+                mainContext.runOnUiThread(() -> {
+                    this.index = index;
+                    this.profile = profile;
+                    this.profileNameText.setText(profile.getName());
+                    this.urlText.setText(profile.getPhotoURL());
+                    this.photo.setImageBitmap(profile.getThumbnail());
+                });
+                return null;
+            });
         }
 
         @Override
@@ -81,5 +98,7 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
 //            intent.putExtra("index_in_profilesList", this.index);
 //            context.startActivity(intent);
         }
+
+
     }
 }

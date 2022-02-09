@@ -22,15 +22,15 @@ public class EditProfile extends AppCompatActivity {
     }
 
     public void onHomeClicked(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
+        saveProfile();
         finish();
     }
 
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        saveProfile();
     }
 
     public void getNameAndURL() {

@@ -30,6 +30,7 @@ public class Profile {
 
 
     public Profile(String name, String photoURL, String id) {
+//        Log.e("New PROFILE", name + " | " + photoURL);
         this.name = name;
         this.photoURL = photoURL;
         this.id = id;
@@ -53,11 +54,11 @@ public class Profile {
     }
     public void setPhotoURL(String photoURL) {
         // If url has been updated, reset the thumbnail
-        if(this.photoURL == null || !this.photoURL.equals(photoURL)) {
-            this.photoURL = photoURL;
-            this.thumbnail = null; //thumbnail must be null for getThumbnail to update it.
-            getThumbnail();
-        }
+//        if(this.photoURL == null || !this.photoURL.equals(photoURL)) {
+//            this.photoURL = photoURL;
+//            this.thumbnail = null; //thumbnail must be null for getThumbnail to update it.
+//            getThumbnail();
+//        }
         // Otherwise, update just the URL.
         this.photoURL = photoURL;
     }
@@ -80,7 +81,7 @@ public class Profile {
             photo = BitmapFactory.decodeStream(photoURLstream);
 
             photoURLstream.close();
-            Log.e("Download Photo - Succeed", "Downloaded " + getPhotoURL());
+            Log.i("Download Photo - Succeed", "Downloaded " + getPhotoURL());
             return photo;
         } catch(Exception e){
             //Possible exception if photoURL is not a URL, return null

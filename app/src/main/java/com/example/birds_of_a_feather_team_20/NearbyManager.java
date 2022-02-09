@@ -9,12 +9,16 @@ import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Queue;
+import java.util.Stack;
+import java.util.concurrent.ArrayBlockingQueue;
 
 public class NearbyManager {
-    private static final String TAG = "BIRDS OF A FEATHER!";
     private static Message profileMessage;
     private static MessageListener messageListener;
     public static ArrayList<Profile> nearbyProfiles;
+    public static Stack<Integer> additions;
+    public static Stack<Integer> modifications;
 
     /**
      * Just for debugging purposes
@@ -23,6 +27,8 @@ public class NearbyManager {
 
     public static void startNearby(Context context) {
         updateMessage(context);
+        Log.e("Broadcasting Name", MyProfile.singleton(context).getName());
+        Log.e("Broadcasting Message", new String(profileMessage.getContent()));
         Nearby.getMessagesClient(context.getApplicationContext()).publish(profileMessage);
         Nearby.getMessagesClient(context.getApplicationContext()).subscribe(messageListener);
     }
@@ -31,31 +37,47 @@ public class NearbyManager {
         Nearby.getMessagesClient(context.getApplicationContext()).unsubscribe(messageListener);
     }
     protected static void recordProfile(Profile profile) {
-        for (Profile p : nearbyProfiles) {
+        for (int i = 0, nearbyProfilesSize = nearbyProfiles.size(); i < nearbyProfilesSize; i++) {
+            Profile p = nearbyProfiles.get(i);
             if (p.getId().equals(profile.getId())) {
-                p.setName(profile.getName()); // update name if id matches
-                p.setPhotoURL(profile.getPhotoURL()); // update url if id matches
+                if (!p.getName().equals(profile.getName()) || !p.getPhotoURL().equals(profile.getPhotoURL())) {
+                    Log.i("Update existing profile", p.getName());
+                    modifications.add(i);
+                    p.setName(profile.getName()); // update name if id matches
+                    p.setPhotoURL(profile.getPhotoURL()); // update url if id matches
+                }
+//                p.getThumbnail(); // FIXME cannot do this here
+                // Don't want to notify the recycler if nothing changed (because it will play an animation)
                 return;
             }
         }
+        Log.i("Adding to List", profile.getName());
+        additions.add(nearbyProfiles.size());
         nearbyProfiles.add(profile); // no profile with this id, so add it
+//        profile.getThumbnail(); // FIXME cannot do this here
     }
     protected static void updateMessage(Context context) {
         if (nearbyProfiles == null) {
             nearbyProfiles = new ArrayList<Profile>();
         }
+        if (additions == null) {
+            additions = new Stack<>();
+        }
+        if (modifications == null) {
+            modifications = new Stack<>();
+        }
         if (messageListener == null) {
             messageListener = new MessageListener() {
                 @Override
                 public void onFound(Message message) {
-                    Log.d(TAG, "Found message: " + new String(message.getContent()));
+                    Log.d("    NEARBY", "Found message: " + new String(message.getContent()));
                     Profile foundProfile = new Profile(null,null, null);
                     foundProfile.deserialize(new String(message.getContent()));
                     recordProfile(foundProfile);
                 }
                 @Override
                 public void onLost(Message message) {
-                    Log.d(TAG, "Lost sight of message: " + new String(message.getContent()));
+                    Log.d("    NEARBY", "Lost sight of message: " + new String(message.getContent()));
                 }
             };
         }
