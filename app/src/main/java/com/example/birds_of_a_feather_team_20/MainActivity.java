@@ -3,7 +3,6 @@ package com.example.birds_of_a_feather_team_20;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.bluetooth.BluetoothManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,9 +28,6 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Find Friends");
         MyProfile.singleton(getApplicationContext());
 
-        final BluetoothManager manager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
-        String uniqueID = UUID.randomUUID().toString();
-//        setupNearbyMessage();
     }
 
     public void onLaunchProfileClicked(View view) {

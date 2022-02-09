@@ -45,12 +45,12 @@ public class Profile {
         this.name = name;
     }
 
-    public void setId(String id) {
+    private void setId(String id) {
         this.id = id;
     }
     public void setPhotoURL(String photoURL) {
         // If url has been updated, reset the thumbnail
-        if(this.photoURL == null || this.photoURL.equals(photoURL) == false) {
+        if(this.photoURL == null || !this.photoURL.equals(photoURL)) {
             this.photoURL = photoURL;
             this.thumbnail = null; //thumbnail must be null for getThumbnail to update it.
             getThumbnail();

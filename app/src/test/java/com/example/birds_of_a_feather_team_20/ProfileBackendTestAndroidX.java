@@ -93,7 +93,7 @@ public class ProfileBackendTestAndroidX {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
         Profile bill = new Profile("Bill", "link", "fakeid");
-        assertEquals("{\"name\":\"Bill\",\"photo_url\":\"link\"}",bill.serialize());
+        assertEquals("{\"user_id\":\"fakeid\",\"name\":\"Bill\",\"photo_url\":\"link\"}",bill.serialize());
     }
 
     @Test
