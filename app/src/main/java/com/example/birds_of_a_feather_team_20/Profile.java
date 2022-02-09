@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.util.JsonReader;
 import android.util.JsonWriter;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +23,9 @@ public class Profile {
     private String id;
     private String name;
     private String photoURL;
+
     private Bitmap thumbnail; //Compressed image from URL
+    public String lastDownloadedURL;
     // private List<Course> courses; // TODO
 
 
@@ -70,7 +73,6 @@ public class Profile {
      */
     public Bitmap getPhoto() {
         Bitmap photo; //Bitmap to return to user
-
         //Send provided URL to input stream
         try {
             InputStream photoURLstream = new java.net.URL(photoURL).openStream();
@@ -78,9 +80,11 @@ public class Profile {
             photo = BitmapFactory.decodeStream(photoURLstream);
 
             photoURLstream.close();
+            Log.e("Download Photo - Succeed", "Downloaded " + getPhotoURL());
             return photo;
         } catch(Exception e){
             //Possible exception if photoURL is not a URL, return null
+            Log.e("Download Photo - Fail", "Couldn't download " + getPhotoURL());
             e.printStackTrace();
         }
         return null;
@@ -97,7 +101,8 @@ public class Profile {
     public Bitmap getThumbnail(){
         // If thumbnail is set (and URL has not been changed since the thumbnail was set), returns
         // existing thumbnail.
-        if(thumbnail != null) return thumbnail;
+        String thisURL = getPhotoURL();
+        if(thumbnail != null && thisURL.equals(lastDownloadedURL)) return thumbnail;
 
         // Download fullsized image, for compression
         Bitmap fullPhoto = getPhoto();
@@ -106,7 +111,7 @@ public class Profile {
 
         //Compress (or extend) image such that result is 256 by 256.
         thumbnail = Bitmap.createScaledBitmap(fullPhoto, 256, 256, true);
-
+        lastDownloadedURL = thisURL;
         return thumbnail;
     }
 
