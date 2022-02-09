@@ -43,22 +43,23 @@ public class MainActivity extends AppCompatActivity {
 
 
             while (true) {
-//                sendFakeMessage("{\"user_id\":\"fakeid\",\"name\":\"John F. Kennedy\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg\"}");
-//                runOnUiThread(this::updateList);
+                // Keep this loop
+                updateThumbnailsBackground();
+                runOnUiThread(this::updateList);
                 Thread.sleep(3000);
 
-                // Send some fake messages for UI testing
+                // JUST FOR TESTING: Send some fake messages for UI testing
                 sendFakeMessage("{\"user_id\":\"fakeid\",\"name\":\"John F. Kennedy\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg\"}");
+                updateThumbnailsBackground();
                 runOnUiThread(this::updateList);
                 Thread.sleep(3000);
+
                 sendFakeMessage("{\"user_id\":\"fakeid1\",\"name\":\"Barack Obama\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/8/8d/President_Barack_Obama.jpg\"}");
+                updateThumbnailsBackground();
                 runOnUiThread(this::updateList);
                 Thread.sleep(3000);
+
                 sendFakeMessage("{\"user_id\":\"fakeid2\",\"name\":\"Richard Nixon\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/2/2c/Richard_Nixon_presidential_portrait_(1).jpg\"}");
-                runOnUiThread(this::updateList);
-                Thread.sleep(3000);
-                //sendFakeMessage("{\"user_id\":\"fakeid1\",\"name\":\"Barack H. Obama\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/8/8d/President_Barack_Obama.jpg\"}");
-                //runOnUiThread(this::updateList);
             }
         });
     }
@@ -69,11 +70,11 @@ public class MainActivity extends AppCompatActivity {
         NearbyManager.getMessageListener().onLost(message);
     }
 
-    private void updateList() {
+    public void updateList() {
 //        basicRecycler = findViewById(R.id.profile_list);
 //        layoutManager = new LinearLayoutManager(this);
 //        basicRecycler.setLayoutManager(layoutManager);
-        adapter.update(this);
+        ProfilesViewAdapter.update(this);
         while(!NearbyManager.modifications.isEmpty()) {
             Integer i = NearbyManager.modifications.pop();
             if (i != null)
@@ -84,12 +85,25 @@ public class MainActivity extends AppCompatActivity {
             if (i != null)
                 adapter.notifyItemInserted(i);
         }
-
-
 //        adapter.notifyDataSetChanged();
 //        adapter = new ProfilesViewAdapter(NearbyManager.nearbyProfiles);
 //        basicRecycler.setAdapter(adapter);
     }
+
+    void updateThumbnailsBackground() {
+//        return;
+//        ProfilesViewAdapter.update(this);
+        for(Integer i : NearbyManager.modifications) {
+            if (i != null)
+                NearbyManager.nearbyProfiles.get(i).getThumbnail();
+        }
+        for(Integer i : NearbyManager.additions) {
+            if (i != null)
+                NearbyManager.nearbyProfiles.get(i).getThumbnail();
+        }
+    }
+
+
     RecyclerView basicRecycler;
     RecyclerView.LayoutManager layoutManager;
 

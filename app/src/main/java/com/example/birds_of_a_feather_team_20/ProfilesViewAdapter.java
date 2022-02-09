@@ -85,6 +85,7 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
                     this.profileNameText.setText(profile.getName());
                     this.urlText.setText(profile.getPhotoURL());
                     this.photo.setImageBitmap(profile.getThumbnail());
+//                    mainContext.updateList();
                 });
                 return null;
             });

@@ -29,6 +29,12 @@ public class EditProfile extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        saveProfile();
+        super.onBackPressed();
+    }
+
+    @Override
     protected void onDestroy(){
         super.onDestroy();
     }
