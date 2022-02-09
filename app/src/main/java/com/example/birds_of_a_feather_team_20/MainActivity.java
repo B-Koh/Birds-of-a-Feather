@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
 
     // Bluetooth fields
     private static final int REQUEST_ENABLE_BT = 100;
-
     private static final String[] PERMISSIONS = new String[]{
             //Manifest.permission.BLUETOOTH,
             Manifest.permission.BLUETOOTH_SCAN,
@@ -32,25 +31,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        // Check Android version for bt
+        // Checks Android version
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            // Checks if permission has not been granted
             checkPermission(PERMISSIONS, REQUEST_ENABLE_BT);
         }
 
+        // ActivityResult for bluetooth from user
         ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
+                    // Checks whether user granted/denied bluetooth
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        // There are no request codes
-                        // Intent data = result.getData();
+                        // Don't do anything
                     }
                     else {
                         Toast.makeText(MainActivity.this," Bluetooth is off", Toast.LENGTH_LONG).show();
                     }
                 });
 
-        // Checks if Bluetooth has been granted
+        // Checks if Bluetooth permission has been granted
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
             // Checks if bluetooth is disabled
             if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
@@ -79,24 +78,22 @@ public class MainActivity extends AppCompatActivity {
      */
     public void checkPermission(String[] permission, int requestCode) {
         for (String i : permission) {
-            // Checks if permission is denied
+            // Requests permission if denied
             if (ContextCompat.checkSelfPermission(MainActivity.this, i) == PackageManager.PERMISSION_DENIED) {
-                // Asks for permission
                 ActivityCompat.requestPermissions(MainActivity.this, permission, requestCode);
             }
             // Case for when permission is granted
             else {
-                // Feedback
                 Toast.makeText(MainActivity.this, i + " already granted", Toast.LENGTH_LONG).show();
             }
         }
     }
 
     /**
-     *
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
+     * Handles result of User input
+     * @param requestCode - Code unique to enabling Bluetooth permissions
+     * @param permissions - Bluetooth permissions that are being checked
+     * @param grantResults - Results from user
      */
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -108,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_ENABLE_BT) {
             // For each permission, check if user granted/denied
             for (int i : grantResults) {
-                // Checks if permission was denied
                 if (i == PackageManager.PERMISSION_DENIED) {
                     Toast.makeText(MainActivity.this,"Bluetooth Permission required. App will not function as intended.", Toast.LENGTH_LONG).show();
                 }
