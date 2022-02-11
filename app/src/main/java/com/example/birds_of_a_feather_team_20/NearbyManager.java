@@ -27,8 +27,8 @@ public class NearbyManager {
 
     public static void startNearby(Context context) {
         updateMessage(context);
-        Log.e("Broadcasting Name", MyProfile.singleton(context).getName());
-        Log.e("Broadcasting Message", new String(profileMessage.getContent()));
+//        Log.e("Broadcasting Name", MyProfile.singleton(context).getName());
+//        Log.e("Broadcasting Message", new String(profileMessage.getContent()));
         Nearby.getMessagesClient(context.getApplicationContext()).publish(profileMessage);
         Nearby.getMessagesClient(context.getApplicationContext()).subscribe(messageListener);
     }

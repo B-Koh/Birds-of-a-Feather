@@ -49,17 +49,17 @@ public class MainActivity extends AppCompatActivity {
                 Thread.sleep(3000);
 
                 // JUST FOR TESTING: Send some fake messages for UI testing
-                sendFakeMessage("{\"user_id\":\"fakeid\",\"name\":\"John F. Kennedy\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg\"}");
-                updateThumbnailsBackground();
-                runOnUiThread(this::updateList);
-                Thread.sleep(3000);
+//                sendFakeMessage("{\"user_id\":\"fakeid\",\"name\":\"John F. Kennedy\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg\"}");
+//                updateThumbnailsBackground();
+//                runOnUiThread(this::updateList);
+//                Thread.sleep(3000);
 
-                sendFakeMessage("{\"user_id\":\"fakeid1\",\"name\":\"Barack Obama\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/8/8d/President_Barack_Obama.jpg\"}");
-                updateThumbnailsBackground();
-                runOnUiThread(this::updateList);
-                Thread.sleep(3000);
-
-                sendFakeMessage("{\"user_id\":\"fakeid2\",\"name\":\"Richard Nixon\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/2/2c/Richard_Nixon_presidential_portrait_(1).jpg\"}");
+//                sendFakeMessage("{\"user_id\":\"fakeid1\",\"name\":\"Barack Obama\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/8/8d/President_Barack_Obama.jpg\"}");
+//                updateThumbnailsBackground();
+//                runOnUiThread(this::updateList);
+//                Thread.sleep(3000);
+//
+//                sendFakeMessage("{\"user_id\":\"fakeid2\",\"name\":\"Richard Nixon\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/2/2c/Richard_Nixon_presidential_portrait_(1).jpg\"}");
             }
         });
     }

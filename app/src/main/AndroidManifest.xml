@@ -11,7 +11,7 @@
         android:theme="@style/Theme.Birdsofafeatherteam20">
         <meta-data
             android:name="com.google.android.nearby.messages.API_KEY"
-            android:value="AIzaSyBTvJOog0n-AGjSXFUr7cHLMvcsUAGz6K4" />
+            android:value="AIzaSyDZWW95rUGD1MhyRL1OzS55OeBEGgSXKw4" />
         <activity
             android:name=".EditProfile"
             android:exported="false" />
