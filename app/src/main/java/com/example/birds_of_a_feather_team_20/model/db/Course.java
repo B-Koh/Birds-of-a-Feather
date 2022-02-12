@@ -56,7 +56,12 @@ public class Course {
         if (this == o) return true;
         if (!(o instanceof Course)) return false;
         Course course = (Course) o;
-        return year == course.year && Objects.equals(session, course.session) && Objects.equals(department, course.department) && Objects.equals(courseNumber, course.courseNumber);
+
+
+        return year == course.year
+                && session.replaceAll(" ", "").equalsIgnoreCase(course.session.replaceAll(" ", ""))
+                && department.replaceAll(" ", "").equalsIgnoreCase(course.department.replaceAll(" ", ""))
+                && courseNumber.replaceAll(" ", "").equalsIgnoreCase(course.courseNumber.replaceAll(" ", ""));
     }
 
     @Override
