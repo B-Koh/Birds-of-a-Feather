@@ -143,10 +143,17 @@ public class Profile {
         return null;
     }
 
-    public void deserialize(String data) {
+    /**
+     * Deserialize using JSON
+     */
+    public static Profile deserialize(String data) {
         // https://developer.android.com/reference/android/util/JsonReader
         StringReader in = new StringReader(data);
         JsonReader reader = new JsonReader(in);
+        String id = null;
+        String name = null;
+        String photoURL = null;
+        Profile profile = null;
         try {
             // read name and URL
             reader.beginObject();
@@ -154,15 +161,13 @@ public class Profile {
                 String key = reader.nextName();
                 switch (key) {
                     case "user_id":
-                        this.setId(reader.nextString());
+                        id = reader.nextString();
                         break;
                     case "name":
-                        this.setName(reader.nextString());
-//                        this.name = reader.nextString();
+                        name = reader.nextString();
                         break;
                     case "photo_url":
-                        this.setPhotoURL(reader.nextString());
-//                        this.photoURL = reader.nextString();
+                        photoURL = reader.nextString();
                         break;
                     default:
                         reader.skipValue();
@@ -172,9 +177,14 @@ public class Profile {
             reader.endObject();
             // TODO read courses array
             reader.close();
+            profile = new Profile(name, photoURL, id);
         } catch (IOException e) {
             e.printStackTrace();
         }
         in.close();
+        return profile;
     }
+//    public static Profile deserialize(byte[] data) {
+//        return deserialize(new String(data));
+//    }
 }

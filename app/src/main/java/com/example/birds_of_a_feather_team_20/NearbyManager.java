@@ -71,8 +71,7 @@ public class NearbyManager {
                 @Override
                 public void onFound(Message message) {
                     Log.d("    NEARBY", "Found message: " + new String(message.getContent()));
-                    Profile foundProfile = new Profile(null,null, null);
-                    foundProfile.deserialize(new String(message.getContent()));
+                    Profile foundProfile = Profile.deserialize(new String(message.getContent()));
                     recordProfile(foundProfile);
                 }
                 @Override

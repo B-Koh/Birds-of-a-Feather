@@ -8,8 +8,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
+import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
@@ -19,13 +22,76 @@ import java.util.concurrent.Future;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Message profileMessage;
+
+    private MessageListener profileMessageListener;
+
+    private static final boolean showDebugToast = true;
+
+    /**
+     * Print a Log message and also display a Toast notification
+     * @param str
+     */
+    private void toastLog(String str) {
+        Log.d("MainActivity", str);
+        if (!showDebugToast) return;
+        runOnUiThread(() -> {
+            Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void testOnCreate() {
+        profileMessage = new Message(MyProfile.singleton(this).serialize().getBytes(StandardCharsets.UTF_8));
+
+        profileMessageListener = new MessageListener() {
+            @Override
+            public void onFound(final Message message) {
+                String msgBody = new String(message.getContent());
+                toastLog("Found profile: " + msgBody);
+                onFoundProfile(msgBody);
+            }
+
+            @Override
+            public void onLost(final Message message) {
+                String msgBody = new String(message.getContent());
+                toastLog("Lost profile: " + msgBody);
+            }
+        };
+    }
+
+    private void subscribe() {
+        toastLog("Subscribing to nearby profiles...");
+        Nearby.getMessagesClient(this).subscribe(profileMessageListener);
+    }
+    private void unsubscribe() {
+        toastLog("Unsubscribing...");
+        Nearby.getMessagesClient(this).unsubscribe(profileMessageListener);
+    }
+    private void publish() {
+        toastLog("Publishing my profile...");
+        Nearby.getMessagesClient(this).publish(profileMessage).addOnFailureListener(e ->
+                toastLog("API Error!"));
+    }
+    private void unpublish() {
+        toastLog("Unpublishing...");
+        Nearby.getMessagesClient(this).unpublish(profileMessage);
+    }
+    private void onFoundProfile(String profileData) {
+        // A profile was received, now process it
+    }
+
+
+
+    //////// END REFACTORING
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Find Friends");
         MyProfile.singleton(getApplicationContext());
-        refreshProfileListRoutine();
+//        refreshProfileListRoutine();
+        testOnCreate();
     }
 
     private void refreshProfileListRoutine() {
@@ -91,8 +157,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void updateThumbnailsBackground() {
-//        return;
-//        ProfilesViewAdapter.update(this);
         for(Integer i : NearbyManager.modifications) {
             if (i != null)
                 NearbyManager.nearbyProfiles.get(i).getThumbnail();
@@ -118,8 +182,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         Log.i("START", "onStart");
         super.onStart();
-        NearbyManager.startNearby(this);
+//        NearbyManager.startNearby(this);
 
+        // FIXME TESTING
+        subscribe();
+        publish();
+        // END FIXME
 //        sendFakeMessage("{\"user_id\":\"fakeid\",\"name\":\"John F. Kennedy\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg\"}");
 
     }
@@ -127,7 +195,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         Log.i("STOP", "onStop");
-        NearbyManager.stopNearby(this);
+//        NearbyManager.stopNearby(this);
+
+        // FIXME TESTING
+        unsubscribe();
+        unpublish();
+        // END FIXME
         super.onStop();
     }
 }
