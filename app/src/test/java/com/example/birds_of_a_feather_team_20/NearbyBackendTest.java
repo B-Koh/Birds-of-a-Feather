@@ -24,16 +24,16 @@ public class NearbyBackendTest {
 
     private void sendMessage(MainActivity activity, String messageStr) {
         Message message = new Message(messageStr.getBytes(StandardCharsets.UTF_8));
-        activity.getProfileMessageListener().onFound(message);
-        activity.getProfileMessageListener().onLost(message);
+        activity.getNearbyManager().getProfileMessageListener().onFound(message);
+        activity.getNearbyManager().getProfileMessageListener().onLost(message);
     }
 
     @Test
     public void testFindingPerson() {
         try(ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             scenario.onActivity(activity -> {
-                activity.foundProfiles.clear();
-                assertEquals(0, activity.foundProfiles.size());
+                activity.getNearbyManager().foundProfiles.clear();
+                assertEquals(0, activity.getNearbyManager().foundProfiles.size());
 
                 Profile profile = MyProfile.singleton(activity.getApplicationContext());
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
@@ -41,8 +41,8 @@ public class NearbyBackendTest {
                 String messageStr = "{\"user_id\":\"fakeid\",\"name\":\"John\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg\"}";
 
                 sendMessage(activity, messageStr);
-                assertEquals(1, activity.foundProfiles.size());
-                Profile john = activity.foundProfiles.get(0);
+                assertEquals(1, activity.getNearbyManager().foundProfiles.size());
+                Profile john = activity.getNearbyManager().foundProfiles.get(0);
                 assertEquals("John", john.getName());
                 assertEquals("https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg", john.getPhotoURL());
                 assertEquals("fakeid", john.getId());
@@ -53,8 +53,8 @@ public class NearbyBackendTest {
     public void testFindingSeveralPeople() {
         try(ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             scenario.onActivity(activity -> {
-                activity.foundProfiles.clear();
-                assertEquals(0, activity.foundProfiles.size());
+                activity.getNearbyManager().foundProfiles.clear();
+                assertEquals(0, activity.getNearbyManager().foundProfiles.size());
 
                 Profile profile = MyProfile.singleton(activity.getApplicationContext());
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
@@ -64,15 +64,15 @@ public class NearbyBackendTest {
                 String messageStr3 = "{\"user_id\":\"fakeid3\",\"name\":\"John\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg\"}";
 
                 sendMessage(activity, messageStr);
-                assertEquals(1, activity.foundProfiles.size());
+                assertEquals(1, activity.getNearbyManager().foundProfiles.size());
                 sendMessage(activity, messageStr);
-                assertEquals(1, activity.foundProfiles.size());
+                assertEquals(1, activity.getNearbyManager().foundProfiles.size());
                 sendMessage(activity, messageStr2);
-                assertEquals(2, activity.foundProfiles.size());
+                assertEquals(2, activity.getNearbyManager().foundProfiles.size());
                 sendMessage(activity, messageStr);
-                assertEquals(2, activity.foundProfiles.size());
+                assertEquals(2, activity.getNearbyManager().foundProfiles.size());
                 sendMessage(activity, messageStr3);
-                assertEquals(3, activity.foundProfiles.size());
+                assertEquals(3, activity.getNearbyManager().foundProfiles.size());
             });
         }
     }
@@ -81,8 +81,8 @@ public class NearbyBackendTest {
     public void testUpdateExisting() {
         try(ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             scenario.onActivity(activity -> {
-                activity.foundProfiles.clear();
-                assertEquals(0, activity.foundProfiles.size());
+                activity.getNearbyManager().foundProfiles.clear();
+                assertEquals(0, activity.getNearbyManager().foundProfiles.size());
 
                 Profile profile = MyProfile.singleton(activity.getApplicationContext());
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
@@ -93,22 +93,22 @@ public class NearbyBackendTest {
                 Profile profile1;
 
                 sendMessage(activity, messageStr1);
-                assertEquals(1, activity.foundProfiles.size());
-                profile1 = activity.foundProfiles.get(0);
+                assertEquals(1, activity.getNearbyManager().foundProfiles.size());
+                profile1 = activity.getNearbyManager().foundProfiles.get(0);
                 assertEquals("NAME1", profile1.getName());
                 assertEquals("URL1", profile1.getPhotoURL());
                 assertEquals("fakeid", profile1.getId());
 
                 sendMessage(activity, messageStr2);
-                assertEquals(1, activity.foundProfiles.size());
-                profile1 = activity.foundProfiles.get(0);
+                assertEquals(1, activity.getNearbyManager().foundProfiles.size());
+                profile1 = activity.getNearbyManager().foundProfiles.get(0);
                 assertEquals("NAME2", profile1.getName());
                 assertEquals("URL2", profile1.getPhotoURL());
                 assertEquals("fakeid", profile1.getId());
 
                 sendMessage(activity, messageStr3);
-                assertEquals(1, activity.foundProfiles.size());
-                profile1 = activity.foundProfiles.get(0);
+                assertEquals(1, activity.getNearbyManager().foundProfiles.size());
+                profile1 = activity.getNearbyManager().foundProfiles.get(0);
                 assertEquals("NAME3", profile1.getName());
                 assertEquals("URL3", profile1.getPhotoURL());
                 assertEquals("fakeid", profile1.getId());
