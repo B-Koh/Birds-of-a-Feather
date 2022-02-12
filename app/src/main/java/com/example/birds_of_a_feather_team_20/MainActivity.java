@@ -17,6 +17,7 @@ import com.google.android.gms.nearby.messages.MessageListener;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -31,6 +32,13 @@ public class MainActivity extends AppCompatActivity {
     private static final boolean showDebugToast = true;
 
     public List<Profile> foundProfiles;
+    public static Stack<Integer> additions;
+    public static Stack<Integer> modifications;
+
+    RecyclerView basicRecycler;
+    RecyclerView.LayoutManager layoutManager;
+    ProfilesViewAdapter adapter;
+
 
     public static class MatchProfilePair implements Comparable<MatchProfilePair> {
         int matchesCount;
@@ -58,18 +66,6 @@ public class MainActivity extends AppCompatActivity {
         public void add(Profile profile) {
             int index = foundProfiles.size();
             adapter.notifyItemInserted(index);
-
-//            ProfilesViewAdapter.update(this);
-//            while(!NearbyManager.modifications.isEmpty()) {
-//                Integer i = NearbyManager.modifications.pop();
-//                if (i != null)
-//                    adapter.notifyItemChanged(i);
-//            }
-//            while(!NearbyManager.additions.isEmpty()) {
-//                Integer i = NearbyManager.additions.pop();
-//                if (i != null)
-//                    adapter.notifyItemInserted(i);
-//            }
         }
         public void insert(Profile profile, int index) {
             adapter.notifyItemInserted(index);
@@ -92,9 +88,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void testOnCreate() {
-
+    private void initializeNearby() {
         foundProfiles = new ArrayList<>();
+        additions = new Stack<>();
+        modifications = new Stack<>();
+
+        initializeProfileList();
+
         profileMessageListener = new MessageListener() {
             @Override
             public void onFound(final Message message) {
@@ -109,6 +109,67 @@ public class MainActivity extends AppCompatActivity {
                 toastLog("Lost profile: " + msgBody);
             }
         };
+    }
+
+    private void onFoundProfile(String profileData) {
+        // A profile was received, now process it
+        Profile profile = Profile.deserialize(profileData);
+        if (profile == null) return;
+        recordProfile(profile);
+        refreshProfileList();
+//        sendFakeMessage(profileData);
+//        refreshProfileListRoutine();
+    }
+
+    protected void recordProfile(Profile profile) {
+        for (int i = 0, nearbyProfilesSize = foundProfiles.size(); i < nearbyProfilesSize; i++) {
+            Profile p = foundProfiles.get(i);
+            if (p.getId().equals(profile.getId())) {
+                if (!p.getName().equals(profile.getName()) || !p.getPhotoURL().equals(profile.getPhotoURL())) {
+                    toastLog("Update existing profile: " + p.getName());
+                    modifications.add(i);
+                    p.setName(profile.getName()); // update name if id matches
+                    p.setPhotoURL(profile.getPhotoURL()); // update url if id matches
+                }
+                // Don't want to notify the recycler if nothing changed (because it will play an animation)
+                return;
+            }
+        }
+        toastLog("Adding to List: " + profile.serialize());
+        additions.add(foundProfiles.size());
+        foundProfiles.add(profile); // no profile with this id, so add it
+    }
+
+    private void refreshProfileList() {
+        setTitle("Find Friends (" + foundProfiles.size() + ")");
+        // Refresh on background thread
+        /*Executors.newSingleThreadExecutor().submit(() -> {
+            updateThumbnailsBackground();
+            toastLog("The number of List items is: " + foundProfiles.size());
+            runOnUiThread(() -> {
+                // notify
+                adapter.notifyDataSetChanged();
+
+            });
+
+            return null;
+        });*/
+    }
+    private void initializeProfileList() {
+
+        basicRecycler = findViewById(R.id.profile_list);
+        layoutManager = new LinearLayoutManager(this);
+        basicRecycler.setLayoutManager(layoutManager);
+        adapter = new ProfilesViewAdapter(foundProfiles);
+//        adapter = new ProfilesViewAdapter(NearbyManager.nearbyProfiles);
+        basicRecycler.setAdapter(adapter);
+
+//        Executors.newSingleThreadExecutor().submit(() -> {
+//            sendFakeMessage("{\"user_id\":\"fakeid\",\"name\":\"John F. Kennedy\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg\"}");
+//            return null;
+//        });
+
+        refreshProfileListRoutine(); // FIXME uncomment as last resort
     }
 
     private void subscribe() {
@@ -129,73 +190,6 @@ public class MainActivity extends AppCompatActivity {
         toastLog("Unpublishing...");
         Nearby.getMessagesClient(this).unpublish(profileMessage);
     }
-    private void onFoundProfile(String profileData) {
-        // A profile was received, now process it
-        Profile profile = Profile.deserialize(profileData);
-        if (profile == null) return;
-        recordProfile(profile);
-        refreshProfileList();
-//        sendFakeMessage(profileData);
-//        refreshProfileListRoutine();
-    }
-    private void recordProfile(Profile profile) {
-        for (int i = 0, nearbyProfilesSize = foundProfiles.size(); i < nearbyProfilesSize; i++) {
-            Profile p = foundProfiles.get(i);
-            if (p.getId().equals(profile.getId())) {
-                if (!p.getName().equals(profile.getName()) || !p.getPhotoURL().equals(profile.getPhotoURL())) {
-                    toastLog("Update existing profile: " + p.getName());
-//                    modifications.add(i);
-                    p.setName(profile.getName());
-                    p.setPhotoURL(profile.getPhotoURL());
-                }
-                return;
-            }
-        }
-        // additions.add(foundProfiles.size());
-        toastLog("Adding to List: " + profile.serialize());
-        foundProfiles.add(profile);
-
-        // TEST
-        NearbyManager.recordProfile(profile);
-
-    }
-    private void setupProfileList() {
-        // TEST
-        NearbyManager.nearbyProfiles = new ArrayList<>();
-        NearbyManager.updateMessage(this);
-        //
-
-        basicRecycler = findViewById(R.id.profile_list);
-        layoutManager = new LinearLayoutManager(this);
-        basicRecycler.setLayoutManager(layoutManager);
-//        adapter = new ProfilesViewAdapter(foundProfiles);
-        adapter = new ProfilesViewAdapter(NearbyManager.nearbyProfiles);
-        basicRecycler.setAdapter(adapter);
-
-//        Executors.newSingleThreadExecutor().submit(() -> {
-//            sendFakeMessage("{\"user_id\":\"fakeid\",\"name\":\"John F. Kennedy\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg\"}");
-//            return null;
-//        });
-
-        refreshProfileListRoutine();
-    }
-    private void refreshProfileList() {
-        setTitle("Find Friends (" + foundProfiles.size() + ")");
-        // Refresh on background thread
-        /*Executors.newSingleThreadExecutor().submit(() -> {
-            updateThumbnailsBackground();
-            toastLog("The number of List items is: " + foundProfiles.size());
-            runOnUiThread(() -> {
-                // notify
-                adapter.notifyDataSetChanged();
-
-            });
-
-            return null;
-        });*/
-    }
-
-
 
     //////// END REFACTORING
 
@@ -206,8 +200,8 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Find Friends");
         MyProfile.singleton(getApplicationContext());
 //        refreshProfileListRoutine();
-        setupProfileList();
-        testOnCreate();
+
+        initializeNearby();
     }
 
     private void refreshProfileListRoutine() {
@@ -257,13 +251,13 @@ public class MainActivity extends AppCompatActivity {
 //        layoutManager = new LinearLayoutManager(this);
 //        basicRecycler.setLayoutManager(layoutManager);
         ProfilesViewAdapter.update(this);
-        while(!NearbyManager.modifications.isEmpty()) {
-            Integer i = NearbyManager.modifications.pop();
+        while(!modifications.isEmpty()) {
+            Integer i = modifications.pop();
             if (i != null)
                 adapter.notifyItemChanged(i);
         }
-        while(!NearbyManager.additions.isEmpty()) {
-            Integer i = NearbyManager.additions.pop();
+        while(!additions.isEmpty()) {
+            Integer i = additions.pop();
             if (i != null)
                 adapter.notifyItemInserted(i);
         }
@@ -279,21 +273,18 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        }
 
-        for(Integer i : NearbyManager.modifications) {
+        for(Integer i : modifications) {
             if (i != null)
-                NearbyManager.nearbyProfiles.get(i).getThumbnail();
+                foundProfiles.get(i).getThumbnail();
         }
-        for(Integer i : NearbyManager.additions) {
+        for(Integer i : additions) {
             if (i != null)
-                NearbyManager.nearbyProfiles.get(i).getThumbnail();
+                foundProfiles.get(i).getThumbnail();
         }
     }
 
 
-    RecyclerView basicRecycler;
-    RecyclerView.LayoutManager layoutManager;
 
-    ProfilesViewAdapter adapter;
 
     public void onLaunchProfileClicked(View view) {
         Intent intent = new Intent(this, EditProfile.class);
@@ -303,26 +294,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         Log.i("START", "onStart");
-        super.onStart();
-//        NearbyManager.startNearby(this);
 
-        // FIXME TESTING
+        super.onStart();
+
         subscribe();
         publish();
-        // END FIXME
-//        sendFakeMessage("{\"user_id\":\"fakeid\",\"name\":\"John F. Kennedy\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg\"}");
-
     }
 
     @Override
     protected void onStop() {
         Log.i("STOP", "onStop");
-//        NearbyManager.stopNearby(this);
 
-        // FIXME TESTING
         unsubscribe();
         unpublish();
-        // END FIXME
+
         super.onStop();
     }
 }
