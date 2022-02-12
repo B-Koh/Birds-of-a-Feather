@@ -1,7 +1,6 @@
 package com.example.birds_of_a_feather_team_20;
 
-import android.content.Context;
-import android.content.Intent;
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,15 +18,12 @@ import java.util.concurrent.Future;
 
 public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapter.ViewHolder> {
     private final List<Profile> profiles;
-    private static MainActivity mainContext;
+    private Activity activity;
 
-    public ProfilesViewAdapter(List<Profile> profilesList) {
+    public ProfilesViewAdapter(Activity activity, List<Profile> profilesList) {
         super();
+        this.activity = activity;
         this.profiles = profilesList;
-    }
-
-    public static void update(MainActivity main) {
-        mainContext = main;
     }
 
     @NonNull
@@ -43,7 +39,7 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int index) {
         if(profiles == null || index >= profiles.size()) return;
-        holder.setProfile(profiles.get(index), index);
+        holder.setProfile(activity, profiles.get(index), index);
     }
 
     @Override
@@ -73,19 +69,18 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
             itemView.setOnClickListener(this);
         }
 
-        public void setProfile(Profile profile, int index) {
+        public void setProfile(Activity activity, Profile profile, int index) {
             ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
 
             // Refresh on background thread
             Future<Void> future = backgroundThreadExecutor.submit(() -> {
                 profile.getThumbnail();
-                mainContext.runOnUiThread(() -> {
+                activity.runOnUiThread(() -> {
                     this.index = index;
                     this.profile = profile;
                     this.profileNameText.setText(profile.getName());
                     this.urlText.setText(profile.getPhotoURL());
                     this.photo.setImageBitmap(profile.getThumbnail());
-//                    mainContext.updateList();
                 });
                 return null;
             });

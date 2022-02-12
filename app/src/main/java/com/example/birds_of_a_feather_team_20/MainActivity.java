@@ -35,14 +35,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setTitle("Find Friends");
 
-        MyProfile.singleton(getApplicationContext());
+        MyProfile.singleton(getApplicationContext()); // This line is probably unnecessary
 
         nearbyManager = new NearbyManager(this);
     }
 
     @Override
     protected void onStart() {
-        Log.i("START", "onStart");
+        Log.i("START", "MainActivity.onStart");
 
         super.onStart();
 
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        Log.i("STOP", "onStop");
+        Log.i("STOP", "MainActivity.onStop");
 
         nearbyManager.unsubscribe();
         nearbyManager.unpublish();

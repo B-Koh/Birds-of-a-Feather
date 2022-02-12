@@ -1,10 +1,6 @@
 package com.example.birds_of_a_feather_team_20;
 
-import android.util.Log;
-import android.widget.Toast;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import android.app.Activity;
 
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
@@ -17,69 +13,55 @@ import java.util.Stack;
 import java.util.concurrent.Executors;
 
 public class NearbyManager {
-    private Message profileMessage;
-    private MessageListener profileMessageListener;
 
     public List<Profile> foundProfiles;
-    public static Stack<Integer> additions;
-    public static Stack<Integer> modifications;
+    public Stack<Integer> additions;
+    public Stack<Integer> modifications;
 
-    RecyclerView basicRecycler;
-    RecyclerView.LayoutManager layoutManager;
-    ProfilesViewAdapter adapter;
+//    RecyclerView basicRecycler;
+//    RecyclerView.LayoutManager layoutManager;
+//    ProfilesViewAdapter adapter;
 
-    MainActivity mainActivity;
-    public NearbyManager(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
+    Activity activity;
+    private NearbyProfilesListView profilesListView;
 
-        foundProfiles = new ArrayList<>();
-        additions = new Stack<>();
-        modifications = new Stack<>();
-
-        initializeNearby();
-    }
+    private Message profileMessage;
+    private MessageListener profileMessageListener;
 
     public MessageListener getProfileMessageListener() {
         return profileMessageListener;
     }
 
-    /**
-     * Print a Log message and also display a Toast notification
-     * @param str
-     */
-    private void toastLog(String str) {
-        Utilities.logToast(mainActivity, str);
-    }
+    public NearbyManager(Activity activity) {
+        this.activity = activity;
 
-    public void sendFakeMessage(String messageStr) {
-        Message message = new Message(messageStr.getBytes(StandardCharsets.UTF_8));
-        profileMessageListener.onFound(message);
-        profileMessageListener.onLost(message);
-    }
+        foundProfiles = new ArrayList<>();
+        additions = new Stack<>();
+        modifications = new Stack<>();
 
-    public void initializeNearby() {
-
-
-        basicRecycler = mainActivity.findViewById(R.id.profile_list);
-        layoutManager = new LinearLayoutManager(mainActivity);
-        basicRecycler.setLayoutManager(layoutManager);
-        adapter = new ProfilesViewAdapter(foundProfiles);
-        basicRecycler.setAdapter(adapter);
+        profilesListView = new NearbyProfilesListView(activity, foundProfiles);
 
         profileMessageListener = new MessageListener() {
             @Override
             public void onFound(final Message message) {
                 String msgBody = new String(message.getContent());
-                toastLog("Found profile: " + msgBody);
+                Utilities.logToast(activity, "Found profile: " + msgBody);
                 onFoundProfile(msgBody);
             }
 
             @Override
             public void onLost(final Message message) {
                 String msgBody = new String(message.getContent());
-                toastLog("Lost profile: " + msgBody);
+                Utilities.logToast(activity, "Lost profile: " + msgBody);
             }
         };
+    }
+
+
+    public void sendFakeMessage(String messageStr) {
+        Message message = new Message(messageStr.getBytes(StandardCharsets.UTF_8));
+        profileMessageListener.onFound(message);
+        profileMessageListener.onLost(message);
     }
 
     private void onFoundProfile(String profileData) {
@@ -95,7 +77,7 @@ public class NearbyManager {
             Profile p = foundProfiles.get(i);
             if (p.getId().equals(profile.getId())) {
                 if (!p.getName().equals(profile.getName()) || !p.getPhotoURL().equals(profile.getPhotoURL())) {
-                    toastLog("Update existing profile: " + p.getName());
+                    Utilities.logToast(activity, "Update existing profile: " + p.getName());
                     modifications.add(i);
                     p.setName(profile.getName()); // update name if id matches
                     p.setPhotoURL(profile.getPhotoURL()); // update url if id matches
@@ -104,84 +86,39 @@ public class NearbyManager {
                 return;
             }
         }
-        toastLog("Adding to List: " + profile.serialize());
+        Utilities.logToast(activity, "Adding to List: " + profile.serialize());
         additions.add(foundProfiles.size());
         foundProfiles.add(profile); // no profile with this id, so add it
     }
 
     private void refreshProfileListView() {
-        mainActivity.setTitle("Find Friends (" + foundProfiles.size() + ")");
+        activity.setTitle("Find Friends (" + foundProfiles.size() + ")");
         // Refresh on background thread
         Executors.newSingleThreadExecutor().submit(() -> {
-            updateThumbnailsBackground();
-            mainActivity.runOnUiThread(this::updateList);
-
-            /*updateThumbnailsBackground();
-            toastLog("The number of List items is: " + foundProfiles.size());
-            runOnUiThread(() -> {
-                // notify
-                adapter.notifyDataSetChanged();
-
-            });*/
-
+            profilesListView.updateThumbnailsBackground(modifications, additions);
+            activity.runOnUiThread(() -> {
+                profilesListView.updateList(modifications, additions);
+            });
             return null;
         });
     }
 
-
     public void subscribe() {
-        toastLog("Subscribing to nearby profiles...");
-        Nearby.getMessagesClient(mainActivity).subscribe(profileMessageListener);
+        Utilities.logToast(activity, "Subscribing to nearby profiles...");
+        Nearby.getMessagesClient(activity).subscribe(profileMessageListener);
     }
     public void unsubscribe() {
-        toastLog("Unsubscribing...");
-        Nearby.getMessagesClient(mainActivity).unsubscribe(profileMessageListener);
+        Utilities.logToast(activity, "Unsubscribing...");
+        Nearby.getMessagesClient(activity).unsubscribe(profileMessageListener);
     }
     public void publish() {
-        profileMessage = new Message(MyProfile.singleton(mainActivity).serialize().getBytes(StandardCharsets.UTF_8));
-        toastLog("Publishing my profile...");
-        Nearby.getMessagesClient(mainActivity).publish(profileMessage).addOnFailureListener(e ->
-                toastLog("API Error!"));
+        profileMessage = new Message(MyProfile.singleton(activity).serialize().getBytes(StandardCharsets.UTF_8));
+        Utilities.logToast(activity, "Publishing my profile...");
+        Nearby.getMessagesClient(activity).publish(profileMessage).addOnFailureListener(e ->
+                Utilities.logToast(activity, "API Error!"));
     }
     public void unpublish() {
-        toastLog("Unpublishing...");
-        Nearby.getMessagesClient(mainActivity).unpublish(profileMessage);
-    }
-
-
-
-    private void updateList() {
-
-        ProfilesViewAdapter.update(mainActivity);
-        while(!modifications.isEmpty()) {
-            Integer i = modifications.pop();
-            if (i != null)
-                adapter.notifyItemChanged(i);
-        }
-        while(!additions.isEmpty()) {
-            Integer i = additions.pop();
-            if (i != null)
-                adapter.notifyItemInserted(i);
-        }
-//        adapter.notifyDataSetChanged();
-//        adapter = new ProfilesViewAdapter(NearbyManager.nearbyProfiles);
-//        basicRecycler.setAdapter(adapter);
-    }
-
-    private void updateThumbnailsBackground() {
-//        for (Profile p : foundProfiles) {
-//            if (p != null) {
-//                p.getThumbnail();
-//            }
-//        }
-
-        for(Integer i : modifications) {
-            if (i != null)
-                foundProfiles.get(i).getThumbnail();
-        }
-        for(Integer i : additions) {
-            if (i != null)
-                foundProfiles.get(i).getThumbnail();
-        }
+        Utilities.logToast(activity, "Unpublishing...");
+        Nearby.getMessagesClient(activity).unpublish(profileMessage);
     }
 }
