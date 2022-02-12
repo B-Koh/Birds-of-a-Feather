@@ -21,20 +21,25 @@ public class MainActivity extends AppCompatActivity {
     // Bluetooth fields
     private static final int REQUEST_ENABLE_BT = 100;
     private static final String[] PERMISSIONS = new String[]{
-            Manifest.permission.BLUETOOTH,
+            //Manifest.permission.BLUETOOTH,
             Manifest.permission.BLUETOOTH_SCAN,
-            Manifest.permission.BLUETOOTH_CONNECT
+            //Manifest.permission.BLUETOOTH_CONNECT
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        // TODO: Follow SRP on Bluetooth Permissions and Bluetooth Adapter and
+        //       refactor in MS2
+
         // Checks Android version
+        // Cited Work:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             checkPermission(PERMISSIONS, REQUEST_ENABLE_BT);
         }
 
         // ActivityResult for bluetooth from user
+        // Cited Work: https://stackoverflow.com/questions/62671106/onactivityresult-method-is-deprecated-what-is-the-alternative
         ActivityResultLauncher<Intent> BluetoothEnableResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -49,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         // Checks if Bluetooth permission has been granted
+        // Cited Work: https://stackoverflow.com/questions/62671106/onactivityresult-method-is-deprecated-what-is-the-alternative
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
             // Checks if bluetooth is disabled
             if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
@@ -63,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Find Friends");
@@ -71,9 +78,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * Checks the local device's permission for passed in permission
+     * Helper method that checks the local device's permission for passed in permission
      * @param permission - the permission that is being checked
      * @param requestCode - the request code associated with permission
+     * Cited Work: https://www.geeksforgeeks.org/android-how-to-request-permissions-in-android-application/
      */
     public void checkPermission(String[] permission, int requestCode) {
         for (String i : permission) {
@@ -89,10 +97,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Handles result of User input
+     * Handles result of User input of requested permissions
      * @param requestCode - Code unique to enabling Bluetooth permissions
      * @param permissions - Bluetooth permissions that are being checked
      * @param grantResults - Results from user
+     * Cited Work: https://www.geeksforgeeks.org/android-how-to-request-permissions-in-android-application/
+     *             https://developer.android.com/training/permissions/requesting#allow-system-manage-request-code
      */
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -101,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        // Check request code
         if (requestCode == REQUEST_ENABLE_BT) {
             // For each permission, check if user granted/denied
             for (int i : grantResults) {
