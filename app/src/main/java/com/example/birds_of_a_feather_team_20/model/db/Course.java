@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.Objects;
+
 @Entity(tableName = "courses")
 public class Course {
     @PrimaryKey(autoGenerate = true)
@@ -49,5 +51,16 @@ public class Course {
 
     public void setCourseNumber(String courseNumber) { this.courseNumber = courseNumber; }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Course)) return false;
+        Course course = (Course) o;
+        return year == course.year && Objects.equals(session, course.session) && Objects.equals(department, course.department) && Objects.equals(courseNumber, course.courseNumber);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(courseId, year, session, department, courseNumber);
+    }
 }
