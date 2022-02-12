@@ -90,22 +90,16 @@ public class ProfileBackendTestAndroidX {
     }
     @Test
     public void testSerialize() {
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-
         Profile bill = new Profile("Bill", "link", "fakeid");
         assertEquals("{\"user_id\":\"fakeid\",\"name\":\"Bill\",\"photo_url\":\"link\"}",bill.serialize());
     }
 
     @Test
     public void testDeserialize() {
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-//        Profile bill = new Profile("Bill", "link");
-//        assertEquals("{\"name\":\"Bill\",\"photo_url\":\"link\"}",bill.serialize());
-
-        Profile john = new Profile("","", "fakeid");
-        john.deserialize("{\"name\":\"John\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg\"}");
+        Profile john = Profile.deserialize("{\"user_id\":\"fakeid\",\"name\":\"John\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg\"}");
         assertEquals("John", john.getName());
         assertEquals("https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg", john.getPhotoURL());
+        assertEquals("fakeid", john.getId());
     }
 }
