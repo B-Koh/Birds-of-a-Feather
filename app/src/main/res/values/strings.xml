@@ -3,5 +3,15 @@
     <string name="enter_name">Enter Name</string>
     <string name="enter_url">Enter Photo URL</string>
     <string name="home">Home</string>
+    <string name="adding_course">Adding a Course</string>
+    <string name="subject">Subject</string>
+    <string name="enter_subject">i.e. CSE</string>
+    <string name="course_number">Course Number</string>
+    <string name="enter_course_num">i.e. 100</string>
+    <string name="year">Year</string>
+    <string name="quarter">Quarter</string>
+    <string name="save_course_exit">Save and Exit</string>
+    <string name="save_add_course">Save and Add New Course</string>
+    <string name="delete_course">Delete and Exit</string>
 
 </resources>
