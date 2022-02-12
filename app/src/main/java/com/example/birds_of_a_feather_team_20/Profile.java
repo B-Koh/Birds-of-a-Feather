@@ -5,15 +5,14 @@ import android.graphics.BitmapFactory;
 import android.util.JsonReader;
 import android.util.JsonWriter;
 import android.util.Log;
-import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import androidx.annotation.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Objects;
 
 /**
  * This class is for representing student profiles. It stores the student's name and the URL to the
@@ -25,7 +24,7 @@ public class Profile {
     private String photoURL;
 
     private Bitmap thumbnail; //Compressed image from URL
-    public String lastDownloadedURL;
+    private String lastDownloadedURL;
     // private List<Course> courses; // TODO
 
 
@@ -62,6 +61,35 @@ public class Profile {
         // Otherwise, update just the URL.
         this.photoURL = photoURL;
     }
+
+    /**
+     * Two profiles are equal if they have the same id. Everything else is ignored.
+     */
+    @Override
+    public boolean equals(@Nullable Object other) {
+        if (other == null) return false;
+        if (!(other instanceof Profile)) return false;
+        Profile casted = (Profile)other;
+        return Objects.equals(casted.getId(), this.getId());
+    }
+
+    public boolean strongEquals(Profile other) {
+        return this.equals(other) && Objects.equals(other.getName(), this.getName())
+                && Objects.equals(other.getPhotoURL(), this.getPhotoURL());
+        // TODO also check courses?
+    }
+
+    public void updateProfile(Profile newProfile) {
+        // return false if there is nothing to update
+//        if (strongEquals(newProfile)) {
+//            return false;
+//        }
+
+        this.setId(newProfile.getId());
+        this.setName(newProfile.getName());
+        this.setPhotoURL(newProfile.getPhotoURL());
+    }
+
 
 
     /**

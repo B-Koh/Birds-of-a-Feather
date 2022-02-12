@@ -8,21 +8,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.Executors;
 
 public class NearbyProfilesListView {
-    private final Activity mainActivity;
+    private final Activity activity;
     private final ProfilesViewAdapter adapter;
     private final List<Profile> foundProfiles;
 
-    public NearbyProfilesListView(Activity mainActivity, List<Profile> foundProfiles) {
-        this.mainActivity = mainActivity;
+    public NearbyProfilesListView(Activity activity, List<Profile> foundProfiles) {
+        this.activity = activity;
         this.foundProfiles = foundProfiles;
 //        this.nearbyManager = mainActivity.getNearbyManager();
 
-        RecyclerView basicRecycler = mainActivity.findViewById(R.id.profile_list);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mainActivity);
+        RecyclerView basicRecycler = activity.findViewById(R.id.profile_list);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(activity);
         basicRecycler.setLayoutManager(layoutManager);
-        adapter = new ProfilesViewAdapter(mainActivity, foundProfiles);
+        adapter = new ProfilesViewAdapter(activity, foundProfiles);
         basicRecycler.setAdapter(adapter);
     }
 
@@ -61,5 +62,19 @@ public class NearbyProfilesListView {
             if (i != null)
                 foundProfiles.get(i).getThumbnail();
         }
+    }
+
+
+    public void refreshProfileListView(Stack<Integer> modifications, Stack<Integer> additions) {
+        activity.setTitle("Find Friends (" + foundProfiles.size() + ")"); // FIXME: May not want this here
+
+        // Refresh on background thread
+        Executors.newSingleThreadExecutor().submit(() -> {
+            updateThumbnailsBackground(modifications, additions);
+            activity.runOnUiThread(() -> {
+                updateList(modifications, additions);
+            });
+            return null;
+        });
     }
 }
