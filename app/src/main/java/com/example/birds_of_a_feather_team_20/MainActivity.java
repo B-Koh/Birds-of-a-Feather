@@ -1,7 +1,5 @@
 package com.example.birds_of_a_feather_team_20;
 
-
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -23,9 +21,9 @@ public class MainActivity extends AppCompatActivity {
     // Bluetooth fields
     private static final int REQUEST_ENABLE_BT = 100;
     private static final String[] PERMISSIONS = new String[]{
-            //Manifest.permission.BLUETOOTH,
+            Manifest.permission.BLUETOOTH,
             Manifest.permission.BLUETOOTH_SCAN,
-            //Manifest.permission.BLUETOOTH_CONNECT
+            Manifest.permission.BLUETOOTH_CONNECT
     };
 
     @Override
@@ -37,12 +35,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // ActivityResult for bluetooth from user
-        ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+        ActivityResultLauncher<Intent> BluetoothEnableResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     // Checks whether user granted/denied bluetooth
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         // Don't do anything
+
                     }
                     else {
                         Toast.makeText(MainActivity.this," Bluetooth is off", Toast.LENGTH_LONG).show();
@@ -55,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
                 // Ask to enable bluetooth
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                someActivityResultLauncher.launch(enableBtIntent);
+                BluetoothEnableResultLauncher.launch(enableBtIntent);
             }
             else {
                 Toast.makeText(MainActivity.this," Bluetooth is on", Toast.LENGTH_LONG).show();
@@ -114,4 +113,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }
