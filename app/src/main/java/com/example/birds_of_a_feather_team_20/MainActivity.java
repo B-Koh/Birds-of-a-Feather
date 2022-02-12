@@ -24,11 +24,11 @@ public class MainActivity extends AppCompatActivity {
 
     // Bluetooth fields
     //private static final int REQUEST_ENABLE_BT = 100;
-    private static final String[] PERMISSIONS = new String[]{
-            Manifest.permission.BLUETOOTH,
-            Manifest.permission.BLUETOOTH_SCAN,
-            Manifest.permission.BLUETOOTH_CONNECT
-    };
+//    private static final String[] PERMISSIONS = new String[]{
+//            Manifest.permission.BLUETOOTH,
+//            Manifest.permission.BLUETOOTH_SCAN,
+//            Manifest.permission.BLUETOOTH_CONNECT
+//    };
 
 
     @Override
