@@ -32,6 +32,54 @@ public class MainActivity extends AppCompatActivity {
 
     public List<Profile> foundProfiles;
 
+    public static class MatchProfilePair implements Comparable<MatchProfilePair> {
+        int matchesCount;
+        Profile profile;
+
+        public MatchProfilePair(int matches, Profile p) {
+            this.matchesCount = matches;
+            this.profile = p;
+        }
+
+        @Override
+        public int compareTo(MatchProfilePair m) {
+            return this.matchesCount - m.matchesCount;
+        }
+    }
+
+    public static class ProfilesCollection {
+        public List<Profile> foundProfiles;
+        ProfilesViewAdapter adapter;
+
+        public ProfilesCollection(ProfilesViewAdapter adapter) {
+            foundProfiles = new ArrayList<>();
+        }
+
+        public void add(Profile profile) {
+            int index = foundProfiles.size();
+            adapter.notifyItemInserted(index);
+
+//            ProfilesViewAdapter.update(this);
+//            while(!NearbyManager.modifications.isEmpty()) {
+//                Integer i = NearbyManager.modifications.pop();
+//                if (i != null)
+//                    adapter.notifyItemChanged(i);
+//            }
+//            while(!NearbyManager.additions.isEmpty()) {
+//                Integer i = NearbyManager.additions.pop();
+//                if (i != null)
+//                    adapter.notifyItemInserted(i);
+//            }
+        }
+        public void insert(Profile profile, int index) {
+            adapter.notifyItemInserted(index);
+        }
+        public void update(Profile profile, int index) {
+            adapter.notifyItemChanged(index);
+        }
+
+    }
+
     /**
      * Print a Log message and also display a Toast notification
      * @param str
@@ -45,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void testOnCreate() {
-        profileMessage = new Message(MyProfile.singleton(this).serialize().getBytes(StandardCharsets.UTF_8));
+
         foundProfiles = new ArrayList<>();
         profileMessageListener = new MessageListener() {
             @Override
@@ -72,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         Nearby.getMessagesClient(this).unsubscribe(profileMessageListener);
     }
     private void publish() {
+        profileMessage = new Message(MyProfile.singleton(this).serialize().getBytes(StandardCharsets.UTF_8));
         toastLog("Publishing my profile...");
         Nearby.getMessagesClient(this).publish(profileMessage).addOnFailureListener(e ->
                 toastLog("API Error!"));
@@ -85,8 +134,9 @@ public class MainActivity extends AppCompatActivity {
         Profile profile = Profile.deserialize(profileData);
         if (profile == null) return;
         recordProfile(profile);
+        refreshProfileList();
 //        sendFakeMessage(profileData);
-
+//        refreshProfileListRoutine();
     }
     private void recordProfile(Profile profile) {
         for (int i = 0, nearbyProfilesSize = foundProfiles.size(); i < nearbyProfilesSize; i++) {
@@ -102,8 +152,47 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         // additions.add(foundProfiles.size());
-        toastLog("Adding to List: " + profile.getName());
+        toastLog("Adding to List: " + profile.serialize());
         foundProfiles.add(profile);
+
+        // TEST
+        NearbyManager.recordProfile(profile);
+
+    }
+    private void setupProfileList() {
+        // TEST
+        NearbyManager.nearbyProfiles = new ArrayList<>();
+        NearbyManager.updateMessage(this);
+        //
+
+        basicRecycler = findViewById(R.id.profile_list);
+        layoutManager = new LinearLayoutManager(this);
+        basicRecycler.setLayoutManager(layoutManager);
+//        adapter = new ProfilesViewAdapter(foundProfiles);
+        adapter = new ProfilesViewAdapter(NearbyManager.nearbyProfiles);
+        basicRecycler.setAdapter(adapter);
+
+//        Executors.newSingleThreadExecutor().submit(() -> {
+//            sendFakeMessage("{\"user_id\":\"fakeid\",\"name\":\"John F. Kennedy\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg\"}");
+//            return null;
+//        });
+
+        refreshProfileListRoutine();
+    }
+    private void refreshProfileList() {
+        setTitle("Find Friends (" + foundProfiles.size() + ")");
+        // Refresh on background thread
+        /*Executors.newSingleThreadExecutor().submit(() -> {
+            updateThumbnailsBackground();
+            toastLog("The number of List items is: " + foundProfiles.size());
+            runOnUiThread(() -> {
+                // notify
+                adapter.notifyDataSetChanged();
+
+            });
+
+            return null;
+        });*/
     }
 
 
@@ -117,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Find Friends");
         MyProfile.singleton(getApplicationContext());
 //        refreshProfileListRoutine();
+        setupProfileList();
         testOnCreate();
     }
 
@@ -125,11 +215,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Refresh on background thread
         Future<Void> future = backgroundThreadExecutor.submit(() -> {
-            basicRecycler = findViewById(R.id.profile_list);
-            layoutManager = new LinearLayoutManager(this);
-            basicRecycler.setLayoutManager(layoutManager);
-            adapter = new ProfilesViewAdapter(NearbyManager.nearbyProfiles);
-            basicRecycler.setAdapter(adapter);
+//            basicRecycler = findViewById(R.id.profile_list);
+//            layoutManager = new LinearLayoutManager(this);
+//            basicRecycler.setLayoutManager(layoutManager);
+//            adapter = new ProfilesViewAdapter(NearbyManager.nearbyProfiles);
+//            basicRecycler.setAdapter(adapter);
 
 //            sendFakeMessage("{\"user_id\":\"fakeid\",\"name\":\"John F. Kennedy\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg\"}");
 
@@ -158,8 +248,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendFakeMessage(String messageStr) {
         Message message = new Message(messageStr.getBytes(StandardCharsets.UTF_8));
-        NearbyManager.getMessageListener().onFound(message);
-        NearbyManager.getMessageListener().onLost(message);
+        profileMessageListener.onFound(message);
+        profileMessageListener.onLost(message);
     }
 
     public void updateList() {
@@ -188,14 +278,15 @@ public class MainActivity extends AppCompatActivity {
 //                p.getThumbnail();
 //            }
 //        }
-        /*for(Integer i : NearbyManager.modifications) {
+
+        for(Integer i : NearbyManager.modifications) {
             if (i != null)
                 NearbyManager.nearbyProfiles.get(i).getThumbnail();
         }
         for(Integer i : NearbyManager.additions) {
             if (i != null)
                 NearbyManager.nearbyProfiles.get(i).getThumbnail();
-        }*/
+        }
     }
 
 

@@ -25,17 +25,15 @@ public class NearbyManager {
      */
     public static MessageListener getMessageListener() { return messageListener; }
 
-    public static void startNearby(Context context) {
-        updateMessage(context);
-//        Log.e("Broadcasting Name", MyProfile.singleton(context).getName());
-//        Log.e("Broadcasting Message", new String(profileMessage.getContent()));
-        Nearby.getMessagesClient(context.getApplicationContext()).publish(profileMessage);
-        Nearby.getMessagesClient(context.getApplicationContext()).subscribe(messageListener);
-    }
-    public static void stopNearby(Context context) { // FIXME: we may want to continue publishing, per the directions
-        Nearby.getMessagesClient(context.getApplicationContext()).unpublish(profileMessage);
-        Nearby.getMessagesClient(context.getApplicationContext()).unsubscribe(messageListener);
-    }
+//    public static void startNearby(Context context) {
+//        updateMessage(context);
+//        Nearby.getMessagesClient(context.getApplicationContext()).publish(profileMessage);
+//        Nearby.getMessagesClient(context.getApplicationContext()).subscribe(messageListener);
+//    }
+//    public static void stopNearby(Context context) { // FIXME: we may want to continue publishing, per the directions
+//        Nearby.getMessagesClient(context.getApplicationContext()).unpublish(profileMessage);
+//        Nearby.getMessagesClient(context.getApplicationContext()).unsubscribe(messageListener);
+//    }
     protected static void recordProfile(Profile profile) {
         for (int i = 0, nearbyProfilesSize = nearbyProfiles.size(); i < nearbyProfilesSize; i++) {
             Profile p = nearbyProfiles.get(i);
@@ -65,7 +63,7 @@ public class NearbyManager {
         if (modifications == null) {
             modifications = new Stack<>();
         }
-        if (messageListener == null) {
+        /*if (messageListener == null) {
             messageListener = new MessageListener() {
                 @Override
                 public void onFound(Message message) {
@@ -80,6 +78,6 @@ public class NearbyManager {
             };
         }
         profileMessage = new Message(MyProfile.singleton(context.getApplicationContext()).serialize()
-                .getBytes(StandardCharsets.UTF_8));
+                .getBytes(StandardCharsets.UTF_8));*/
     }
 }
