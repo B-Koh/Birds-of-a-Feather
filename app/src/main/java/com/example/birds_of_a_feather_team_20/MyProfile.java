@@ -27,9 +27,9 @@ public class MyProfile extends Profile {
      * @return reference to the local student's profile
      */
     public static MyProfile singleton(Context context) {
-        if (preferences == null) {
-            preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        }
+//        if (preferences == null) {
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+//        }
         if (singletonInstance == null) {
             singletonInstance = loadProfile(context);
         }
@@ -50,8 +50,20 @@ public class MyProfile extends Profile {
      * Updates local student's name and saves the change to shared prefs.
      * @param name New name
      */
+    public void setName(String name, SharedPreferences prefs) {
+        super.setName(name);
+//        SharedPreferences.Editor editor = preferences.edit();
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(NAME_KEY, name);
+        editor.apply();
+    }
+    /**
+     * Updates local student's name and saves the change to shared prefs.
+     * @param name New name
+     */
     public void setName(String name) {
         super.setName(name);
+//        SharedPreferences.Editor editor = preferences.edit();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(NAME_KEY, name);
         editor.apply();
