@@ -15,6 +15,8 @@ import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private MessageListener profileMessageListener;
 
     private static final boolean showDebugToast = true;
+
+    public List<Profile> foundProfiles;
 
     /**
      * Print a Log message and also display a Toast notification
@@ -42,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void testOnCreate() {
         profileMessage = new Message(MyProfile.singleton(this).serialize().getBytes(StandardCharsets.UTF_8));
-
+        foundProfiles = new ArrayList<>();
         profileMessageListener = new MessageListener() {
             @Override
             public void onFound(final Message message) {
@@ -78,6 +82,28 @@ public class MainActivity extends AppCompatActivity {
     }
     private void onFoundProfile(String profileData) {
         // A profile was received, now process it
+        Profile profile = Profile.deserialize(profileData);
+        if (profile == null) return;
+        recordProfile(profile);
+//        sendFakeMessage(profileData);
+
+    }
+    private void recordProfile(Profile profile) {
+        for (int i = 0, nearbyProfilesSize = foundProfiles.size(); i < nearbyProfilesSize; i++) {
+            Profile p = foundProfiles.get(i);
+            if (p.getId().equals(profile.getId())) {
+                if (!p.getName().equals(profile.getName()) || !p.getPhotoURL().equals(profile.getPhotoURL())) {
+                    toastLog("Update existing profile: " + p.getName());
+//                    modifications.add(i);
+                    p.setName(profile.getName());
+                    p.setPhotoURL(profile.getPhotoURL());
+                }
+                return;
+            }
+        }
+        // additions.add(foundProfiles.size());
+        toastLog("Adding to List: " + profile.getName());
+        foundProfiles.add(profile);
     }
 
 
@@ -157,14 +183,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void updateThumbnailsBackground() {
-        for(Integer i : NearbyManager.modifications) {
+//        for (Profile p : foundProfiles) {
+//            if (p != null) {
+//                p.getThumbnail();
+//            }
+//        }
+        /*for(Integer i : NearbyManager.modifications) {
             if (i != null)
                 NearbyManager.nearbyProfiles.get(i).getThumbnail();
         }
         for(Integer i : NearbyManager.additions) {
             if (i != null)
                 NearbyManager.nearbyProfiles.get(i).getThumbnail();
-        }
+        }*/
     }
 
 

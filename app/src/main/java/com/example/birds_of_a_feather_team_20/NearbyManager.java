@@ -46,7 +46,6 @@ public class NearbyManager {
                     p.setName(profile.getName()); // update name if id matches
                     p.setPhotoURL(profile.getPhotoURL()); // update url if id matches
                 }
-//                p.getThumbnail(); // FIXME cannot do this here
                 // Don't want to notify the recycler if nothing changed (because it will play an animation)
                 return;
             }
