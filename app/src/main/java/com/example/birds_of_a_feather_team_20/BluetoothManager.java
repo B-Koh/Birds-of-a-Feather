@@ -38,17 +38,20 @@ public class BluetoothManager {
 
         // Checks if Bluetooth permission has been granted
         // Cited Work: https://stackoverflow.com/questions/62671106/onactivityresult-method-is-deprecated-what-is-the-alternative
-        if (new PermissionsManager(thisContext).isBluetoothPermissionGranted()) {
-            // Checks if bluetooth is disabled
-            if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
-                // Ask to enable bluetooth
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                bluetoothEnableResultLauncher.launch(enableBtIntent);
-            }
-            else {
-                Utilities.logToast(thisContext, "Bluetooth is on");
-                //Toast.makeText(thisContext," Bluetooth is on", Toast.LENGTH_LONG).show();
-            }
+        if (!isBluetoothEnabled()) {
+            // Ask to enable bluetooth
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            bluetoothEnableResultLauncher.launch(enableBtIntent);
         }
+        else {
+            Utilities.logToast(thisContext, "Bluetooth is on");
+            //Toast.makeText(thisContext," Bluetooth is on", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    public boolean isBluetoothEnabled() {
+        return (new PermissionsManager(thisContext).isBluetoothPermissionGranted()) &&
+                BluetoothAdapter.getDefaultAdapter().isEnabled();
     }
 }
