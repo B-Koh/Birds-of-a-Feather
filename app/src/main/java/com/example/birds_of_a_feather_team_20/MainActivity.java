@@ -25,9 +25,9 @@ public class MainActivity extends AppCompatActivity {
     // Bluetooth fields
     private static final int REQUEST_ENABLE_BT = 100;
     private static final String[] PERMISSIONS = new String[]{
-            //Manifest.permission.BLUETOOTH,
-            //Manifest.permission.BLUETOOTH_SCAN,
-            //Manifest.permission.BLUETOOTH_CONNECT
+            Manifest.permission.BLUETOOTH,
+            Manifest.permission.BLUETOOTH_SCAN,
+            Manifest.permission.BLUETOOTH_CONNECT
     };
 
     @Override
@@ -38,17 +38,8 @@ public class MainActivity extends AppCompatActivity {
         MyProfile.singleton(getApplicationContext());
 
 
-        // Checks Bluetooth Permissions on startup
-        // bluetoothStart();
 
-    }
 
-    public void onLaunchProfileClicked(View view) {
-        Intent intent = new Intent(this, EditProfile.class);
-        startActivity(intent);
-    }
-
-    public void bluetoothStart() {
         // TODO: Follow SRP on Bluetooth Permissions and Bluetooth Adapter and
         //       refactor in MS2
 
@@ -74,10 +65,10 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this," Bluetooth is off", Toast.LENGTH_LONG).show();
                     }
                 });
-
+//
         // Checks if Bluetooth permission has been granted
         // Cited Work: https://stackoverflow.com/questions/62671106/onactivityresult-method-is-deprecated-what-is-the-alternative
-        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED ) {
             // Checks if bluetooth is disabled
             if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
                 // Ask to enable bluetooth
@@ -89,6 +80,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+
+
+
+
+    }
+
+    public void onLaunchProfileClicked(View view) {
+        Intent intent = new Intent(this, EditProfile.class);
+        startActivity(intent);
     }
 
 
@@ -108,8 +108,10 @@ public class MainActivity extends AppCompatActivity {
             else {
                 Toast.makeText(MainActivity.this, i + " already granted", Toast.LENGTH_LONG).show();
                 //TODO TEST
-                findViewById(R.id.test_bluetooth_permission_granted).setVisibility(View.VISIBLE);
-                findViewById(R.id.test_bluetooth_permission_denied).setVisibility(View.INVISIBLE);
+                TextView grant = findViewById(R.id.test_bluetooth_permission_granted);
+                grant.setVisibility(View.VISIBLE);
+                TextView deny = findViewById(R.id.test_bluetooth_permission_denied);
+                deny.setVisibility(View.INVISIBLE);
             }
         }
     }
