@@ -12,8 +12,8 @@ public interface CourseDao {
     @Query("SELECT * FROM courses")
     List<Course> getAll();
 
-    @Query("SELECT * FROM courses WHERE course_id=:id")
-    Course get(int id);
+    @Query("SELECT * FROM courses WHERE year=:year AND session=:session AND department=:department AND course_number=:courseNumber")
+    Course get(int year, String session, String department, String courseNumber);
 
     @Insert
     void insert(Course course);
