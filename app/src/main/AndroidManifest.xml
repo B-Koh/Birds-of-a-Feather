@@ -32,6 +32,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Birdsofafeatherteam20">
         <activity
+            android:name=".EditProfile"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -40,6 +43,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

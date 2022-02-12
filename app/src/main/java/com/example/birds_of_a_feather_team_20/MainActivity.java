@@ -14,7 +14,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.view.View;
+
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,13 +26,29 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_ENABLE_BT = 100;
     private static final String[] PERMISSIONS = new String[]{
             //Manifest.permission.BLUETOOTH,
-            Manifest.permission.BLUETOOTH_SCAN,
+            //Manifest.permission.BLUETOOTH_SCAN,
             //Manifest.permission.BLUETOOTH_CONNECT
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        setTitle("Find Friends");
+        MyProfile.singleton(getApplicationContext());
 
+
+        // Checks Bluetooth Permissions on startup
+        // bluetoothStart();
+
+    }
+
+    public void onLaunchProfileClicked(View view) {
+        Intent intent = new Intent(this, EditProfile.class);
+        startActivity(intent);
+    }
+
+    public void bluetoothStart() {
         // TODO: Follow SRP on Bluetooth Permissions and Bluetooth Adapter and
         //       refactor in MS2
 
@@ -37,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             checkPermission(PERMISSIONS, REQUEST_ENABLE_BT);
         }
+
+
 
         // ActivityResult for bluetooth from user
         // Cited Work: https://stackoverflow.com/questions/62671106/onactivityresult-method-is-deprecated-what-is-the-alternative
@@ -67,13 +89,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-
-
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        setTitle("Find Friends");
-        MyProfile.singleton(getApplicationContext());
     }
 
 
@@ -92,6 +107,9 @@ public class MainActivity extends AppCompatActivity {
             // Case for when permission is granted
             else {
                 Toast.makeText(MainActivity.this, i + " already granted", Toast.LENGTH_LONG).show();
+                //TODO TEST
+                findViewById(R.id.test_bluetooth_permission_granted).setVisibility(View.VISIBLE);
+                findViewById(R.id.test_bluetooth_permission_denied).setVisibility(View.INVISIBLE);
             }
         }
     }
@@ -101,8 +119,7 @@ public class MainActivity extends AppCompatActivity {
      * @param requestCode - Code unique to enabling Bluetooth permissions
      * @param permissions - Bluetooth permissions that are being checked
      * @param grantResults - Results from user
-     * Cited Work: https://www.geeksforgeeks.org/android-how-to-request-permissions-in-android-application/
-     *             https://developer.android.com/training/permissions/requesting#allow-system-manage-request-code
+ * Cited Work: https://www.geeksforgeeks.org/android-how-to-request-permissions-in-android-application/
      */
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -117,9 +134,16 @@ public class MainActivity extends AppCompatActivity {
             for (int i : grantResults) {
                 if (i == PackageManager.PERMISSION_DENIED) {
                     Toast.makeText(MainActivity.this,"Bluetooth Permission required. App will not function as intended.", Toast.LENGTH_LONG).show();
+                    // TODO: For Demo, please remove after
+                    findViewById(R.id.test_bluetooth_permission_granted).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.test_bluetooth_permission_denied).setVisibility(View.VISIBLE);
+
                 }
                 else {
                     Toast.makeText(MainActivity.this, "Permission Granted.", Toast.LENGTH_LONG).show();
+                    // TODO: For Demo, please remove after
+                    findViewById(R.id.test_bluetooth_permission_granted).setVisibility(View.VISIBLE);
+                    findViewById(R.id.test_bluetooth_permission_denied).setVisibility(View.INVISIBLE);
                 }
             }
         }
