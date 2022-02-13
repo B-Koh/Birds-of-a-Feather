@@ -5,12 +5,10 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 import static androidx.test.runner.lifecycle.Stage.RESUMED;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.rule.ActivityTestRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
-import androidx.test.runner.AndroidJUnit4;
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 
-import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,12 +17,15 @@ import static org.junit.Assert.*;
 
 import android.Manifest;
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 
 import java.util.Collection;
+import java.util.concurrent.Executors;
 
 /**
  * Test class that helps check Bluetooth permissions and check Bluetooth status.
  */
+@RunWith(AndroidJUnit4.class)
 public class BluetoothPermissionsTest {
 
     @Rule
@@ -37,27 +38,31 @@ public class BluetoothPermissionsTest {
     @Test
     public void bluetoothPermissionsTest() {
         Utilities.debugToast = false;
-        Activity activity = getCurrentActivity();
 
-        GrantPermissionRule.grant(Manifest.permission.BLUETOOTH_SCAN);
+        activityScenarioRule.getScenario().onActivity(activity -> {
+            GrantPermissionRule.grant(Manifest.permission.BLUETOOTH_SCAN);
+            GrantPermissionRule.grant(Manifest.permission.BLUETOOTH_CONNECT);
 
-        PermissionsManager pm = new PermissionsManager(activity);
-        pm.checkPermission();
-
-        assertTrue(pm.isBluetoothPermissionGranted());
+            PermissionsManager pm = new PermissionsManager(activity);
+            pm.checkPermission();
+            assertTrue(pm.isBluetoothPermissionGranted());
+        });
     }
 
     /**
      * Tests if bluetooth has been enabled on local device.
-     * Note: Will fail if bluetooth is not enabled on local device first!
+     * Note: Will fail if bluetooth is not enabled on testing device first!
      */
     @Test
-    public void isBluetoothEnabledTest() {
+    public void isBluetoothEnabledTest()  {
         Utilities.debugToast = false;
-        MainActivity activity = (MainActivity) getCurrentActivity();
+        activityScenarioRule.getScenario().onActivity(activity -> {
+            GrantPermissionRule.grant(Manifest.permission.BLUETOOTH_SCAN);
+            GrantPermissionRule.grant(Manifest.permission.BLUETOOTH_CONNECT);
 
-        BluetoothManager bt = new BluetoothManager(activity);
-        assertTrue(bt.isBluetoothEnabled());
+            BluetoothManager bt = new BluetoothManager(activity);
+            assertTrue(bt.isBluetoothEnabled());
+        });
     }
 
     /**
