@@ -12,6 +12,11 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
 
+/**
+ * This class is used to manage and check bluetooth status on a user's local device. Call
+ * methods such as initializeBluetooth() to set up bluetooth and isBluetoothEnabled to check
+ * the status of bluetooth on a user's device.
+ */
 public class BluetoothManager {
     MainActivity thisContext;
 
@@ -19,7 +24,15 @@ public class BluetoothManager {
         thisContext = context;
     }
 
+    /**
+     * Asks the user to enable bluetooth if permissions are already granted and bluetooth is off
+     */
     public void initializeBluetooth() {
+        // Checks if permission has been granted
+        if (!new PermissionsManager(thisContext).isBluetoothPermissionGranted()) {
+            Utilities.logToast(thisContext, "Bluetooth permission denied. Please turn on permission.");
+            return;
+        }
         // ActivityResult for bluetooth from user
         // Cited Work: https://stackoverflow.com/questions/62671106/onactivityresult-method-is-deprecated-what-is-the-alternative
         ActivityResultLauncher<Intent> bluetoothEnableResultLauncher = thisContext.registerForActivityResult(
@@ -32,7 +45,6 @@ public class BluetoothManager {
                     }
                     else {
                         Utilities.logToast(thisContext, "Bluetooth is off");
-                        //Toast.makeText(thisContext," Bluetooth is off", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -45,13 +57,21 @@ public class BluetoothManager {
         }
         else {
             Utilities.logToast(thisContext, "Bluetooth is on");
-            //Toast.makeText(thisContext," Bluetooth is on", Toast.LENGTH_LONG).show();
         }
-
     }
 
+    /**
+     * Checks if bluetooth is enabled/disabled
+     * @return - true if enabled and false for all other cases
+     */
     public boolean isBluetoothEnabled() {
-        return (new PermissionsManager(thisContext).isBluetoothPermissionGranted()) &&
-                BluetoothAdapter.getDefaultAdapter().isEnabled();
+        // Checks if permission has been granted and bluetooth is enabled/disabled
+        if (new PermissionsManager(thisContext).isBluetoothPermissionGranted()) {
+            return BluetoothAdapter.getDefaultAdapter().isEnabled();
+        }
+        Utilities.logToast(thisContext, "Bluetooth permission denied. Please turn on permission.");
+        return false;
     }
+
+
 }
