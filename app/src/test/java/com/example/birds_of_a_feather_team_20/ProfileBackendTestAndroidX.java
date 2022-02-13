@@ -15,6 +15,8 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.example.birds_of_a_feather_team_20.model.db.Course;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -104,5 +106,19 @@ public class ProfileBackendTestAndroidX {
         assertEquals("John", john.getName());
         assertEquals("https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg", john.getPhotoURL());
         assertEquals("fakeid", john.getId());
+    }
+
+    @Test
+    public void testCountMatchingCourses() {
+        // TODO make sure we aren't counting null courses as the same (or just prevent null courses)
+        Course CSE100_1 = new Course(2020, "WI", "CSE", "100");
+        Course CSE100_2 = new Course(2020, "wi", " CSE ", "100 ");
+        Profile bill = new Profile("bill", null, "fakeid");
+        Profile hillary = new Profile("hillary", null, "fakeid");
+        assertEquals(0, bill.countMatchingCourses(hillary));
+        bill.getCourses().add(CSE100_1);
+        hillary.getCourses().add(CSE100_2);
+        assertEquals(1, bill.countMatchingCourses(hillary));
+        assertEquals(1, hillary.countMatchingCourses(bill));
     }
 }

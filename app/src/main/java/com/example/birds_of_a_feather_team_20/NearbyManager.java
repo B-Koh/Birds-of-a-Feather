@@ -99,9 +99,14 @@ public class NearbyManager {
         if (profile == null || !profile.isValid())
             return;
 
+        // Count the number of matching courses
+        int courseMatches = profile.countMatchingCourses(MyProfile.singleton(activity));
+        Utilities.logToast(activity, profile.getName() + " has " + courseMatches
+                + " matching courses.");
+
         // Store the Profile in our list of profiles
         ProfilesCollection profiles = ProfilesCollection.singleton();
-        profiles.addOrUpdateProfile(profile);
+        profiles.addOrUpdateProfile(profile, courseMatches);
         profilesListView.refreshProfileListView(profiles.getModifications(), profiles.getAdditions());
     }
 

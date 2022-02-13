@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.example.birds_of_a_feather_team_20.model.db.Course;
+import com.example.birds_of_a_feather_team_20.model.db.CourseDatabase;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,6 +47,7 @@ public class MyProfile extends Profile {
 
     /**
      * Helper method for loading the local student's profile from shared preferences.
+     * Also loads courses from the database
      */
     private static MyProfile loadProfile(Context context) {
         String id = preferences.getString(ID_KEY, null);
@@ -56,7 +60,13 @@ public class MyProfile extends Profile {
         String name = preferences.getString(NAME_KEY,null);
         String url = preferences.getString(URL_KEY,null);
 
-        return new MyProfile(name, url, id);
+        MyProfile profile = new MyProfile(name, url, id);
+
+        // Load courses from the database
+        CourseDatabase db = CourseDatabase.singleton(context);
+        profile.setCourses(db.courseDao().getAll());
+
+        return profile;
     }
 
     /**

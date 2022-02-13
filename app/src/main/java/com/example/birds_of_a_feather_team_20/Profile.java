@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,6 +37,7 @@ public class Profile {
         this.name = name;
         this.photoURL = photoURL;
         this.id = id;
+        courses = new ArrayList<>();
     }
 
     public String getId() {
@@ -45,6 +47,11 @@ public class Profile {
         return (name != null) ? name : "";
     }
     public List<Course> getCourses(){ return this.courses;}
+    public void setCourses(List<Course> courses) {
+        if (courses == null)
+            return;
+        this.courses = courses;
+    }
     public String getPhotoURL() {
         return (photoURL != null) ? photoURL : "";
     }
@@ -78,7 +85,7 @@ public class Profile {
     }
 
     /**
-     * Two profiles are equal if they have the same id. Everything else is ignored.
+     * Count the number of courses that match between this profile and otherProfile
      * @param otherProfile profile to compare courses to
      * @return number of matching courses
      */
@@ -86,11 +93,11 @@ public class Profile {
         //int to return the num of matching courses
         int numMatchCourse = 0;
 
-        for(int i = 0; i < this.courses.size(); i++){
+        for(int i = 0; i < getCourses().size(); i++){
             for(int j = 0; j < otherProfile.getCourses().size(); j++){
 
                 //check if courses are equal
-                if(courses.get(i).equals(otherProfile.getCourses().get(j))){
+                if(getCourses().get(i).equals(otherProfile.getCourses().get(j))){
                     numMatchCourse++;
                 }
             }

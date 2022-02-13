@@ -37,8 +37,14 @@ public class ProfilesCollection {
         modifications = new Stack<>();
     }
 
-    public void addOrUpdateProfile(Profile profile) {
+    public void addOrUpdateProfile(Profile profile, int courseMatches) {
         if (profile == null) return;
+
+//        int profileMatches = profile.countMatchingCourses(MyProfile.singleton())
+        if (courseMatches == 0) {
+            return; // Don't add to list if no matches
+        }
+
         int index = getProfiles().indexOf(profile);
         if (index == -1) {
             insertNewProfile(profile, getProfiles().size());
