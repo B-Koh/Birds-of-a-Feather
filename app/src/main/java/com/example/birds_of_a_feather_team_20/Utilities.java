@@ -1,6 +1,5 @@
 package com.example.birds_of_a_feather_team_20;
 
-
 import android.content.Context;
 import android.widget.Toast;
 
@@ -22,5 +21,5 @@ public class Utilities {
         }
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
-
 }
+

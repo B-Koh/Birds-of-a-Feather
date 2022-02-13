@@ -4,6 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.UUID;
+
 /**
  * This class is an extension of Profile to represent the student using the app. For all other
  * students, use Profile. Call methods setName() and setPhotoURL() to change the profile data
@@ -13,12 +18,13 @@ import android.preference.PreferenceManager;
 public class MyProfile extends Profile {
     private static final String NAME_KEY = "name";
     private static final String URL_KEY = "photo_url"; // Note: If you change these, edit the tests.
+    private static final String ID_KEY = "user_id";
 
     private static SharedPreferences preferences;
     private static MyProfile singletonInstance;
 
-    public MyProfile(String name, String photoURL) {
-        super(name, photoURL);
+    public MyProfile(String name, String photoURL, String id) {
+        super(name, photoURL, id);
     }
 
     /**
@@ -40,23 +46,19 @@ public class MyProfile extends Profile {
      * Helper method for loading the local student's profile from shared preferences.
      */
     private static MyProfile loadProfile(Context context) {
+        String id = preferences.getString(ID_KEY, null);
+        if (id == null) {
+            id = UUID.randomUUID().toString();
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(ID_KEY, id);
+            editor.apply();
+        }
         String name = preferences.getString(NAME_KEY,null);
         String url = preferences.getString(URL_KEY,null);
 
-        return new MyProfile(name, url);
+        return new MyProfile(name, url, id);
     }
 
-    /**
-     * Updates local student's name and saves the change to shared prefs.
-     * @param name New name
-     */
-    public void setName(String name, SharedPreferences prefs) {
-        super.setName(name);
-//        SharedPreferences.Editor editor = preferences.edit();
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(NAME_KEY, name);
-        editor.apply();
-    }
     /**
      * Updates local student's name and saves the change to shared prefs.
      * @param name New name

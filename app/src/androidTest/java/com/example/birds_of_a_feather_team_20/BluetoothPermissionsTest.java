@@ -33,7 +33,6 @@ public class BluetoothPermissionsTest {
 
     /**
      * Tests if bluetooth permissions have been granted on local device
-     * Cited Work: https://stackoverflow.com/questions/50403128/how-to-grant-permissions-to-android-instrumented-tests
      */
     @Test
     public void bluetoothPermissionsTest() {
@@ -64,23 +63,6 @@ public class BluetoothPermissionsTest {
             assertTrue(bt.isBluetoothEnabled());
         });
     }
-
-    /**
-     * Helper method to obtain MainActivity
-     * Cited Work: https://stackoverflow.com/a/53023272
-     */
-    public static Activity getCurrentActivity() {
-        final Activity[] currentActivity = {null};
-        getInstrumentation().runOnMainSync(() -> {
-            Collection<Activity> resumedActivities = ActivityLifecycleMonitorRegistry.getInstance()
-                    .getActivitiesInStage(RESUMED);
-            if (resumedActivities.iterator().hasNext()) {
-                currentActivity[0] = resumedActivities.iterator().next();
-            }
-        });
-        return currentActivity[0];
-    }
-
 }
 
 

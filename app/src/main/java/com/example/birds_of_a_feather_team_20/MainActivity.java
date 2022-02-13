@@ -6,18 +6,23 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private NearbyManager nearbyManager;
+
+    public NearbyManager getNearbyManager() {
+        return nearbyManager;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Find Friends");
-        MyProfile.singleton(getApplicationContext());
-
 
         // Checks bluetooth permissions
         PermissionsManager permManager = new PermissionsManager(this);
@@ -26,6 +31,30 @@ public class MainActivity extends AppCompatActivity {
         // Checks bluetooth if enabled
         BluetoothManager bt = new BluetoothManager(this);
         bt.initializeBluetooth();
+
+        MyProfile.singleton(getApplicationContext()); // This line is probably unnecessary
+
+        nearbyManager = new NearbyManager(this);
+    }
+
+    @Override
+    protected void onStart() {
+        Log.i("START", "MainActivity.onStart");
+
+        super.onStart();
+
+        nearbyManager.subscribe();
+        nearbyManager.publish();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.i("STOP", "MainActivity.onStop");
+
+        nearbyManager.unsubscribe();
+        nearbyManager.unpublish();
+
+        super.onStop();
 
     }
 
