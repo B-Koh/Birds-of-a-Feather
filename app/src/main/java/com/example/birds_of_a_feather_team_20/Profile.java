@@ -39,10 +39,10 @@ public class Profile {
         return id;
     }
     public String getName() {
-        return name;
+        return (name != null) ? name : "";
     }
     public String getPhotoURL() {
-        return photoURL;
+        return (photoURL != null) ? photoURL : "";
     }
     public void setName(String name) {
         this.name = name;
@@ -176,9 +176,9 @@ public class Profile {
         if (data == null) return null;
         StringReader in = new StringReader(data);
         JsonReader reader = new JsonReader(in);
-        String id = null;
-        String name = null;
-        String photoURL = null;
+        String id = "";
+        String name = "";
+        String photoURL = "";
         Profile profile = null;
         try {
             // read name and URL
@@ -203,11 +203,18 @@ public class Profile {
             reader.endObject();
             // TODO read courses array
             reader.close();
-            profile = new Profile(name, photoURL, id);
-        } catch (IOException e) {
+        } catch (IOException | IllegalStateException e) {
             e.printStackTrace();
         }
         in.close();
+
+        profile = new Profile(name, photoURL, id);
         return profile;
+    }
+
+    public boolean isValid() {
+        // OK for the photoURL to be ""
+        return getName() != null && getId() != null && getPhotoURL() != null &&
+                !getName().trim().equals("") && !getId().trim().equals("");
     }
 }

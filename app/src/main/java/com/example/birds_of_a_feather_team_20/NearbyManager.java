@@ -96,13 +96,16 @@ public class NearbyManager {
 
         // Convert the string to a Profile
         Profile profile = Profile.deserialize(profileData);
-        if (profile == null) return;
+        if (profile == null || !profile.isValid())
+            return;
 
         // Store the Profile in our list of profiles
         ProfilesCollection profiles = ProfilesCollection.singleton();
         profiles.addOrUpdateProfile(profile);
         profilesListView.refreshProfileListView(profiles.getModifications(), profiles.getAdditions());
     }
+
+
 
     /**
      * Send a mock message (for testing purposes)

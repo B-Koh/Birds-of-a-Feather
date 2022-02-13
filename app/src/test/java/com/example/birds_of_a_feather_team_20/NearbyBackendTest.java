@@ -46,6 +46,34 @@ public class NearbyBackendTest {
         }
     }
     @Test
+    public void testFindingPersonNull() {
+        try(ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+            scenario.onActivity(activity -> {
+                ProfilesCollection.singleton().getProfiles().clear();
+                assertEquals(0, ProfilesCollection.singleton().getProfiles().size());
+
+                Profile profile = MyProfile.singleton(activity.getApplicationContext());
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
+
+                String messageStr = "{\"user_id\":\"fakeid\",\"name\":null,\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg\"}";
+                sendMessage(activity, messageStr);
+                assertEquals(0, ProfilesCollection.singleton().getProfiles().size());
+
+                messageStr = "{\"user_id\":\"fakeid\",\"name\":\"John\",\"photo_url\":\"\"}";
+                sendMessage(activity, messageStr);
+                assertEquals(1, ProfilesCollection.singleton().getProfiles().size());
+
+                messageStr = "{\"user_id\":\"fakeid\",\"name\":\"John\",\"photo_url\":null}";
+                sendMessage(activity, messageStr);
+                assertEquals(1, ProfilesCollection.singleton().getProfiles().size());
+//                Profile john = ProfilesCollection.singleton().getProfiles().get(0);
+//                assertEquals("John", john.getName());
+//                assertEquals("https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg", john.getPhotoURL());
+//                assertEquals("fakeid", john.getId());
+            });
+        }
+    }
+    @Test
     public void testFindingSeveralPeople() {
         try(ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             scenario.onActivity(activity -> {
