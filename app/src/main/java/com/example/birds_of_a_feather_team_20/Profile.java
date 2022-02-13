@@ -8,10 +8,13 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.birds_of_a_feather_team_20.model.db.Course;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -25,7 +28,7 @@ public class Profile {
 
     private Bitmap thumbnail; //Compressed image from URL
     private String lastDownloadedURL;
-    // private List<Course> courses; // TODO
+    private List<Course> courses;
 
 
     public Profile(String name, String photoURL, String id) {
@@ -41,6 +44,7 @@ public class Profile {
     public String getName() {
         return (name != null) ? name : "";
     }
+    public List<Course> getCourses(){ return this.courses;}
     public String getPhotoURL() {
         return (photoURL != null) ? photoURL : "";
     }
@@ -71,6 +75,27 @@ public class Profile {
         if (!(other instanceof Profile)) return false;
         Profile casted = (Profile)other;
         return Objects.equals(casted.getId(), this.getId());
+    }
+
+    /**
+     * Two profiles are equal if they have the same id. Everything else is ignored.
+     * @param otherProfile profile to compare courses to
+     * @return number of matching courses
+     */
+    public int countMatchingCourses(Profile otherProfile){
+        //int to return the num of matching courses
+        int numMatchCourse = 0;
+
+        for(int i = 0; i < this.courses.size(); i++){
+            for(int j = 0; j < otherProfile.getCourses().size(); j++){
+
+                //check if courses are equal
+                if(courses.get(i).equals(otherProfile.getCourses().get(j))){
+                    numMatchCourse++;
+                }
+            }
+        }
+        return numMatchCourse;
     }
 
     /**
