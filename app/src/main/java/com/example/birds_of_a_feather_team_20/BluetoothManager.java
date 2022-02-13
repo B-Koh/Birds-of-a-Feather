@@ -1,16 +1,12 @@
 package com.example.birds_of_a_feather_team_20;
 
-import android.Manifest;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.core.content.ContextCompat;
 
 /**
  * This class is used to manage and check bluetooth status on a user's local device. Call
@@ -40,8 +36,7 @@ public class BluetoothManager {
                 result -> {
                     // Checks whether user granted/denied bluetooth
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        // Don't do anything
-
+                        Utilities.logToast(thisContext, "Bluetooth is turned on");
                     }
                     else {
                         Utilities.logToast(thisContext, "Bluetooth is off");
@@ -50,6 +45,7 @@ public class BluetoothManager {
 
         // Checks if Bluetooth permission has been granted
         // Cited Work: https://stackoverflow.com/questions/62671106/onactivityresult-method-is-deprecated-what-is-the-alternative
+        //             https://developer.android.com/guide/topics/connectivity/bluetooth/setup
         if (!isBluetoothEnabled()) {
             // Ask to enable bluetooth
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -65,13 +61,13 @@ public class BluetoothManager {
      * @return - true if enabled and false for all other cases
      */
     public boolean isBluetoothEnabled() {
-        // Checks if permission has been granted and bluetooth is enabled/disabled
+        // Checks if permission has been granted
         if (new PermissionsManager(thisContext).isBluetoothPermissionGranted()) {
             return BluetoothAdapter.getDefaultAdapter().isEnabled();
         }
+
         Utilities.logToast(thisContext, "Bluetooth permission denied. Please turn on permission.");
         return false;
     }
-
 
 }
