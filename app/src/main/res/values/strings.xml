@@ -13,5 +13,5 @@
     <string name="save_course_exit">Save and Exit</string>
     <string name="save_add_course">Save and Add New Course</string>
     <string name="delete_course">Delete and Exit</string>
-
+    <string name="save">Save</string>
 </resources>

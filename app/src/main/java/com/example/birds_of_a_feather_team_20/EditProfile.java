@@ -22,15 +22,21 @@ public class EditProfile extends AppCompatActivity {
     }
 
     public void onHomeClicked(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
+        saveProfile();
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        saveProfile();
+        super.onBackPressed();
     }
 
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        saveProfile();
     }
 
     public void getNameAndURL() {
@@ -56,5 +62,6 @@ public class EditProfile extends AppCompatActivity {
 
 //        Intent intent = new Intent(this, EditCourses.class);
 //        startActivity(intent);
+        //getApplicationContext().update
     }
 }

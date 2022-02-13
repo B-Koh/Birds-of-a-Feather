@@ -21,6 +21,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.List;
+import java.util.Stack;
+
 @RunWith(RobolectricTestRunner.class)
 public class ProfileBackendTestAndroidX {
 //    public ActivityScenarioRule<MainActivity> scenarioRule;
@@ -53,7 +56,7 @@ public class ProfileBackendTestAndroidX {
     public void testBasicProfile() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        Profile bill = new Profile("Bill Clinton", "https://upload.wikimedia.org/wikipedia/commons/d/d3/Bill_Clinton.jpg");
+        Profile bill = new Profile("Bill Clinton", "https://upload.wikimedia.org/wikipedia/commons/d/d3/Bill_Clinton.jpg", "fakeid");
         assertEquals(bill.getName(), "Bill Clinton");
         bill.setName("William Clinton");
         assertEquals(bill.getName(), "William Clinton");
@@ -87,5 +90,19 @@ public class ProfileBackendTestAndroidX {
                 assertEquals(profile.getPhotoURL(), "https://upload.wikimedia.org/wikipedia/commons/8/8d/President_Barack_Obama.jpg");
             });
         }
+    }
+    @Test
+    public void testSerialize() {
+        Profile bill = new Profile("Bill", "link", "fakeid");
+        assertEquals("{\"user_id\":\"fakeid\",\"name\":\"Bill\",\"photo_url\":\"link\"}",bill.serialize());
+    }
+
+    @Test
+    public void testDeserialize() {
+
+        Profile john = Profile.deserialize("{\"user_id\":\"fakeid\",\"name\":\"John\",\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg\"}");
+        assertEquals("John", john.getName());
+        assertEquals("https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg", john.getPhotoURL());
+        assertEquals("fakeid", john.getId());
     }
 }
