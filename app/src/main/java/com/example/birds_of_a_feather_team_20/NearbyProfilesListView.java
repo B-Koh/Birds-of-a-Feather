@@ -15,9 +15,9 @@ public class NearbyProfilesListView {
     private final ProfilesViewAdapter adapter;
     private final List<Profile> foundProfiles;
 
-    public NearbyProfilesListView(Activity activity, List<Profile> foundProfiles) {
+    public NearbyProfilesListView(Activity activity) {
         this.activity = activity;
-        this.foundProfiles = foundProfiles;
+        this.foundProfiles = ProfilesCollection.singleton().getProfiles();
 //        this.nearbyManager = mainActivity.getNearbyManager();
 
         RecyclerView basicRecycler = activity.findViewById(R.id.profile_list);

@@ -37,7 +37,7 @@ public class NearbyManager {
         additions = new Stack<>();
         modifications = new Stack<>();
 
-        profilesListView = new NearbyProfilesListView(activity, getFoundProfiles());
+        profilesListView = new NearbyProfilesListView(activity);
 
         profileMessageListener = new MessageListener() {
             @Override
@@ -132,8 +132,9 @@ public class NearbyManager {
         return profileMessageListener;
     }
 
-    public List<Profile> getFoundProfiles() {
-        return foundProfiles;
+    public ProfilesCollection getFoundProfiles() {
+//        return foundProfiles;
+        return ProfilesCollection.singleton();
     }
 
     public Stack<Integer> getAdditions() {
