@@ -27,6 +27,12 @@ public class EditProfile extends AppCompatActivity {
         finish();
     }
 
+//    public void onEditCoursesClicked(View view){
+//        Intent intent = new Intent(this, EditCourses.class);
+//        startActivity(intent);
+//        finish();
+//    }
+
     @Override
     protected void onDestroy(){
         super.onDestroy();
