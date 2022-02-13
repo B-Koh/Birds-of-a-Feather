@@ -30,6 +30,7 @@ public class DisplayProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display);
+        Intent intent = getIntent();
         setName();
         setImage();
         setCourses();
