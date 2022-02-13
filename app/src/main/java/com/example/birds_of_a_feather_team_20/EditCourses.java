@@ -12,6 +12,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.birds_of_a_feather_team_20.model.db.Course;
+import com.example.birds_of_a_feather_team_20.model.db.CourseDao;
+import com.example.birds_of_a_feather_team_20.model.db.CourseDatabase;
+
+import java.util.List;
+
 /**
  * This class consists of the UI necessary for adding, editing, and deleting courses.
  * It stores the course's subject, course number, year, and quarter.
@@ -23,11 +29,17 @@ public class EditCourses extends AppCompatActivity {
     String[] quarterList = {"Fall", "Winter", "Spring", "Summer Session I", "Summer Session II"};
     String subject;
     String courseNumber;
+    CourseDatabase db;
+    MyProfile mp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_courses);
+
+        db = CourseDatabase.singleton(this);
+        mp = MyProfile.singleton(this);
+        List<Course> courses = db.courseDao().getAll();
 
         Spinner year_dropdown = findViewById(R.id.year_dropdown);
         ArrayAdapter<Integer> year_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, yearList);
@@ -72,7 +84,7 @@ public class EditCourses extends AppCompatActivity {
     private void onSave() {
         TextView subjectView = findViewById(R.id.subject_edit_text);
         subject = subjectView.getText().toString();
-//        Course.singleton(getApplicationContext()).setSubject(subject);
+//        Course course = CourseDatabase.singleton(getApplicationContext());
 
         TextView courseNumberView = findViewById(R.id.course_num_edit_text);
         courseNumber = subjectView.getText().toString();
@@ -85,6 +97,13 @@ public class EditCourses extends AppCompatActivity {
         Spinner quarter_spinner = findViewById(R.id.quarter_dropdown);
         quarter = quarter_spinner.getSelectedItem().toString();
 //        Course.singleton(getApplicationContext()).setQuarter(quarter);
+
+        Course currCourse = new Course(year, quarter, subject, courseNumber);
+        db.courseDao().insert(currCourse);
+        List<Course> updatedCourses = db.courseDao().getAll();
+//        mp.setCourses(updatedCourses);
+
+
 
     }
 }
