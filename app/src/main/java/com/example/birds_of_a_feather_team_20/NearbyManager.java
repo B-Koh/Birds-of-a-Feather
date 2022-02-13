@@ -8,140 +8,115 @@ import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
 
+/**
+ * This class is responsible for handling the Nearby messaging.
+ * It has methods for (un)subscribing and (un)publishing, and it handles the callback for finding
+ * a message.
+ */
 public class NearbyManager {
-
-    private final List<Profile> foundProfiles;
-    private final Stack<Integer> additions;
-    private final Stack<Integer> modifications;
-
-//    RecyclerView basicRecycler;
-//    RecyclerView.LayoutManager layoutManager;
-//    ProfilesViewAdapter adapter;
-
-    private final Activity activity;
-    private final NearbyProfilesListView profilesListView;
-    private final MessageListener profileMessageListener;
-    private Message profileMessage;
 
     public static final Charset CHARSET = StandardCharsets.UTF_8;
 
+    private final Activity activity;
+    private final ProfilesListView profilesListView;
+    private final MessageListener profileMessageListener;
 
+    private Message profileMessage;
+
+    /**
+     * Constructor. Sets up the message listener and the profiles list view
+     */
     public NearbyManager(Activity activity) {
         this.activity = activity;
 
-        foundProfiles = new ArrayList<>();
-        additions = new Stack<>();
-        modifications = new Stack<>();
+        // Set up the list view of nearby profiles
+        profilesListView = new ProfilesListView(activity);
 
-        profilesListView = new NearbyProfilesListView(activity);
-
+        // Set up the MessageListener and its callbacks
         profileMessageListener = new MessageListener() {
             @Override
             public void onFound(final Message message) {
+                if (message == null) return;
                 String msgBody = new String(message.getContent(), CHARSET);
                 Utilities.logToast(activity, "Found profile: " + msgBody);
-                onFoundProfile(msgBody);
+
+                onFoundProfile(msgBody); // Handle the profile we found
             }
 
+            // Only listening to this for debugging purposes. Not functionally necessary.
             @Override
             public void onLost(final Message message) {
+                if (message == null) return;
                 String msgBody = new String(message.getContent(), CHARSET);
                 Utilities.logToast(activity, "Lost profile: " + msgBody);
             }
         };
     }
-
+    /**
+     * Start listening for nearby profiles
+     */
     public void subscribe() {
         Utilities.logToast(activity, "Subscribing to nearby profiles...");
         Nearby.getMessagesClient(activity).subscribe(profileMessageListener);
     }
+    /**
+     * Stop listening for nearby profiles
+     */
     public void unsubscribe() {
         Utilities.logToast(activity, "Unsubscribing...");
         Nearby.getMessagesClient(activity).unsubscribe(profileMessageListener);
     }
+    /**
+     * Start sharing our profile
+     */
     public void publish() {
-        profileMessage = new Message(MyProfile.singleton(activity).serialize().getBytes(CHARSET));
         Utilities.logToast(activity, "Publishing my profile...");
+        // Convert our profile to a string and publish it as a message
+        profileMessage = new Message(MyProfile.singleton(activity).serialize().getBytes(CHARSET));
         Nearby.getMessagesClient(activity).publish(profileMessage).addOnFailureListener(e ->
                 Utilities.logToast(activity, "API Error!"));
     }
+    /**
+     * Stop sharing our profile
+     */
     public void unpublish() {
         Utilities.logToast(activity, "Unpublishing...");
         Nearby.getMessagesClient(activity).unpublish(profileMessage);
     }
 
-    public void sendFakeMessage(String messageStr) {
-        Message message = new Message(messageStr.getBytes(CHARSET));
-        profileMessageListener.onFound(message);
-        profileMessageListener.onLost(message);
-    }
-
+    /**
+     * Call this method when a profile is found. If the profile is new, then it will be added to
+     * the list of profiles. If it isn't new, then the existing profile will be updated with any
+     * new data (e.g. a new name, photo, etc.)
+     */
     private void onFoundProfile(String profileData) {
-        // A profile was received, now process it
+        Utilities.logToast(activity, "Adding profile: " + profileData);
+        if (profileData == null) return;
+
+        // Convert the string to a Profile
         Profile profile = Profile.deserialize(profileData);
         if (profile == null) return;
-        addProfile(profile);
-        profilesListView.refreshProfileListView(getModifications(), getAdditions());
+
+        // Store the Profile in our list of profiles
+        ProfilesCollection profiles = ProfilesCollection.singleton();
+        profiles.addOrUpdateProfile(profile);
+        profilesListView.refreshProfileListView(profiles.getModifications(), profiles.getAdditions());
     }
 
-    private void addProfile(Profile profile) {
-        /*for (int i = 0, nearbyProfilesSize = foundProfiles.size(); i < nearbyProfilesSize; i++) {
-            Profile p = foundProfiles.get(i);
-            if (p.getId().equals(profile.getId())) {
-                if (!p.getName().equals(profile.getName()) || !p.getPhotoURL().equals(profile.getPhotoURL())) {
-                    updateExistingProfile(profile, i);
-                }
-                // Don't want to notify the recycler if nothing changed (because it will play an animation)
-                return;
-            }
-        }*/
-        if (profile == null) return;
-        int index = getFoundProfiles().indexOf(profile);
-        if (index == -1) {
-
-            insertNewProfile(profile, getFoundProfiles().size());
-        }
-        else {
-            updateExistingProfile(profile, index);
-        }
+    /**
+     * Send a mock message (for testing purposes)
+     */
+    public void sendFakeMessage(String messageStr) {
+        Message message = new Message(messageStr.getBytes(CHARSET));
+        getProfileMessageListener().onFound(message);
+        getProfileMessageListener().onLost(message);
     }
 
-    private void updateExistingProfile(Profile newProfile, int index) {
-        Utilities.logToast(activity, "Update existing profile: " + newProfile.getName());
-
-        Profile existing = getFoundProfiles().get(index);
-        if(newProfile == null || existing == null) {
-            return; // Note: Making your profile null will not remove it from others' lists
-        }
-        if (existing.strongEquals(newProfile)) return; // Don't update if they already match (would unnecessarily update the list view)
-        existing.updateProfile(newProfile);
-        getModifications().add(index);
-    }
-    private void insertNewProfile(Profile profile, int index) {
-        Utilities.logToast(activity, "Adding to List: " + profile.serialize());
-        getAdditions().add(index);
-        getFoundProfiles().add(index, profile); // no profile with this id, so add it
-        // Note, not sure if it is necessary to tell the adapter that all the other items moved down
-    }
-
+    /**
+     * Get the message listener
+     */
     public MessageListener getProfileMessageListener() {
         return profileMessageListener;
-    }
-
-    public ProfilesCollection getFoundProfiles() {
-//        return foundProfiles;
-        return ProfilesCollection.singleton();
-    }
-
-    public Stack<Integer> getAdditions() {
-        return additions;
-    }
-
-    public Stack<Integer> getModifications() {
-        return modifications;
     }
 }

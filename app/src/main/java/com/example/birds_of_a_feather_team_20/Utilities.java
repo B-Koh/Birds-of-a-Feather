@@ -5,7 +5,7 @@ import android.widget.Toast;
 
 public class Utilities {
 
-    public static final boolean debugToast = true;
+    public static final boolean debugToast = false;
 
     public static void logToast(Context context, String message) {
         if (!debugToast) {

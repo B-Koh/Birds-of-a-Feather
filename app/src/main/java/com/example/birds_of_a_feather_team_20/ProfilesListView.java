@@ -10,12 +10,20 @@ import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.Executors;
 
-public class NearbyProfilesListView {
+/**
+ * This class is for managing the UI of the profile list. It sets up the RecyclerView and
+ * ViewAdapter, and it notifies the ViewAdapter when items have been added or updated.
+ */
+public class ProfilesListView {
     private final Activity activity;
     private final ProfilesViewAdapter adapter;
     private final List<Profile> foundProfiles;
 
-    public NearbyProfilesListView(Activity activity) {
+    /**
+     * Constructor. Sets up the UI components.
+     * @param activity
+     */
+    public ProfilesListView(Activity activity) {
         this.activity = activity;
         this.foundProfiles = ProfilesCollection.singleton().getProfiles();
 //        this.nearbyManager = mainActivity.getNearbyManager();
@@ -27,8 +35,10 @@ public class NearbyProfilesListView {
         basicRecycler.setAdapter(adapter);
     }
 
-
-    public void updateList(Stack<Integer> modifications, Stack<Integer> additions) {
+    /**
+     * Notifies the adapter of any changes to the data
+     */
+    public void notifyAdapter(Stack<Integer> modifications, Stack<Integer> additions) {
 
         while(!modifications.isEmpty()) {
             Integer i = modifications.pop();
@@ -40,19 +50,13 @@ public class NearbyProfilesListView {
             if (i != null)
                 adapter.notifyItemInserted(i);
         }
-//        adapter.notifyDataSetChanged();
-//        adapter = new ProfilesViewAdapter(NearbyManager.nearbyProfiles);
-//        basicRecycler.setAdapter(adapter);
     }
 
-    public void updateThumbnailsBackground(Stack<Integer> modifications, Stack<Integer> additions) {
-//        for (Profile p : foundProfiles) {
-//            if (p != null) {
-//                p.getThumbnail();
-//            }
-//        }
-
-
+    /**
+     * Fetches any new thumbnails on the modified profiles. Do not run this on the UI thread.
+     */
+    private void updateThumbnailsBackground(Stack<Integer> modifications, Stack<Integer> additions) {
+        if (modifications == null || additions == null) return;
 
         for(Integer i : modifications) {
             if (i != null)
@@ -64,15 +68,18 @@ public class NearbyProfilesListView {
         }
     }
 
-
+    /**
+     * On a background thread, download any new thumbnails, then notify the view adapter of changes
+     */
     public void refreshProfileListView(Stack<Integer> modifications, Stack<Integer> additions) {
-        activity.setTitle("Find Friends (" + foundProfiles.size() + ")"); // FIXME: May not want this here
+        // Show
+        activity.setTitle("Find Friends (" + foundProfiles.size() + ")");
 
         // Refresh on background thread
         Executors.newSingleThreadExecutor().submit(() -> {
             updateThumbnailsBackground(modifications, additions);
             activity.runOnUiThread(() -> {
-                updateList(modifications, additions);
+                notifyAdapter(modifications, additions);
             });
             return null;
         });

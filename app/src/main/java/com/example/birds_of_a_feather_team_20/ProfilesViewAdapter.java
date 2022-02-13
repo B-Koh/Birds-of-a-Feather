@@ -15,7 +15,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-
+/**
+ * View adapter for the UI list of nearby profiles. Binds profiles to the view holders.
+ */
 public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapter.ViewHolder> {
     private final List<Profile> profiles;
     private Activity activity;
@@ -61,7 +63,6 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
 
         ViewHolder(View itemView) {
             super(itemView);
-            // TODO also collect other text/image views
             this.profileNameText = itemView.findViewById(R.id.profile_name);
             this.urlText = itemView.findViewById(R.id.profile_photo_url);
             this.photo = itemView.findViewById(R.id.profile_photo);

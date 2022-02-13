@@ -73,21 +73,23 @@ public class Profile {
         return Objects.equals(casted.getId(), this.getId());
     }
 
+    /**
+     * Two profiles are strongly equal if all their data match.
+     */
     public boolean strongEquals(Profile other) {
         return this.equals(other) && Objects.equals(other.getName(), this.getName())
                 && Objects.equals(other.getPhotoURL(), this.getPhotoURL());
         // TODO also check courses?
     }
 
+    /**
+     * Copy data from the newProfile to this profile.
+     */
     public void updateProfile(Profile newProfile) {
-        // return false if there is nothing to update
-//        if (strongEquals(newProfile)) {
-//            return false;
-//        }
-
         this.setId(newProfile.getId());
         this.setName(newProfile.getName());
         this.setPhotoURL(newProfile.getPhotoURL());
+        // TODO Copy courses as well
     }
 
 
@@ -124,6 +126,7 @@ public class Profile {
      * images, the method will compress the image to make it square.
      *
      * Recommended to run this in background.
+     * TODO May want to make a separate fetchThumbnail to download, so it doesn't run on UI thread
      *
      * @return If image has been previously loaded, null otherwise.
      */
@@ -144,17 +147,11 @@ public class Profile {
         return thumbnail;
     }
 
+    /**
+     * Represent the Profile as a String using JSON
+     * https://developer.android.com/reference/android/util/JsonWriter
+     */
     public String serialize() {
-        /*JSONObject json = new JSONObject();
-        String name = this.getName();
-        String url = this.getPhotoURL();
-        try {
-            json.put("name", name);
-            json.put("photo_url", url);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return json.toString();*/
         StringWriter out = new StringWriter();
         JsonWriter writer = new JsonWriter(out);
         try {
@@ -172,10 +169,11 @@ public class Profile {
     }
 
     /**
-     * Deserialize using JSON
+     * Convert the String to a Profile using JSON
+     * https://developer.android.com/reference/android/util/JsonReader
      */
     public static Profile deserialize(String data) {
-        // https://developer.android.com/reference/android/util/JsonReader
+        if (data == null) return null;
         StringReader in = new StringReader(data);
         JsonReader reader = new JsonReader(in);
         String id = null;
@@ -212,7 +210,4 @@ public class Profile {
         in.close();
         return profile;
     }
-//    public static Profile deserialize(byte[] data) {
-//        return deserialize(new String(data));
-//    }
 }
