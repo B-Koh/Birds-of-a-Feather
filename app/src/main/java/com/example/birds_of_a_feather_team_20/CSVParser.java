@@ -7,6 +7,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is used to read in a file and parse the file into something useable
+ */
 public class CSVParser {
 
     private InputStream inputStream;
@@ -15,6 +18,11 @@ public class CSVParser {
         this.inputStream = inputStream;
     }
 
+    /**
+     * Reads in a file and parses it.
+     * @return list of rows from the csv file (each index in the list is a row)
+     * Cited work: https://stackoverflow.com/questions/38415680/how-to-parse-csv-file-into-an-array-in-android-studio/38415815
+     */
     public List read(){
         List outputList = new ArrayList();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
