@@ -211,6 +211,7 @@ public class Profile {
     /**
      * Represent the Profile as a String using JSON
      * https://developer.android.com/reference/android/util/JsonWriter
+     * https://www.javadoc.io/doc/com.google.code.gson/gson/2.6.2/com/google/gson/stream/JsonWriter.html
      */
     public String serialize() {
         StringWriter out = new StringWriter();
@@ -220,6 +221,8 @@ public class Profile {
             writer.name("user_id").value(this.getId());
             writer.name("name").value(this.getName());
             writer.name("photo_url").value(this.getPhotoURL());
+            writer.name("course_data").value(serializeCourses(this.getCourses()));
+            //writeCourses(writer);
             writer.endObject();
             writer.close();
             return out.toString();
@@ -228,6 +231,30 @@ public class Profile {
         }
         return null;
     }
+
+    private static String serializeCourses(List<Course> courses) throws IOException {
+        StringWriter out = new StringWriter();
+        JsonWriter writer = new JsonWriter(out);
+        writeCourses(writer, courses);
+        writer.close();
+        return out.toString();
+    }
+
+    private static void writeCourses(JsonWriter writer, List<Course> courses) throws IOException {
+//        writer.
+        writer.beginArray();
+        for(Course course : courses) {
+            course.writeCourse(writer);
+            // writeCourse(writer, course);
+        }
+        writer.endArray();
+    }
+
+//    private static void writeCourse(JsonWriter writer, Course course) throws IOException {
+//        writer.beginObject();
+//        writer.name("course_data").value(course.serialize());
+//        writer.endObject();
+//    }
 
     /**
      * Convert the String to a Profile using JSON
@@ -240,6 +267,7 @@ public class Profile {
         String id = "";
         String name = "";
         String photoURL = "";
+        String coursesData = "";
         Profile profile = null;
         try {
             // read name and URL
@@ -260,21 +288,66 @@ public class Profile {
                     case "photo_url":
                         photoURL = reader.nextString();
                         break;
+                    case "course_data":
+                        coursesData = reader.nextString();
                     default:
                         reader.skipValue();
                         break;
                 }
             }
+            profile = new Profile(name, photoURL, id);
+            readCourses(profile, coursesData);
             reader.endObject();
-            // TODO read courses array
             reader.close();
         } catch (IOException | IllegalStateException e) {
             e.printStackTrace();
         }
         in.close();
 
-        profile = new Profile(name, photoURL, id);
         return profile;
+    }
+
+    private static void readCourses(Profile profile, String coursesData) throws IOException {
+        if (coursesData == null || coursesData.equals("")) return;
+
+//        profile.addCourse();
+        StringReader in = new StringReader(coursesData);
+        JsonReader reader = new JsonReader(in);
+//        String id = "";
+//        String name = "";
+//        String photoURL = "";
+//        String coursesData = "";
+//        Profile profile = null;
+        reader.beginArray();
+        while (reader.hasNext()) {
+            profile.addCourse(readCourse(reader));
+        }
+        reader.endArray();
+        reader.close();
+//        try {
+//             read name and URL
+//            reader.beginObject();
+//            while(reader.hasNext()) {
+//                String key = reader.nextName();
+    }
+
+    private static Course readCourse(JsonReader reader) throws IOException {
+        Course course = null;
+        reader.beginObject();
+//        while(reader.hasNext()) {
+            if (reader.nextName().equals("course_data")) {
+                course = Course.deserialize(reader.nextString());
+            } else {
+                reader.skipValue();
+            }
+//        }
+        reader.endObject();
+        return course;
+    }
+
+    // TODO match this up with what brandon added
+    public void addCourse(Course course) {
+        getCourses().add(course);
     }
 
     public boolean isValid() {
