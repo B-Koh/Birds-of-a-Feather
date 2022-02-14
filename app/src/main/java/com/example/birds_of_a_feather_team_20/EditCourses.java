@@ -63,9 +63,8 @@ public class EditCourses extends AppCompatActivity {
         Course newCourse = getCourseInfo();
         addCourse(newCourse);
 
-        // goes to Personal Profile Page
-//        Intent intent = new Intent(this, __.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
         Toast.makeText(this, "Course Saved", Toast.LENGTH_SHORT).show();
     }
 
@@ -73,8 +72,8 @@ public class EditCourses extends AppCompatActivity {
         Course newCourse = getCourseInfo();
         deleteCourse(newCourse);
         Toast.makeText(this, "Course Deleted", Toast.LENGTH_SHORT).show();
-//        Intent intent = new Intent(this, .class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     public void onSaveAddClicked(View view) {
