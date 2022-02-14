@@ -79,11 +79,9 @@ public class MainActivity extends AppCompatActivity {
         try {
             InputStream in = new ByteArrayInputStream(debugText.getBytes(StandardCharsets.UTF_8));
             CSVParser parser = new CSVParser(in);
-            List thisList = parser.read();
+            List<String[]> thisList = parser.read();
             String name = ((String[]) thisList.get(0))[0];
             String url = ((String[]) thisList.get(1))[0];
-//        String url = ((String[])thisList.get(1))[0];
-//        List<Course>
             Profile profile = new Profile(name, url, String.valueOf(new Random().nextInt()));
             for (int i = 2; i < thisList.size(); i++) {
                 int year = Integer.parseInt(((String[]) thisList.get(i))[0]);
@@ -95,29 +93,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-//    public void onSetFakeProfileClicked2() {
-////        TextView nameView = (TextView)findViewById(R.id.debug_textview2);
-//        String debugText = "Bill,,,\n" +
-//                "https://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,\n" +
-//                "2021,FA,CSE,210\n" +
-//                "2022,WI,CSE,110\n" +
-//                "2022,SP,CSE,110\n";
-//
-//        InputStream in = new ByteArrayInputStream(debugText.getBytes(StandardCharsets.UTF_8));
-//        CSVParser parser = new CSVParser(in);
-//        List thisList = parser.read();
-//        String name = ((String[]) thisList.get(0))[0];
-//        String url = ((String[]) thisList.get(1))[0];
-////        String url = ((String[])thisList.get(1))[0];
-////        List<Course>
-//        Profile profile = new Profile(name, url, String.valueOf(new Random().nextInt()));
-//        for (int i = 2; i < thisList.size(); i++) {
-//            int year = Integer.parseInt(((String[]) thisList.get(i))[0]);
-//            Course course = new Course(year, ((String[]) thisList.get(i))[1], ((String[]) thisList.get(i))[2], ((String[]) thisList.get(i))[3]);
-//            profile.addCourse(course);
-//        }
-//        nearbyManager.sendFakeMessage(name);
-//    }
 
 
     public void onLaunchProfileClicked(View view) {

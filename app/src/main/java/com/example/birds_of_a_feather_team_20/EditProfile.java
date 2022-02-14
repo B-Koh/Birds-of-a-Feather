@@ -1,5 +1,6 @@
 package com.example.birds_of_a_feather_team_20;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,10 +23,11 @@ public class EditProfile extends AppCompatActivity {
     }
 
     public void onCoursesClicked(View view) {
-        Intent intent = new Intent(this, EditCourses.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, EditCourses.class);
+//        startActivity(intent);
         saveProfile();
-        finish();
+        goToEditCourses();
+//        finish();
     }
 
     @Override
@@ -51,6 +53,11 @@ public class EditProfile extends AppCompatActivity {
     }
 
 
+    public void goToEditCourses() {
+//        finish();
+        Intent intent = new Intent(this, EditCourses.class);
+        startActivity(intent);
+    }
     public void saveProfile() {
         TextView nameView = (TextView)findViewById(R.id.name_textview);
         name = nameView.getText().toString();
@@ -59,13 +66,18 @@ public class EditProfile extends AppCompatActivity {
         TextView urlView = (TextView)findViewById(R.id.photo_url_textview);
         photoURL = urlView.getText().toString();
         MyProfile.singleton(getApplicationContext()).setPhotoURL(photoURL);
-
-        Intent intent = new Intent(this, EditCourses.class);
-        startActivity(intent);
-        //getApplicationContext().update
     }
 
-    public void onFinish(View view) {
+    public void onClickFinish(View view) {
+        saveProfile();
         finish();
+    }
+    public void onClickViewMyProfile(View view) {
+        saveProfile();
+//        finish();
+        Context context = view.getContext();
+        Intent intent = new Intent(context, DisplayProfile.class);
+        intent.putExtra("index_in_profilesList", -1);
+        context.startActivity(intent);
     }
 }

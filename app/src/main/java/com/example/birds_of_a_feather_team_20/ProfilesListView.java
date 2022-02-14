@@ -73,7 +73,8 @@ public class ProfilesListView {
      */
     public void refreshProfileListView(Stack<Integer> modifications, Stack<Integer> additions) {
         // Show
-        activity.setTitle("Find Friends (" + foundProfiles.size() + ")");
+        if (foundProfiles.size() > 0)
+            activity.setTitle("Find Friends (" + foundProfiles.size() + ")");
 
         // Refresh on background thread
         Executors.newSingleThreadExecutor().submit(() -> {

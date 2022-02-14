@@ -30,6 +30,7 @@ public class DisplayProfile extends AppCompatActivity {
     private List<Course> courses;
     private String name;
     private Bitmap profileIm;
+    private boolean isMyProfile = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +39,18 @@ public class DisplayProfile extends AppCompatActivity {
         Intent intent = getIntent();
 
         int index = intent.getIntExtra("index_in_profilesList", 0);
+
         List<Profile> profiles = ProfilesCollection.singleton().getProfiles();
-        profile = profiles.get(index);
+        if (index == -1) {
+            profile = MyProfile.singleton(this);
+            isMyProfile = true;
+        } else {
+            profile = profiles.get(index);
+            isMyProfile = false;
+        }
         setName();
         setCourses();
-
-        Executors.newSingleThreadExecutor().submit(this::setImage);
+        setImage();
 
     }
 
@@ -55,14 +62,18 @@ public class DisplayProfile extends AppCompatActivity {
     }
 
     public void setImage(){
-        ImageView imageView = (ImageView) findViewById(R.id.profile_image);
-        Bitmap fullPhoto = profile.getPhoto();
-        if (fullPhoto == null) {
-            Log.e("DisplayProfile", "fullPhoto is NULL!");
-            return;
-        }
-        profileIm = Bitmap.createScaledBitmap(fullPhoto, 450, 450, true);
-        imageView.setImageBitmap(profileIm);
+        Executors.newSingleThreadExecutor().submit(() -> {
+            ImageView imageView = (ImageView) findViewById(R.id.profile_image);
+            Bitmap fullPhoto = profile.getPhoto();
+            if (fullPhoto == null) {
+                Log.e("DisplayProfile", "fullPhoto is NULL!");
+                return;
+            }
+            profileIm = Bitmap.createScaledBitmap(fullPhoto, 450, 450, true);
+            runOnUiThread(() -> {
+                imageView.setImageBitmap(profileIm);
+            });
+        });
     }
 
     public void setCourses(){
@@ -72,15 +83,15 @@ public class DisplayProfile extends AppCompatActivity {
         coursesRecyclerView = findViewById(R.id.course_view);
         coursesLayoutManager = new LinearLayoutManager(this);
         coursesRecyclerView.setLayoutManager(coursesLayoutManager);
-        coursesViewAdapter = new CoursesViewAdapter(courses);
+        coursesViewAdapter = new CoursesViewAdapter(courses, this, isMyProfile);
 
         coursesRecyclerView.setAdapter(coursesViewAdapter);
 
     }
 
     public void onBackClicked(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
         finish();
     }
 

@@ -27,7 +27,8 @@ public class EditCourses extends AppCompatActivity {
     int year;
     Integer[] yearList = {2022, 2021, 2020, 2019, 2018};
     String quarter;
-    String[] quarterList = {"Fall", "Winter", "Spring", "Summer Session I", "Summer Session II"};
+//    String[] quarterList = {"Fall", "Winter", "Spring", "Summer Session I", "Summer Session II"};
+    String[] quarterList = {"FA", "WI", "SP", "SS1", "SS2", "SSS"};
     String subject;
     String courseNumber;
     CourseDatabase db;
@@ -85,7 +86,7 @@ public class EditCourses extends AppCompatActivity {
         // reload intent with blank template
         Intent intent = new Intent(this, EditCourses.class);
         startActivity(intent);
-//        finish();
+        finish();
     }
 
     /**
@@ -96,7 +97,7 @@ public class EditCourses extends AppCompatActivity {
         subject = subjectView.getText().toString();
 
         TextView courseNumberView = findViewById(R.id.course_num_edit_text);
-        courseNumber = subjectView.getText().toString();
+        courseNumber = courseNumberView.getText().toString();
 
         Spinner year_spinner = findViewById(R.id.year_dropdown);
         year = Integer.parseInt(year_spinner.getSelectedItem().toString());
@@ -110,6 +111,11 @@ public class EditCourses extends AppCompatActivity {
     }
 
     private void addCourse(Course newCourse) {
+        if (newCourse == null || newCourse.getCourseNumber() == null
+                || newCourse.getCourseNumber().equals("") || newCourse.getDepartment() == null
+                || newCourse.getDepartment().equals("")) {
+            return;
+        }
         db.courseDao().insert(newCourse);
         myCourses = db.courseDao().getAll();
         mp.setMyCourses(myCourses);

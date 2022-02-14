@@ -11,8 +11,8 @@
     <string name="year">Year</string>
     <string name="quarter">Quarter</string>
     <string name="save_course_exit">Save and Exit</string>
-    <string name="save_add_course">Save and Add New Course</string>
-    <string name="delete_course">Delete and Exit</string>
+    <string name="save_add_course">Save And Add Another</string>
+    <string name="delete_course">Cancel</string>
     <string name="save">Save</string>
     <string name="add_courses">Add Courses</string>
     <string name="profile_title">Profile</string>
