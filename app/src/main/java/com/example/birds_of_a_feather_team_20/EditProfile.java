@@ -60,8 +60,8 @@ public class EditProfile extends AppCompatActivity {
         photoURL = urlView.getText().toString();
         MyProfile.singleton(getApplicationContext()).setPhotoURL(photoURL);
 
-//        Intent intent = new Intent(this, EditCourses.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, EditCourses.class);
+        startActivity(intent);
         //getApplicationContext().update
     }
 }

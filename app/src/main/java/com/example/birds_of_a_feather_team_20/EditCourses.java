@@ -31,6 +31,7 @@ public class EditCourses extends AppCompatActivity {
     String courseNumber;
     CourseDatabase db;
     MyProfile mp;
+    List<Course> myCourses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,8 @@ public class EditCourses extends AppCompatActivity {
 
         db = CourseDatabase.singleton(this);
         mp = MyProfile.singleton(this);
-        List<Course> courses = db.courseDao().getAll();
+//        myCourses = db.courseDao().getAll();
+//        myCourses = mp.getMyCourses();
 
         Spinner year_dropdown = findViewById(R.id.year_dropdown);
         ArrayAdapter<Integer> year_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, yearList);
@@ -55,24 +57,25 @@ public class EditCourses extends AppCompatActivity {
 
 
     public void onSaveExitClicked(View view) {
-        onSave();
+        Course newCourse = getCourseInfo();
+        addCourse(newCourse);
+
         // goes to Personal Profile Page
 //        Intent intent = new Intent(this, __.class);
 //        startActivity(intent);
     }
 
     public void onDeleteClicked(View view) {
-
-        // if course exists:
-        //      remove from course list within profile
-
+        Course newCourse = getCourseInfo();
+        deleteCourse(newCourse);
         // goes to Personal Profile Page
 //        Intent intent = new Intent(this, __.class);
 //        startActivity(intent);
     }
 
     public void onSaveAddClicked(View view) {
-        onSave();
+        Course newCourse = getCourseInfo();
+        addCourse(newCourse);
         // reload intent with blank template
         Intent intent = new Intent(this, EditCourses.class);
         startActivity(intent);
@@ -81,29 +84,36 @@ public class EditCourses extends AppCompatActivity {
     /**
      * Helper Method: Helps us save all the information entered by the User.
      */
-    private void onSave() {
+    private Course getCourseInfo() {
         TextView subjectView = findViewById(R.id.subject_edit_text);
         subject = subjectView.getText().toString();
-//        Course course = CourseDatabase.singleton(getApplicationContext());
 
         TextView courseNumberView = findViewById(R.id.course_num_edit_text);
         courseNumber = subjectView.getText().toString();
-//        Course.singleton(getApplicationContext()).setCourseNumber(courseNumber);
 
         Spinner year_spinner = findViewById(R.id.year_dropdown);
         year = Integer.parseInt(year_spinner.getSelectedItem().toString());
-//        Course.singleton(getApplicationContext()).setYear(year);
 
         Spinner quarter_spinner = findViewById(R.id.quarter_dropdown);
         quarter = quarter_spinner.getSelectedItem().toString();
-//        Course.singleton(getApplicationContext()).setQuarter(quarter);
 
         Course currCourse = new Course(year, quarter, subject, courseNumber);
-        db.courseDao().insert(currCourse);
-        List<Course> updatedCourses = db.courseDao().getAll();
-//        mp.setCourses(updatedCourses);
 
-
-
+        return currCourse;
     }
+
+    private void addCourse(Course newCourse) {
+        db.courseDao().insert(newCourse);
+        myCourses = db.courseDao().getAll();
+        mp.setMyCourses(myCourses);
+    }
+
+    private void deleteCourse(Course newCourse) {
+        if(db.courseDao().get(year, quarter, subject, courseNumber) != null) {
+            db.courseDao().delete(db.courseDao().get(year, quarter, subject, courseNumber));
+        }
+        myCourses = db.courseDao().getAll();
+        mp.setMyCourses(myCourses);
+    }
+
 }
