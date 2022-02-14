@@ -40,6 +40,7 @@ public class NearbyManager {
             public void onFound(final Message message) {
                 if (message == null) return;
                 String msgBody = new String(message.getContent(), CHARSET);
+//                activity.runOnUiThread(() -> {});
                 Utilities.logToast(activity, "Found profile: " + msgBody);
 
                 onFoundProfile(msgBody); // Handle the profile we found
@@ -126,10 +127,10 @@ public class NearbyManager {
      * Send a mock message (for testing purposes)
      */
     public void sendFakeMessage(Activity activity, Profile profile) {
-        Executors.newSingleThreadExecutor().submit(() -> {
+//        Executors.newSingleThreadExecutor().submit(() -> {
             String messageStr = profile.serialize();
             sendFakeMessage(messageStr);
-        });
+//        });
 //        activity.runOnUiThread(() -> {
 //            String messageStr = profile.serialize();
 //            sendFakeMessage(messageStr);

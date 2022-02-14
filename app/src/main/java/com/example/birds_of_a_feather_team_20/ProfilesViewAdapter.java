@@ -75,13 +75,13 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
 
             // Refresh on background thread
             Future<Void> future = backgroundThreadExecutor.submit(() -> {
-                profile.getThumbnail();
+                profile.fetchThumbnail();
                 activity.runOnUiThread(() -> {
                     this.index = index;
                     this.profile = profile;
                     this.profileNameText.setText(profile.getName());
                     this.urlText.setText(profile.getPhotoURL());
-                    this.photo.setImageBitmap(profile.getThumbnail());
+                    this.photo.setImageBitmap(profile.getPrefetchedThumbnail());
                 });
                 return null;
             });

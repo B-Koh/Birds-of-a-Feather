@@ -179,6 +179,31 @@ public class Profile {
         return thumbnail;
     }
 
+    public void fetchThumbnail() {
+        // If thumbnail is set (and URL has not been changed since the thumbnail was set), returns
+        // existing thumbnail.
+        String thisURL = getPhotoURL();
+        if(thumbnail != null && thisURL.equals(lastDownloadedURL)) {
+            Log.e("Thumbnail", "The thumbnail didn't need to be fetched again.");
+            return;
+        }
+
+        // Download fullsized image, for compression
+        Bitmap fullPhoto = getPhoto();
+        // Catch case for unset or invalid URL.
+        if(fullPhoto == null) {
+            Log.e("Thumbnail", "Downloaded a null image!");
+            return;
+        }
+
+        //Compress (or extend) image such that result is 256 by 256.
+        thumbnail = Bitmap.createScaledBitmap(fullPhoto, 256, 256, true);
+        lastDownloadedURL = thisURL;
+    }
+    public Bitmap getPrefetchedThumbnail() {
+        return thumbnail;
+    }
+
     /**
      * Represent the Profile as a String using JSON
      * https://developer.android.com/reference/android/util/JsonWriter
