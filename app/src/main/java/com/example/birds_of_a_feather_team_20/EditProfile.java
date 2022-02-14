@@ -16,14 +16,14 @@ public class EditProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
-        getNameAndURL();;
+        setTitle("Edit Profile");
+        getNameAndURL();
 
     }
 
-    public void onHomeClicked(View view) {
-//        Intent intent = new Intent(this, MainActivity.class);
-//        startActivity(intent);
+    public void onCoursesClicked(View view) {
+        Intent intent = new Intent(this, EditCourses.class);
+        startActivity(intent);
         saveProfile();
         finish();
     }
@@ -59,6 +59,9 @@ public class EditProfile extends AppCompatActivity {
         TextView urlView = (TextView)findViewById(R.id.photo_url_textview);
         photoURL = urlView.getText().toString();
         MyProfile.singleton(getApplicationContext()).setPhotoURL(photoURL);
+
+        Intent intent = new Intent(this, EditCourses.class);
+        startActivity(intent);
         //getApplicationContext().update
     }
 }

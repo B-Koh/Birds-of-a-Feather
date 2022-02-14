@@ -1,6 +1,7 @@
 <resources>
     <dimen name="small">20sp</dimen>
-    <dimen name="medium">40sp</dimen>
+    <dimen name="small_medium">25sp</dimen>
+    <dimen name="medium">30sp</dimen>
     <dimen name="large">55sp</dimen>
     <dimen name="regular">35sp</dimen>
 </resources>

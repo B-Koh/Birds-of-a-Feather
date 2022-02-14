@@ -10,6 +10,7 @@ import com.example.birds_of_a_feather_team_20.model.db.CourseDatabase;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -25,6 +26,7 @@ public class MyProfile extends Profile {
 
     private static SharedPreferences preferences;
     private static MyProfile singletonInstance;
+    private List<Course> myCouses;
 
     public MyProfile(String name, String photoURL, String id) {
         super(name, photoURL, id);
@@ -90,5 +92,12 @@ public class MyProfile extends Profile {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(URL_KEY, photoURL);
         editor.apply();
+    }
+
+    public List<Course> getMyCourses() {
+        return myCouses;
+    }
+    public void setMyCourses(List<Course> newCouses) {
+        myCouses = newCouses;
     }
 }
