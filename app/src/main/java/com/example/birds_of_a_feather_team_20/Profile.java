@@ -290,13 +290,16 @@ public class Profile {
                         break;
                     case "course_data":
                         coursesData = reader.nextString();
+                        break;
                     default:
                         reader.skipValue();
                         break;
                 }
             }
             profile = new Profile(name, photoURL, id);
-            readCourses(profile, coursesData);
+            profile.setCourses(deserializeCourses(coursesData));
+
+            //readCourses1(profile, coursesData);
             reader.endObject();
             reader.close();
         } catch (IOException | IllegalStateException e) {
@@ -307,7 +310,29 @@ public class Profile {
         return profile;
     }
 
-    private static void readCourses(Profile profile, String coursesData) throws IOException {
+    private static List<Course> deserializeCourses(String data) throws IOException {
+        if (data == null || data.equals("")) return null;
+
+        StringReader in = new StringReader(data);
+        JsonReader reader = new JsonReader(in);
+        List<Course> courses = readCourses(reader, data);
+        reader.close();
+
+
+        return courses; // FIXME
+    }
+
+    private static List<Course> readCourses(JsonReader reader, String data) throws IOException {
+        List<Course> courses = new ArrayList<Course>();
+        reader.beginArray();
+        while(reader.hasNext()) {
+            courses.add(Course.readCourse(reader));
+        }
+        reader.endArray();
+        return courses;
+    }
+
+    private static void readCourses1(Profile profile, String coursesData) throws IOException {
         if (coursesData == null || coursesData.equals("")) return;
 
 //        profile.addCourse();
@@ -320,7 +345,7 @@ public class Profile {
 //        Profile profile = null;
         reader.beginArray();
         while (reader.hasNext()) {
-            profile.addCourse(readCourse(reader));
+//            profile.addCourse(readCourse(reader));
         }
         reader.endArray();
         reader.close();
@@ -331,19 +356,19 @@ public class Profile {
 //                String key = reader.nextName();
     }
 
-    private static Course readCourse(JsonReader reader) throws IOException {
-        Course course = null;
-        reader.beginObject();
-//        while(reader.hasNext()) {
-            if (reader.nextName().equals("course_data")) {
-                course = Course.deserialize(reader.nextString());
-            } else {
-                reader.skipValue();
-            }
-//        }
-        reader.endObject();
-        return course;
-    }
+//    private static Course readCourse(JsonReader reader) throws IOException {
+//        Course course = null;
+//        reader.beginObject();
+////        while(reader.hasNext()) {
+//            if (reader.nextName().equals("course_data")) {
+//                course = Course.deserialize(reader.nextString());
+//            } else {
+//                reader.skipValue();
+//            }
+////        }
+//        reader.endObject();
+//        return course;
+//    }
 
     // TODO match this up with what brandon added
     public void addCourse(Course course) {

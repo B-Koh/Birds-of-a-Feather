@@ -189,6 +189,7 @@ public class Course {
                     break;
             }
         }
+        reader.endObject();
         return new Course(year, session, department, number);
     }
 }
