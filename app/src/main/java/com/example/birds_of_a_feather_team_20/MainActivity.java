@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import java.io.StringReader;
 import java.util.Random;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -66,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
     public void onSetFakeProfileClicked(View view) {
         TextView nameView = (TextView)findViewById(R.id.debug_textview);
         String name = nameView.getText().toString();
+
+//        CSVParser parser = new CSVParser();
+
 
         nearbyManager.sendFakeMessage(name);
     }

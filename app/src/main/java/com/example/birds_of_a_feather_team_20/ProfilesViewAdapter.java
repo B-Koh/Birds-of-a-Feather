@@ -1,6 +1,8 @@
 package com.example.birds_of_a_feather_team_20;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,10 +92,10 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
         @Override
         public void onClick(View view) {
             // TODO: Open profile details
-//            Context context = view.getContext();
-//            Intent intent = new Intent(context, ProfileDetailActivity.class);
-//            intent.putExtra("index_in_profilesList", this.index);
-//            context.startActivity(intent);
+            Context context = view.getContext();
+            Intent intent = new Intent(context, DisplayProfile.class);
+            intent.putExtra("index_in_profilesList", this.index);
+            context.startActivity(intent);
         }
 
 

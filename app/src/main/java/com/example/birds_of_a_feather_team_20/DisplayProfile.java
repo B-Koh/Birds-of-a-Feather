@@ -60,7 +60,7 @@ public class DisplayProfile extends AppCompatActivity {
     }
 
     public void setCourses(){
-//        courses = profile.getCourses();
+        courses = profile.getCourses();
 
         //Set up the recycler view to show our database contents
         coursesRecyclerView = findViewById(R.id.course_view);
