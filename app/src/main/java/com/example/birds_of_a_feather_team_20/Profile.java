@@ -3,6 +3,7 @@ package com.example.birds_of_a_feather_team_20;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.JsonReader;
+import android.util.JsonToken;
 import android.util.JsonWriter;
 import android.util.Log;
 
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,9 +36,9 @@ public class Profile {
 
     public Profile(String name, String photoURL, String id) {
 //        Log.e("New PROFILE", name + " | " + photoURL);
-        this.name = name;
-        this.photoURL = photoURL;
-        this.id = id;
+        this.name = (name != null) ? name : "";
+        this.photoURL = (photoURL != null) ? photoURL : "";
+        this.id = (id != null) ? id : "";
         courses = new ArrayList<>();
     }
 
@@ -145,6 +147,8 @@ public class Profile {
             photoURLstream.close();
             Log.i("Download Photo - Succeed", "Downloaded " + getPhotoURL());
             return photo;
+        } catch (MalformedURLException e) {
+            Log.e("Image", "Image URL is invalid.");
         } catch(Exception e){
             //Possible exception if photoURL is not a URL, return null
             Log.e("Download Photo - Fail", "Couldn't download " + getPhotoURL());
@@ -242,6 +246,10 @@ public class Profile {
             reader.beginObject();
             while(reader.hasNext()) {
                 String key = reader.nextName();
+                if (reader.peek() == JsonToken.NULL) {
+                    reader.skipValue();
+                    continue;
+                }
                 switch (key) {
                     case "user_id":
                         id = reader.nextString();

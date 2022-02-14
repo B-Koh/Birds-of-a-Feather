@@ -50,25 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
         nearbyManager.subscribe();
         nearbyManager.publish();
-
-//        nearbyManager.sendFakeMessage(this, new Profile(
-//                "Bill",
-//                "https://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0",
-//                "456024568734659"
-//        ));
-//        nearbyManager.sendFakeMessage(this, new Profile(
-//                "Bill1", "https://upload.wikimedia.org/wikipedia/commons/4/44/Geisel_Library,_UCSD.jpg",
-//                "5456024568734659"
-//        ));
-//
-//        nearbyManager.sendFakeMessage(this, new Profile(
-//                "Bill2", "https://upload.wikimedia.org/wikipedia/commons/4/44/Geisel_Library,_UCSD.jpg",
-//                "145460424568734"
-//        ));
-//        nearbyManager.sendFakeMessage(this, new Profile(
-//                "Bill3", "",
-//                "456024566856"
-//        ));
     }
 
     @Override
