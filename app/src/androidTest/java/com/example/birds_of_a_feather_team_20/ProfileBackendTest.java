@@ -23,7 +23,7 @@ public class ProfileBackendTest {
     public void testBasicProfile() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        Profile bill = new Profile("Bill Clinton", "https://upload.wikimedia.org/wikipedia/commons/d/d3/Bill_Clinton.jpg");
+        Profile bill = new Profile("Bill Clinton", "https://upload.wikimedia.org/wikipedia/commons/d/d3/Bill_Clinton.jpg", "fakeid");
         assertEquals(bill.getName(), "Bill Clinton");
         bill.setName("William Clinton");
         assertEquals(bill.getName(), "William Clinton");

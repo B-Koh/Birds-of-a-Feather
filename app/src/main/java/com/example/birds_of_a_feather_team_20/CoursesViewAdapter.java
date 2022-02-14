@@ -54,12 +54,19 @@ public class CoursesViewAdapter extends RecyclerView.Adapter<CoursesViewAdapter.
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView courseTextView;
+        private final TextView courseDepartment;
+        private final TextView courseNumber;
+        private final TextView courseSession;
+        private final TextView courseYear;
+
         private Course course;
 
         ViewHolder(View itemView) {
             super(itemView);
-            this.courseTextView = itemView.findViewById(R.id.notes_row_text);
+            this.courseDepartment = itemView.findViewById(R.id.course_department_textview);
+            this.courseNumber = itemView.findViewById(R.id.course_number_textview);
+            this.courseSession = itemView.findViewById(R.id.course_session_textview);
+            this.courseYear = itemView.findViewById(R.id.course_year_textview);
 
 //            Button removeButton = itemView.findViewById(R.id.remove_note_button);
 //            removeButton.setOnClickListener((view) -> {
@@ -71,7 +78,11 @@ public class CoursesViewAdapter extends RecyclerView.Adapter<CoursesViewAdapter.
 
         public void setCourse(Course course) {
             this.course = course;
-            this.courseTextView.setText(course.getDepartment());
+            this.courseDepartment.setText(course.getDepartment());
+            this.courseNumber.setText(course.getCourseNumber());
+            this.courseSession.setText(course.getSession());
+            this.courseYear.setText(course.getCourseNumber());
+
         }
 
     }

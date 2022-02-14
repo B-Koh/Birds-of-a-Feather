@@ -22,15 +22,21 @@ public class EditProfile extends AppCompatActivity {
     }
 
     public void onHomeClicked(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
+        saveProfile();
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        saveProfile();
+        super.onBackPressed();
     }
 
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        saveProfile();
     }
 
     public void getNameAndURL() {
@@ -53,5 +59,6 @@ public class EditProfile extends AppCompatActivity {
         TextView urlView = (TextView)findViewById(R.id.photo_url_textview);
         photoURL = urlView.getText().toString();
         MyProfile.singleton(getApplicationContext()).setPhotoURL(photoURL);
+        //getApplicationContext().update
     }
 }
