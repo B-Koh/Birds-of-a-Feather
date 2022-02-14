@@ -64,4 +64,8 @@ public class EditProfile extends AppCompatActivity {
         startActivity(intent);
         //getApplicationContext().update
     }
+
+    public void onFinish(View view) {
+        finish();
+    }
 }

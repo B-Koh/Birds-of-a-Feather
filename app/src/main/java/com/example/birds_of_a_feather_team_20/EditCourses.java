@@ -63,17 +63,19 @@ public class EditCourses extends AppCompatActivity {
         Course newCourse = getCourseInfo();
         addCourse(newCourse);
 
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
         Toast.makeText(this, "Course Saved", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     public void onDeleteClicked(View view) {
         Course newCourse = getCourseInfo();
         deleteCourse(newCourse);
         Toast.makeText(this, "Course Deleted", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        finish();
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
     }
 
     public void onSaveAddClicked(View view) {
@@ -83,6 +85,7 @@ public class EditCourses extends AppCompatActivity {
         // reload intent with blank template
         Intent intent = new Intent(this, EditCourses.class);
         startActivity(intent);
+//        finish();
     }
 
     /**
