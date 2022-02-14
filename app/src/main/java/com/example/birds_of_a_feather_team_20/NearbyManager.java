@@ -8,6 +8,7 @@ import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.Executors;
 
 /**
  * This class is responsible for handling the Nearby messaging.
@@ -124,9 +125,15 @@ public class NearbyManager {
     /**
      * Send a mock message (for testing purposes)
      */
-    public void sendFakeMessage(Profile profile) {
-        String messageStr = profile.serialize();
-        sendFakeMessage(messageStr);
+    public void sendFakeMessage(Activity activity, Profile profile) {
+        Executors.newSingleThreadExecutor().submit(() -> {
+            String messageStr = profile.serialize();
+            sendFakeMessage(messageStr);
+        });
+//        activity.runOnUiThread(() -> {
+//            String messageStr = profile.serialize();
+//            sendFakeMessage(messageStr);
+//        });
     }
 
     /**
