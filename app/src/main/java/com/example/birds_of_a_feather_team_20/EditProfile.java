@@ -16,23 +16,17 @@ public class EditProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
+        setTitle("Edit Profile");
         getNameAndURL();
 
     }
 
-    public void onHomeClicked(View view) {
-//        Intent intent = new Intent(this, MainActivity.class);
-//        startActivity(intent);
+    public void onCoursesClicked(View view) {
+        Intent intent = new Intent(this, EditCourses.class);
+        startActivity(intent);
         saveProfile();
         finish();
     }
-
-//    public void onEditCoursesClicked(View view){
-//        Intent intent = new Intent(this, EditCourses.class);
-//        startActivity(intent);
-//        finish();
-//    }
 
     @Override
     public void onBackPressed() {
