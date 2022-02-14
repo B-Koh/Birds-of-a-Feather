@@ -18,6 +18,7 @@ import com.example.birds_of_a_feather_team_20.model.db.CourseDatabase;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public class DisplayProfile extends AppCompatActivity {
 
@@ -40,8 +41,9 @@ public class DisplayProfile extends AppCompatActivity {
         List<Profile> profiles = ProfilesCollection.singleton().getProfiles();
         profile = profiles.get(index);
         setName();
-        setImage();
         setCourses();
+
+        Executors.newSingleThreadExecutor().submit(this::setImage);
 
     }
 
@@ -55,6 +57,10 @@ public class DisplayProfile extends AppCompatActivity {
     public void setImage(){
         ImageView imageView = (ImageView) findViewById(R.id.profile_image);
         Bitmap fullPhoto = profile.getPhoto();
+        if (fullPhoto == null) {
+            Log.e("DisplayProfile", "fullPhoto is NULL!");
+            return;
+        }
         profileIm = Bitmap.createScaledBitmap(fullPhoto, 450, 450, true);
         imageView.setImageBitmap(profileIm);
     }
