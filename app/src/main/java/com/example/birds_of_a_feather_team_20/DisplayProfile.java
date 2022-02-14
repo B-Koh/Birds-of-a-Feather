@@ -28,7 +28,6 @@ public class DisplayProfile extends AppCompatActivity {
     private Profile profile;
     private List<Course> courses;
     private String name;
-    private String URLPhoto;
     private Bitmap profileIm;
 
     @Override
@@ -56,7 +55,7 @@ public class DisplayProfile extends AppCompatActivity {
     public void setImage(){
         ImageView imageView = (ImageView) findViewById(R.id.profile_image);
         Bitmap fullPhoto = profile.getPhoto();
-        profileIm = Bitmap.createScaledBitmap(fullPhoto, 500, 500, true);
+        profileIm = Bitmap.createScaledBitmap(fullPhoto, 450, 450, true);
         imageView.setImageBitmap(profileIm);
     }
 

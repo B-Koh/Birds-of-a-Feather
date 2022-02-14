@@ -42,17 +42,6 @@ public class CoursesViewAdapter extends RecyclerView.Adapter<CoursesViewAdapter.
         return this.courses.size();
     }
 
-//    public void addNote(Course course){
-//        this.courses.add(course);
-//        this.notifyItemInserted(this.courses.size() - 1);
-//    }
-//
-//    public void removeCourse(int position){
-//        this.courses.remove(position);
-//        this.notifyItemRemoved(position);
-//    }
-
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView courseDepartment;
         private final TextView courseNumber;
@@ -67,12 +56,6 @@ public class CoursesViewAdapter extends RecyclerView.Adapter<CoursesViewAdapter.
             this.courseNumber = itemView.findViewById(R.id.course_number_textview);
             this.courseSession = itemView.findViewById(R.id.course_session_textview);
             this.courseYear = itemView.findViewById(R.id.course_year_textview);
-
-//            Button removeButton = itemView.findViewById(R.id.remove_note_button);
-//            removeButton.setOnClickListener((view) -> {
-//                removeCourse.accept(this.getAdapterPosition());
-//                onCourseRemoved.accept(course);
-//            });
 
         }
 
