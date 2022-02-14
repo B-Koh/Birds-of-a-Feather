@@ -40,7 +40,7 @@
         android:id="@+id/home_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/home"
+        android:text="@string/save"
         android:textColor="#000000"
         android:textSize="@dimen/small"
         android:onClick="onHomeClicked"

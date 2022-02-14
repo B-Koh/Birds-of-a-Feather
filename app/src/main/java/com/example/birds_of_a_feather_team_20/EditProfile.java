@@ -17,7 +17,7 @@ public class EditProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        getNameAndURL();;
+        getNameAndURL();
 
     }
 
@@ -65,6 +65,9 @@ public class EditProfile extends AppCompatActivity {
         TextView urlView = (TextView)findViewById(R.id.photo_url_textview);
         photoURL = urlView.getText().toString();
         MyProfile.singleton(getApplicationContext()).setPhotoURL(photoURL);
+
+        Intent intent = new Intent(this, EditCourses.class);
+        startActivity(intent);
         //getApplicationContext().update
     }
 }
