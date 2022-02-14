@@ -53,6 +53,8 @@ public class AddingCoursesTest {
         mp.setMyCourses(currCourses);
 
         assertEquals(mp.getMyCourses().size(), 2);
+        assertEquals(courseDao.count(), 2);
+
     }
 
     @Test
@@ -70,6 +72,7 @@ public class AddingCoursesTest {
         mp.setMyCourses(currCourses);
 
         assertEquals(mp.getMyCourses().size(), 2);
+        assertEquals(courseDao.count(), 2);
     }
 
     @Test
@@ -86,5 +89,6 @@ public class AddingCoursesTest {
         mp.setMyCourses(currCourses);
 
         assertEquals(mp.getMyCourses().size(), 1);
+        assertEquals(courseDao.count(), 1);
     }
 }

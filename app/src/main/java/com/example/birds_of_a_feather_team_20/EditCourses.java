@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -38,11 +39,6 @@ public class EditCourses extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_courses);
 
-        db = CourseDatabase.singleton(this);
-        mp = MyProfile.singleton(this);
-//        myCourses = db.courseDao().getAll();
-//        myCourses = mp.getMyCourses();
-
         Spinner year_dropdown = findViewById(R.id.year_dropdown);
         ArrayAdapter<Integer> year_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, yearList);
         year_adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
@@ -53,6 +49,13 @@ public class EditCourses extends AppCompatActivity {
         ArrayAdapter<String> quarter_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, quarterList);
         quarter_adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         quarter_dropdown.setAdapter(quarter_adapter);
+
+        db = CourseDatabase.singleton(this);
+        mp = MyProfile.singleton(this);
+
+//        int newCourseNumber = db.courseDao().count() + 1;
+//        TextView title = findViewById(R.id.adding_course_title);
+//        title.setText("Enter Course #" + newCourseNumber);
     }
 
 
@@ -63,19 +66,21 @@ public class EditCourses extends AppCompatActivity {
         // goes to Personal Profile Page
 //        Intent intent = new Intent(this, __.class);
 //        startActivity(intent);
+        Toast.makeText(this, "Course Saved", Toast.LENGTH_SHORT).show();
     }
 
     public void onDeleteClicked(View view) {
         Course newCourse = getCourseInfo();
         deleteCourse(newCourse);
-        // goes to Personal Profile Page
-//        Intent intent = new Intent(this, __.class);
+        Toast.makeText(this, "Course Deleted", Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(this, .class);
 //        startActivity(intent);
     }
 
     public void onSaveAddClicked(View view) {
         Course newCourse = getCourseInfo();
         addCourse(newCourse);
+        Toast.makeText(this, "Course Saved, Continue Adding", Toast.LENGTH_SHORT).show();
         // reload intent with blank template
         Intent intent = new Intent(this, EditCourses.class);
         startActivity(intent);
