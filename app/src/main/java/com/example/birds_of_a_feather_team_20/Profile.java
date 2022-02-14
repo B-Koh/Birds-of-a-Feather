@@ -59,7 +59,7 @@ public class Profile {
         this.name = name;
     }
 
-    private void setId(String id) {
+    public void setId(String id) {
         this.id = id;
     }
     public void setPhotoURL(String photoURL) {

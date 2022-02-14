@@ -9,6 +9,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import java.util.Random;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +39,20 @@ public class MainActivity extends AppCompatActivity {
         MyProfile.singleton(getApplicationContext()); // This line is probably unnecessary
 
         nearbyManager = new NearbyManager(this);
+//        Executors.newSingleThreadExecutor().submit(() -> {
+//
+//
+//
+//        });
+
+        // FIXME: Just for testing, then delete this:
+//        nearbyManager.sendFakeMessage(new Profile(
+//                "Bill",
+//                "https://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0",
+//                "456024568734659"
+//        ));
+
+
     }
 
     @Override
@@ -43,8 +61,29 @@ public class MainActivity extends AppCompatActivity {
 
         super.onStart();
 
+            // TESTING
+//            MyProfile.singleton(this).setId(String.valueOf(new Random().nextInt()));
+
         nearbyManager.subscribe();
         nearbyManager.publish();
+
+//        nearbyManager.sendFakeMessage(new Profile(
+//                "Bill",
+//                "https://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0",
+//                "456024568734659"
+//        ));
+//        nearbyManager.sendFakeMessage(new Profile(
+//                "Bill1", "https://upload.wikimedia.org/wikipedia/commons/4/44/Geisel_Library,_UCSD.jpg",
+//                "5456024568734659"
+//        ));
+//        nearbyManager.sendFakeMessage(new Profile(
+//                "Bill2", "https://upload.wikimedia.org/wikipedia/commons/4/44/Geisel_Library,_UCSD.jpg",
+//                "145460424568734"
+//        ));
+//        nearbyManager.sendFakeMessage(new Profile(
+//                "Bill3", "",
+//                "456024566856"
+//        ));
     }
 
     @Override

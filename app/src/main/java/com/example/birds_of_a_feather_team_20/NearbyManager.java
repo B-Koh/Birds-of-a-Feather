@@ -122,6 +122,14 @@ public class NearbyManager {
     }
 
     /**
+     * Send a mock message (for testing purposes)
+     */
+    public void sendFakeMessage(Profile profile) {
+        String messageStr = profile.serialize();
+        sendFakeMessage(messageStr);
+    }
+
+    /**
      * Get the message listener
      */
     public MessageListener getProfileMessageListener() {
