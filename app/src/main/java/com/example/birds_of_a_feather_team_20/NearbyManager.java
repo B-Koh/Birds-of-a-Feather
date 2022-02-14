@@ -1,13 +1,21 @@
 package com.example.birds_of_a_feather_team_20;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
+
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
+import com.google.android.gms.nearby.messages.MessagesClient;
+import com.google.android.gms.nearby.messages.MessagesOptions;
+import com.google.android.gms.nearby.messages.NearbyPermissions;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.Executors;
 
 /**
  * This class is responsible for handling the Nearby messaging.
@@ -39,6 +47,7 @@ public class NearbyManager {
             public void onFound(final Message message) {
                 if (message == null) return;
                 String msgBody = new String(message.getContent(), CHARSET);
+//                activity.runOnUiThread(() -> {});
                 Utilities.logToast(activity, "Found profile: " + msgBody);
 
                 onFoundProfile(msgBody); // Handle the profile we found
@@ -96,13 +105,21 @@ public class NearbyManager {
 
         // Convert the string to a Profile
         Profile profile = Profile.deserialize(profileData);
-        if (profile == null) return;
+        if (profile == null || !profile.isValid())
+            return;
+
+        // Count the number of matching courses
+        int courseMatches = profile.countMatchingCourses(MyProfile.singleton(activity));
+        Utilities.logToast(activity, profile.getName() + " has " + courseMatches
+                + " matching courses.");
 
         // Store the Profile in our list of profiles
         ProfilesCollection profiles = ProfilesCollection.singleton();
-        profiles.addOrUpdateProfile(profile);
+        profiles.addOrUpdateProfile(profile, courseMatches);
         profilesListView.refreshProfileListView(profiles.getModifications(), profiles.getAdditions());
     }
+
+
 
     /**
      * Send a mock message (for testing purposes)
@@ -111,6 +128,20 @@ public class NearbyManager {
         Message message = new Message(messageStr.getBytes(CHARSET));
         getProfileMessageListener().onFound(message);
         getProfileMessageListener().onLost(message);
+    }
+
+    /**
+     * Send a mock message (for testing purposes)
+     */
+    public void sendFakeMessage(Activity activity, Profile profile) {
+//        Executors.newSingleThreadExecutor().submit(() -> {
+            String messageStr = profile.serialize();
+            sendFakeMessage(messageStr);
+//        });
+//        activity.runOnUiThread(() -> {
+//            String messageStr = profile.serialize();
+//            sendFakeMessage(messageStr);
+//        });
     }
 
     /**

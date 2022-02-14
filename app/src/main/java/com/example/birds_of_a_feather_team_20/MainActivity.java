@@ -8,6 +8,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
+
+import java.util.Random;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -57,6 +62,14 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
 
     }
+
+    public void onSetFakeProfileClicked(View view) {
+        TextView nameView = (TextView)findViewById(R.id.debug_textview);
+        String name = nameView.getText().toString();
+
+        nearbyManager.sendFakeMessage(name);
+    }
+
 
     public void onLaunchProfileClicked(View view) {
         Intent intent = new Intent(this, EditProfile.class);

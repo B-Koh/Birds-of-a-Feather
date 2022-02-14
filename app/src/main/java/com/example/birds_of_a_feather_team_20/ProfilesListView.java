@@ -60,11 +60,11 @@ public class ProfilesListView {
 
         for(Integer i : modifications) {
             if (i != null)
-                foundProfiles.get(i).getThumbnail();
+                foundProfiles.get(i).fetchThumbnail();
         }
         for(Integer i : additions) {
             if (i != null)
-                foundProfiles.get(i).getThumbnail();
+                foundProfiles.get(i).fetchThumbnail();
         }
     }
 
@@ -77,7 +77,7 @@ public class ProfilesListView {
 
         // Refresh on background thread
         Executors.newSingleThreadExecutor().submit(() -> {
-            updateThumbnailsBackground(modifications, additions);
+//            updateThumbnailsBackground(modifications, additions);
             activity.runOnUiThread(() -> {
                 notifyAdapter(modifications, additions);
             });

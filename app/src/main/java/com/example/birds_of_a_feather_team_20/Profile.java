@@ -3,15 +3,21 @@ package com.example.birds_of_a_feather_team_20;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.JsonReader;
+import android.util.JsonToken;
 import android.util.JsonWriter;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.birds_of_a_feather_team_20.model.db.Course;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -25,30 +31,37 @@ public class Profile {
 
     private Bitmap thumbnail; //Compressed image from URL
     private String lastDownloadedURL;
-    // private List<Course> courses; // TODO
+    private List<Course> courses;
 
 
     public Profile(String name, String photoURL, String id) {
 //        Log.e("New PROFILE", name + " | " + photoURL);
-        this.name = name;
-        this.photoURL = photoURL;
-        this.id = id;
+        this.name = (name != null) ? name : "";
+        this.photoURL = (photoURL != null) ? photoURL : "";
+        this.id = (id != null) ? id : "";
+        courses = new ArrayList<>();
     }
 
     public String getId() {
         return id;
     }
     public String getName() {
-        return name;
+        return (name != null) ? name : "";
+    }
+    public List<Course> getCourses(){ return this.courses;}
+    public void setCourses(List<Course> courses) {
+        if (courses == null)
+            return;
+        this.courses = courses;
     }
     public String getPhotoURL() {
-        return photoURL;
+        return (photoURL != null) ? photoURL : "";
     }
     public void setName(String name) {
         this.name = name;
     }
 
-    private void setId(String id) {
+    public void setId(String id) {
         this.id = id;
     }
     public void setPhotoURL(String photoURL) {
@@ -71,6 +84,27 @@ public class Profile {
         if (!(other instanceof Profile)) return false;
         Profile casted = (Profile)other;
         return Objects.equals(casted.getId(), this.getId());
+    }
+
+    /**
+     * Count the number of courses that match between this profile and otherProfile
+     * @param otherProfile profile to compare courses to
+     * @return number of matching courses
+     */
+    public int countMatchingCourses(Profile otherProfile){
+        //int to return the num of matching courses
+        int numMatchCourse = 0;
+
+        for(int i = 0; i < getCourses().size(); i++){
+            for(int j = 0; j < otherProfile.getCourses().size(); j++){
+
+                //check if courses are equal
+                if(getCourses().get(i).equals(otherProfile.getCourses().get(j))){
+                    numMatchCourse++;
+                }
+            }
+        }
+        return numMatchCourse;
     }
 
     /**
@@ -113,6 +147,8 @@ public class Profile {
             photoURLstream.close();
             Log.i("Download Photo - Succeed", "Downloaded " + getPhotoURL());
             return photo;
+        } catch (MalformedURLException e) {
+            Log.e("Image", "Image URL is invalid.");
         } catch(Exception e){
             //Possible exception if photoURL is not a URL, return null
             Log.e("Download Photo - Fail", "Couldn't download " + getPhotoURL());
@@ -147,9 +183,35 @@ public class Profile {
         return thumbnail;
     }
 
+    public void fetchThumbnail() {
+        // If thumbnail is set (and URL has not been changed since the thumbnail was set), returns
+        // existing thumbnail.
+        String thisURL = getPhotoURL();
+        if(thumbnail != null && thisURL.equals(lastDownloadedURL)) {
+            Log.e("Thumbnail", "The thumbnail didn't need to be fetched again.");
+            return;
+        }
+
+        // Download fullsized image, for compression
+        Bitmap fullPhoto = getPhoto();
+        // Catch case for unset or invalid URL.
+        if(fullPhoto == null) {
+            Log.e("Thumbnail", "Downloaded a null image!");
+            return;
+        }
+
+        //Compress (or extend) image such that result is 256 by 256.
+        thumbnail = Bitmap.createScaledBitmap(fullPhoto, 256, 256, true);
+        lastDownloadedURL = thisURL;
+    }
+    public Bitmap getPrefetchedThumbnail() {
+        return thumbnail;
+    }
+
     /**
      * Represent the Profile as a String using JSON
      * https://developer.android.com/reference/android/util/JsonWriter
+     * https://www.javadoc.io/doc/com.google.code.gson/gson/2.6.2/com/google/gson/stream/JsonWriter.html
      */
     public String serialize() {
         StringWriter out = new StringWriter();
@@ -159,6 +221,8 @@ public class Profile {
             writer.name("user_id").value(this.getId());
             writer.name("name").value(this.getName());
             writer.name("photo_url").value(this.getPhotoURL());
+            writer.name("course_data").value(serializeCourses(this.getCourses()));
+            //writeCourses(writer);
             writer.endObject();
             writer.close();
             return out.toString();
@@ -168,6 +232,30 @@ public class Profile {
         return null;
     }
 
+    private static String serializeCourses(List<Course> courses) throws IOException {
+        StringWriter out = new StringWriter();
+        JsonWriter writer = new JsonWriter(out);
+        writeCourses(writer, courses);
+        writer.close();
+        return out.toString();
+    }
+
+    private static void writeCourses(JsonWriter writer, List<Course> courses) throws IOException {
+//        writer.
+        writer.beginArray();
+        for(Course course : courses) {
+            course.writeCourse(writer);
+            // writeCourse(writer, course);
+        }
+        writer.endArray();
+    }
+
+//    private static void writeCourse(JsonWriter writer, Course course) throws IOException {
+//        writer.beginObject();
+//        writer.name("course_data").value(course.serialize());
+//        writer.endObject();
+//    }
+
     /**
      * Convert the String to a Profile using JSON
      * https://developer.android.com/reference/android/util/JsonReader
@@ -176,15 +264,20 @@ public class Profile {
         if (data == null) return null;
         StringReader in = new StringReader(data);
         JsonReader reader = new JsonReader(in);
-        String id = null;
-        String name = null;
-        String photoURL = null;
+        String id = "";
+        String name = "";
+        String photoURL = "";
+        String coursesData = "";
         Profile profile = null;
         try {
             // read name and URL
             reader.beginObject();
             while(reader.hasNext()) {
                 String key = reader.nextName();
+                if (reader.peek() == JsonToken.NULL) {
+                    reader.skipValue();
+                    continue;
+                }
                 switch (key) {
                     case "user_id":
                         id = reader.nextString();
@@ -195,19 +288,96 @@ public class Profile {
                     case "photo_url":
                         photoURL = reader.nextString();
                         break;
+                    case "course_data":
+                        coursesData = reader.nextString();
+                        break;
                     default:
                         reader.skipValue();
                         break;
                 }
             }
-            reader.endObject();
-            // TODO read courses array
-            reader.close();
             profile = new Profile(name, photoURL, id);
-        } catch (IOException e) {
+            profile.setCourses(deserializeCourses(coursesData));
+
+            //readCourses1(profile, coursesData);
+            reader.endObject();
+            reader.close();
+        } catch (IOException | IllegalStateException e) {
             e.printStackTrace();
         }
         in.close();
+
         return profile;
+    }
+
+    private static List<Course> deserializeCourses(String data) throws IOException {
+        if (data == null || data.equals("")) return null;
+
+        StringReader in = new StringReader(data);
+        JsonReader reader = new JsonReader(in);
+        List<Course> courses = readCourses(reader, data);
+        reader.close();
+
+
+        return courses; // FIXME
+    }
+
+    private static List<Course> readCourses(JsonReader reader, String data) throws IOException {
+        List<Course> courses = new ArrayList<Course>();
+        reader.beginArray();
+        while(reader.hasNext()) {
+            courses.add(Course.readCourse(reader));
+        }
+        reader.endArray();
+        return courses;
+    }
+
+    private static void readCourses1(Profile profile, String coursesData) throws IOException {
+        if (coursesData == null || coursesData.equals("")) return;
+
+//        profile.addCourse();
+        StringReader in = new StringReader(coursesData);
+        JsonReader reader = new JsonReader(in);
+//        String id = "";
+//        String name = "";
+//        String photoURL = "";
+//        String coursesData = "";
+//        Profile profile = null;
+        reader.beginArray();
+        while (reader.hasNext()) {
+//            profile.addCourse(readCourse(reader));
+        }
+        reader.endArray();
+        reader.close();
+//        try {
+//             read name and URL
+//            reader.beginObject();
+//            while(reader.hasNext()) {
+//                String key = reader.nextName();
+    }
+
+//    private static Course readCourse(JsonReader reader) throws IOException {
+//        Course course = null;
+//        reader.beginObject();
+////        while(reader.hasNext()) {
+//            if (reader.nextName().equals("course_data")) {
+//                course = Course.deserialize(reader.nextString());
+//            } else {
+//                reader.skipValue();
+//            }
+////        }
+//        reader.endObject();
+//        return course;
+//    }
+
+    // TODO match this up with what brandon added
+    public void addCourse(Course course) {
+        getCourses().add(course);
+    }
+
+    public boolean isValid() {
+        // OK for the photoURL to be ""
+        return getName() != null && getId() != null && getPhotoURL() != null &&
+                !getName().trim().equals("") && !getId().trim().equals("");
     }
 }

@@ -9,6 +9,8 @@ import androidx.test.core.app.ActivityScenario;
 
 import com.google.android.gms.nearby.messages.Message;
 
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -24,11 +26,16 @@ public class NearbyBackendTest {
         activity.getNearbyManager().getProfileMessageListener().onLost(message);
     }
 
+    private void reset() {
+        ProfilesCollection.singleton().getProfiles().clear();
+    }
+
     @Test
     public void testFindingPerson() {
+        reset();
         try(ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             scenario.onActivity(activity -> {
-                ProfilesCollection.singleton().getProfiles().clear();
+//                ProfilesCollection.singleton().getProfiles().clear();
                 assertEquals(0, ProfilesCollection.singleton().getProfiles().size());
 
                 Profile profile = MyProfile.singleton(activity.getApplicationContext());
@@ -44,12 +51,40 @@ public class NearbyBackendTest {
                 assertEquals("fakeid", john.getId());
             });
         }
+        reset();
+    }
+    @Test
+    public void testFindingPersonNull() {
+        reset();
+        try(ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+            scenario.onActivity(activity -> {
+//                ProfilesCollection.singleton().getProfiles().clear();
+                assertEquals(0, ProfilesCollection.singleton().getProfiles().size());
+
+                Profile profile = MyProfile.singleton(activity.getApplicationContext());
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
+
+                String messageStr = "{\"user_id\":\"fakeid\",\"name\":null,\"photo_url\":\"https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg\"}";
+                sendMessage(activity, messageStr);
+                assertEquals(0, ProfilesCollection.singleton().getProfiles().size());
+
+                messageStr = "{\"user_id\":\"fakeid\",\"name\":\"John\",\"photo_url\":\"\"}";
+                sendMessage(activity, messageStr);
+                assertEquals(1, ProfilesCollection.singleton().getProfiles().size());
+
+                messageStr = "{\"user_id\":\"fakeid\",\"name\":\"John\",\"photo_url\":null}";
+                sendMessage(activity, messageStr);
+                assertEquals(1, ProfilesCollection.singleton().getProfiles().size());
+            });
+        }
+        reset();
     }
     @Test
     public void testFindingSeveralPeople() {
+        reset();
         try(ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             scenario.onActivity(activity -> {
-                ProfilesCollection.singleton().getProfiles().clear();
+//                ProfilesCollection.singleton().getProfiles().clear();
                 assertEquals(0, ProfilesCollection.singleton().getProfiles().size());
 
                 Profile profile = MyProfile.singleton(activity.getApplicationContext());
@@ -71,13 +106,15 @@ public class NearbyBackendTest {
                 assertEquals(3, ProfilesCollection.singleton().getProfiles().size());
             });
         }
+        reset();
     }
 
     @Test
     public void testUpdateExisting() {
+        reset();
         try(ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             scenario.onActivity(activity -> {
-                ProfilesCollection.singleton().getProfiles().clear();
+//                ProfilesCollection.singleton().getProfiles().clear();
                 assertEquals(0, ProfilesCollection.singleton().getProfiles().size());
 
                 Profile profile = MyProfile.singleton(activity.getApplicationContext());
@@ -110,8 +147,6 @@ public class NearbyBackendTest {
                 assertEquals("fakeid", profile1.getId());
             });
         }
+        reset();
     }
-
-
-
 }

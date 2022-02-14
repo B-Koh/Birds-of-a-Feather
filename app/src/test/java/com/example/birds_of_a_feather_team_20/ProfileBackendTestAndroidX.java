@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.lifecycle.Lifecycle;
@@ -14,6 +15,8 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
+
+import com.example.birds_of_a_feather_team_20.model.db.Course;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -51,6 +54,21 @@ public class ProfileBackendTestAndroidX {
             });
         }
     }*/
+
+    @Test
+    public void testSerializeDeserializeCourse() {
+        Course course = new Course(2020, "FA", "CSE", "100");
+        String serialized = course.serialize();
+        Log.d("Serialized", serialized);
+        Course reconstructed = Course.deserialize(serialized);
+//        assert reconstructed.equals(course);
+        assertEquals(reconstructed, course);
+    }
+
+    @Test
+    public void testSerializeDeserializeCourses() {
+
+    }
 
     @Test
     public void testBasicProfile() {
@@ -94,7 +112,14 @@ public class ProfileBackendTestAndroidX {
     @Test
     public void testSerialize() {
         Profile bill = new Profile("Bill", "link", "fakeid");
-        assertEquals("{\"user_id\":\"fakeid\",\"name\":\"Bill\",\"photo_url\":\"link\"}",bill.serialize());
+        assertEquals("{\"user_id\":\"fakeid\",\"name\":\"Bill\",\"photo_url\":\"link\",\"course_data\":\"[]\"}",bill.serialize());
+        bill.addCourse(new Course(2000, "FA", "CSE", "100"));
+        bill.addCourse(new Course(2020, "WI", "CSE", "110"));
+        assertEquals("{\"user_id\":\"fakeid\",\"name\":\"Bill\",\"photo_url\":\"link\",\"course_data\":\"[{\\\"course_year\\\":2000,\\\"course_session\\\":\\\"FA\\\",\\\"course_department\\\":\\\"CSE\\\",\\\"course_number\\\":\\\"100\\\"},{\\\"course_year\\\":2020,\\\"course_session\\\":\\\"WI\\\",\\\"course_department\\\":\\\"CSE\\\",\\\"course_number\\\":\\\"110\\\"}]\"}",
+                bill.serialize());
+        String serialized = bill.serialize();
+        Profile deserialized = Profile.deserialize(serialized);
+        assertEquals(2, deserialized.getCourses().size());
     }
 
     @Test
@@ -104,5 +129,19 @@ public class ProfileBackendTestAndroidX {
         assertEquals("John", john.getName());
         assertEquals("https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg", john.getPhotoURL());
         assertEquals("fakeid", john.getId());
+    }
+
+    @Test
+    public void testCountMatchingCourses() {
+        // TODO make sure we aren't counting null courses as the same (or just prevent null courses)
+        Course CSE100_1 = new Course(2020, "WI", "CSE", "100");
+        Course CSE100_2 = new Course(2020, "wi", " CSE ", "100 ");
+        Profile bill = new Profile("bill", null, "fakeid");
+        Profile hillary = new Profile("hillary", null, "fakeid");
+        assertEquals(0, bill.countMatchingCourses(hillary));
+        bill.getCourses().add(CSE100_1);
+        hillary.getCourses().add(CSE100_2);
+        assertEquals(1, bill.countMatchingCourses(hillary));
+        assertEquals(1, hillary.countMatchingCourses(bill));
     }
 }

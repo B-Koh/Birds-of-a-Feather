@@ -63,7 +63,12 @@ public class BluetoothManager {
     public boolean isBluetoothEnabled() {
         // Checks if permission has been granted
         if (new PermissionsManager(thisContext).isBluetoothPermissionGranted()) {
-            return BluetoothAdapter.getDefaultAdapter().isEnabled();
+            BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+            if (adapter == null) {
+                Utilities.logToast(thisContext, "Null bluetooth adapter.");
+                return false;
+            }
+            return adapter.isEnabled();
         }
 
         Utilities.logToast(thisContext, "Bluetooth permission denied. Please turn on permission.");
