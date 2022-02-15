@@ -18,12 +18,12 @@ public class ExampleUnitTest {
     }
 
 
-    @Test
-    public void testDebugButtonCSV() {
-        try(ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
-            scenario.onActivity(activity -> {
-
-            });
-        }
-    }
+//    @Test
+//    public void testDebugButtonCSV() {
+//        try(ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+//            scenario.onActivity(activity -> {
+//
+//            });
+//        }
+//    }
 }
