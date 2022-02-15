@@ -73,7 +73,9 @@ public class DisplayProfile extends AppCompatActivity {
                 Log.e("DisplayProfile", "fullPhoto is NULL!");
                 return;
             }
-            profileIm = Bitmap.createScaledBitmap(fullPhoto, 450, 450, true);
+            profileIm = fullPhoto;
+//            profileIm = Bitmap.createScaledBitmap(fullPhoto, 450, 450, true);
+//            Bitmap.createScaledBitmap()
             runOnUiThread(() -> {
                 imageView.setImageBitmap(profileIm);
             });
