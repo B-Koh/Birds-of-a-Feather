@@ -58,6 +58,10 @@ public class DisplayProfile extends AppCompatActivity {
         TextView nameView = (TextView)findViewById(R.id.name_textview);
         name = profile.getName();
         nameView.setText(name);
+        if (isMyProfile)
+            setTitle("My Profile");
+        else
+            setTitle(name + "'s Profile");
 
     }
 
