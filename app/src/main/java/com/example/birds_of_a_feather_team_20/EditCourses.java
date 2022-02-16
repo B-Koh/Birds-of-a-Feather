@@ -39,7 +39,7 @@ public class EditCourses extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_courses);
-        setTitle("Adding a Course");
+        setTitle("Adding a course");
 
         Spinner year_dropdown = findViewById(R.id.year_dropdown);
         ArrayAdapter<Integer> year_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, yearList);

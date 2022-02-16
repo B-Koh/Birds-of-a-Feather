@@ -179,6 +179,7 @@ public class Profile {
 
         //Compress (or extend) image such that result is 256 by 256.
         thumbnail = Bitmap.createScaledBitmap(fullPhoto, 256, 256, true);
+
         lastDownloadedURL = thisURL;
         return thumbnail;
     }
@@ -201,7 +202,8 @@ public class Profile {
         }
 
         //Compress (or extend) image such that result is 256 by 256.
-        thumbnail = Bitmap.createScaledBitmap(fullPhoto, 256, 256, true);
+//        thumbnail = Bitmap.createScaledBitmap(fullPhoto, 256, 256, true);
+        thumbnail = Utilities.rescaleBitmap(fullPhoto, 256, 256);
         lastDownloadedURL = thisURL;
     }
     public Bitmap getPrefetchedThumbnail() {

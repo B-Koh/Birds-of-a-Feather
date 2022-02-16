@@ -61,7 +61,7 @@ public class DisplayProfile extends AppCompatActivity {
         if (isMyProfile)
             setTitle("My Profile");
         else
-            setTitle(name + "'s Profile");
+            setTitle(Utilities.getFirstName(name) + "'s Profile");
 
     }
 
