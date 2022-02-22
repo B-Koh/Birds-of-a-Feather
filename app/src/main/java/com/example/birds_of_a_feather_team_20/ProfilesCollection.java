@@ -40,9 +40,9 @@ public class ProfilesCollection {
     public void addOrUpdateProfile(Profile profile, int courseMatches) {
         if (profile == null) return;
 
-//        if (courseMatches == 0) {
-//            return; // TODO Don't add to list if no matches
-//        }
+        if (courseMatches == 0) {
+            return; // TODO Don't add to list if no matches
+        }
 
         int index = getProfiles().indexOf(profile);
         if (index == -1) {

@@ -56,11 +56,11 @@ public class BluetoothPermissionsTest {
     public void isBluetoothEnabledTest()  {
         Utilities.debugToast = false;
         activityScenarioRule.getScenario().onActivity(activity -> {
-            GrantPermissionRule.grant(Manifest.permission.BLUETOOTH_SCAN);
-            GrantPermissionRule.grant(Manifest.permission.BLUETOOTH_CONNECT);
+//            GrantPermissionRule.grant(Manifest.permission.BLUETOOTH_SCAN);
+//            GrantPermissionRule.grant(Manifest.permission.BLUETOOTH_CONNECT);
 
             BluetoothManager bt = new BluetoothManager(activity);
-            assertTrue(bt.isBluetoothEnabled());
+            assertFalse(bt.isBluetoothEnabled());
         });
     }
 }

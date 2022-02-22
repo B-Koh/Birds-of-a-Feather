@@ -26,7 +26,7 @@ public class MyProfile extends Profile {
 
     private static SharedPreferences preferences;
     private static MyProfile singletonInstance;
-    private List<Course> myCouses;
+//    private List<Course> myCouses;
 
     public MyProfile(String name, String photoURL, String id) {
         super(name, photoURL, id);
@@ -95,9 +95,9 @@ public class MyProfile extends Profile {
     }
 
     public List<Course> getMyCourses() {
-        return myCouses;
+        return getCourses();
     }
     public void setMyCourses(List<Course> newCouses) {
-        myCouses = newCouses;
+        setCourses(newCouses);
     }
 }
