@@ -8,19 +8,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.birds_of_a_feather_team_20.model.db.Course;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Currency;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -55,20 +52,28 @@ public class MainActivity extends AppCompatActivity {
         Log.i("START", "MainActivity.onStart");
 
         super.onStart();
-
-        nearbyManager.subscribe();
-        nearbyManager.publish();
+        nearbyManager.republish();
     }
 
     @Override
     protected void onStop() {
         Log.i("STOP", "MainActivity.onStop");
-
-        nearbyManager.unsubscribe();
-        nearbyManager.unpublish();
-
         super.onStop();
 
+    }
+
+    public void onClickStartStop(View view) {
+//        Utilities.toast(this,"Start/Stop");
+        Button button = (Button)view;
+        if (nearbyManager.getIsScanning()) {
+            boolean success = nearbyManager.stopScanning();
+            if (success)
+                button.setText("Start");
+        } else {
+            boolean success = nearbyManager.startScanning();
+            if (success)
+                button.setText("Stop");
+        }
     }
 
     public void onSetFakeProfileClicked(View view) {

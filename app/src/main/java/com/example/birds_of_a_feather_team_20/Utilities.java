@@ -18,9 +18,14 @@ public class Utilities {
      * @param message - message that toast will contain
      */
     public static void logToast(Context context, String message) {
+        Log.d(context.toString(), message);
         if (!debugToast) {
             return;
         }
+        toast(context, message);
+    }
+
+    public static void toast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 

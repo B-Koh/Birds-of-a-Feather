@@ -31,12 +31,18 @@ public class NearbyManager {
     private final MessageListener profileMessageListener;
 
     private Message profileMessage;
+    private boolean isScanning;
+
+    public boolean getIsScanning() {
+        return isScanning;
+    }
 
     /**
      * Constructor. Sets up the message listener and the profiles list view
      */
     public NearbyManager(Activity activity) {
         this.activity = activity;
+        isScanning = false;
 
         // Set up the list view of nearby profiles
         profilesListView = new ProfilesListView(activity);
@@ -45,7 +51,7 @@ public class NearbyManager {
         profileMessageListener = new MessageListener() {
             @Override
             public void onFound(final Message message) {
-                if (message == null) return;
+                if (message == null || !getIsScanning()) return;
                 String msgBody = new String(message.getContent(), CHARSET);
 //                activity.runOnUiThread(() -> {});
                 Utilities.logToast(activity, "Found profile: " + msgBody);
@@ -56,7 +62,7 @@ public class NearbyManager {
             // Only listening to this for debugging purposes. Not functionally necessary.
             @Override
             public void onLost(final Message message) {
-                if (message == null) return;
+                if (message == null || !getIsScanning()) return;
                 String msgBody = new String(message.getContent(), CHARSET);
                 Utilities.logToast(activity, "Lost profile: " + msgBody);
             }
@@ -65,21 +71,21 @@ public class NearbyManager {
     /**
      * Start listening for nearby profiles
      */
-    public void subscribe() {
+    private void subscribe() {
         Utilities.logToast(activity, "Subscribing to nearby profiles...");
         Nearby.getMessagesClient(activity).subscribe(profileMessageListener);
     }
     /**
      * Stop listening for nearby profiles
      */
-    public void unsubscribe() {
+    private void unsubscribe() {
         Utilities.logToast(activity, "Unsubscribing...");
         Nearby.getMessagesClient(activity).unsubscribe(profileMessageListener);
     }
     /**
      * Start sharing our profile
      */
-    public void publish() {
+    private void publish() {
         Utilities.logToast(activity, "Publishing my profile...");
         // Convert our profile to a string and publish it as a message
         profileMessage = new Message(MyProfile.singleton(activity).serialize().getBytes(CHARSET));
@@ -89,7 +95,7 @@ public class NearbyManager {
     /**
      * Stop sharing our profile
      */
-    public void unpublish() {
+    private void unpublish() {
         Utilities.logToast(activity, "Unpublishing...");
         Nearby.getMessagesClient(activity).unpublish(profileMessage);
     }
@@ -149,5 +155,41 @@ public class NearbyManager {
      */
     public MessageListener getProfileMessageListener() {
         return profileMessageListener;
+    }
+
+    /**
+     * Begin the scanning for Nearby
+     * @return false if already started
+     */
+    public boolean startScanning() {
+        if (getIsScanning()) return false; // failure, already started
+
+        isScanning = true;
+        Utilities.logToast(activity,"Starting...");
+        subscribe();
+        publish();
+        return true;
+    }
+
+    /**
+     * Stop the scanning for Nearby
+     * @return false if already stopped
+     */
+    public boolean stopScanning() {
+        if (!getIsScanning()) return false; // failure, already stopped
+
+        isScanning = false;
+        Utilities.logToast(activity, "Stopping...");
+        unsubscribe();
+        unpublish();
+        return true;
+    }
+
+    public void republish() {
+        if (getIsScanning()) {
+            Utilities.logToast(activity, "Republishing...");
+            unpublish();
+            publish();
+        }
     }
 }
