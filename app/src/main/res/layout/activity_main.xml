@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schema.android.com/apk/res-auto"
+    xmlns:app2="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,38 +11,47 @@
         android:id="@+id/launch_profile_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="29dp"
+        android:layout_marginStart="95dp"
+        android:layout_marginBottom="56dp"
         android:onClick="onLaunchProfileClicked"
         android:text="Launch Profile"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/small"
+        app2:layout_constraintBottom_toBottomOf="parent"
+        app2:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/debug_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="77dp"
+        android:layout_marginStart="127dp"
+        android:layout_marginBottom="107dp"
         android:onClick="onSetFakeProfileClicked"
         android:text="Debug CSV"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/small"
+        app2:layout_constraintBottom_toBottomOf="parent"
+        app2:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/profile_list"
-        android:layout_width="407dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="4dp"
         android:layout_marginTop="54dp"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="190dp"
+        app2:layout_constraintBottom_toBottomOf="parent"
+        app2:layout_constraintEnd_toEndOf="parent"
+        app2:layout_constraintStart_toStartOf="parent"
+        app2:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,13 +62,16 @@
         android:id="@+id/debug_textview2"
         android:layout_width="354dp"
         android:layout_height="61dp"
-        android:layout_marginBottom="125dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginBottom="129dp"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
+        app2:layout_constraintBottom_toBottomOf="parent"
+        app2:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -66,11 +79,55 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="5dp"
-        android:text="Start"
         android:onClick="onClickStartStop"
+        android:text="Start"
+        app2:layout_constraintStart_toStartOf="parent"
+        app2:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app2:layout_constraintBottom_toBottomOf="parent"
+        app2:layout_constraintEnd_toEndOf="parent"
+        app2:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_friends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_friends" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_favorties"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_favorite" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_profile"
+            android:onClick="onLaunchProfileClicked"/>
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_session"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_session" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_debug"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_debug" />
+    </com.google.android.material.tabs.TabLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
