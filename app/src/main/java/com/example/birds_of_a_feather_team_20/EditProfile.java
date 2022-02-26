@@ -80,4 +80,14 @@ public class EditProfile extends AppCompatActivity {
         intent.putExtra("index_in_profilesList", -1);
         context.startActivity(intent);
     }
+
+    public void onLaunchDebugClicked(View view) {
+        onLaunchFriendsClicked(view);
+        Intent intent = new Intent(this, DebugActivity.class);
+        startActivity(intent);
+    }
+
+    public void onLaunchFriendsClicked(View view) {
+        onClickFinish(view);
+    }
 }
