@@ -47,6 +47,9 @@ public class NearbyBackendTest {
                 reset(activity);
                 assertEquals(0, ProfilesCollection.singleton().getProfiles().size());
 
+                // Start Nearby
+                activity.getNearbyManager().startScanning();
+
                 // Construct the profile
                 Profile profile1 = new Profile("John", "https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg", "this_is_the_id");
                 Course course1 = new Course(2020, "FA", "CSE", "100");
@@ -78,6 +81,9 @@ public class NearbyBackendTest {
             scenario.onActivity(activity -> {
                 reset(activity);
                 assertEquals(0, ProfilesCollection.singleton().getProfiles().size());
+
+                // Start Nearby
+                activity.getNearbyManager().startScanning();
 
                 // Construct the profile
                 Profile profile1 = new Profile("", "https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg", "this_is_the_id");
@@ -113,6 +119,8 @@ public class NearbyBackendTest {
                 reset(activity);
                 assertEquals(0, ProfilesCollection.singleton().getProfiles().size());
 
+                // Start Nearby
+                activity.getNearbyManager().startScanning();
                 // Construct the profile
                 Profile profile1 = new Profile("John", "https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy,_White_House_color_photo_portrait.jpg", "this_is_the_id");
                 Course matchingCourse = new Course(2020, "FA", "CSE", "100");
@@ -147,6 +155,8 @@ public class NearbyBackendTest {
                 reset(activity);
                 assertEquals(0, ProfilesCollection.singleton().getProfiles().size());
 
+                // Start Nearby
+                activity.getNearbyManager().startScanning();
                 // Construct the profile
                 Profile profile1 = new Profile("Joe Biden", "https://upload.wikimedia.org/wikipedia/commons/6/68/Joe_Biden_presidential_portrait.jpg", "id_biden");
                 Profile profile2 = new Profile("Donald Trump", "https://upload.wikimedia.org/wikipedia/commons/5/56/Donald_Trump_official_portrait.jpg", "id_trump");
@@ -186,6 +196,8 @@ public class NearbyBackendTest {
                 reset(activity);
                 assertEquals(0, ProfilesCollection.singleton().getProfiles().size());
 
+                // Start Nearby
+                activity.getNearbyManager().startScanning();
                 // Note that these have the same ID
                 Profile profile1 = new Profile("Joe Biden", "https://upload.wikimedia.org/wikipedia/commons/6/68/Joe_Biden_presidential_portrait.jpg", "id_here");
                 Profile profile2 = new Profile("Donald Trump", "https://upload.wikimedia.org/wikipedia/commons/5/56/Donald_Trump_official_portrait.jpg", "id_here");

@@ -42,16 +42,16 @@ public class AddProfileTest {
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void addProfileTest() {
-        ViewInteraction materialButton = onView(
-                allOf(withId(R.id.launch_profile_button), withText("Launch Profile"),
+    public void addProfileTestExpresso() {
+        ViewInteraction appCompatImageButton = onView(
+                allOf(withId(R.id.profile_tab_button), withContentDescription("profile tab"),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
+                                        withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                        2),
+                                2),
                         isDisplayed()));
-        materialButton.perform(click());
+        appCompatImageButton.perform(click());
 
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.name_textview),
@@ -59,7 +59,7 @@ public class AddProfileTest {
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                1),
+                                2),
                         isDisplayed()));
         appCompatEditText.perform(replaceText("George"), closeSoftKeyboard());
 
@@ -69,7 +69,7 @@ public class AddProfileTest {
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                1),
+                                2),
                         isDisplayed()));
         appCompatEditText2.perform(pressImeActionButton());
 
@@ -79,7 +79,7 @@ public class AddProfileTest {
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                2),
+                                3),
                         isDisplayed()));
         appCompatEditText3.perform(replaceText("www.wikipedia.com"), closeSoftKeyboard());
 
@@ -89,20 +89,61 @@ public class AddProfileTest {
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                2),
+                                3),
                         isDisplayed()));
         appCompatEditText4.perform(pressImeActionButton());
 
-        ViewInteraction materialButton2 = onView(
+        ViewInteraction materialButton = onView(
                 allOf(withId(R.id.courses_button), withText("Add Courses"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                3),
+                                4),
+                        isDisplayed()));
+        materialButton.perform(click());
+
+        ViewInteraction materialButton2 = onView(
+                allOf(withId(R.id.delete_course), withText("Cancel"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                11),
                         isDisplayed()));
         materialButton2.perform(click());
 
+        ViewInteraction appCompatImageButton2 = onView(
+                allOf(withId(R.id.friends_tab_button), withContentDescription("friends tab"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                        0),
+                                0),
+                        isDisplayed()));
+        appCompatImageButton2.perform(click());
+
+        ViewInteraction appCompatImageButton3 = onView(
+                allOf(withId(R.id.profile_tab_button), withContentDescription("profile tab"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                        2),
+                                2),
+                        isDisplayed()));
+        appCompatImageButton3.perform(click());
+
+        ViewInteraction editText = onView(
+                allOf(withId(R.id.name_textview), withText("George"),
+                        withParent(withParent(withId(android.R.id.content))),
+                        isDisplayed()));
+        editText.check(matches(withText("George")));
+
+        ViewInteraction editText2 = onView(
+                allOf(withId(R.id.photo_url_textview), withText("www.wikipedia.com"),
+                        withParent(withParent(withId(android.R.id.content))),
+                        isDisplayed()));
+        editText2.check(matches(withText("www.wikipedia.com")));
     }
 
     private static Matcher<View> childAtPosition(

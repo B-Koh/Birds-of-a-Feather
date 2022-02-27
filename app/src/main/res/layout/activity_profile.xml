@@ -6,6 +6,92 @@
     android:layout_height="match_parent"
     tools:context=".EditProfile">
 
+    <LinearLayout
+        android:layout_width="411dp"
+        android:layout_height="54dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/friends_tab_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#00FFFFFF"
+            android:contentDescription="friends tab"
+            android:onClick="onLaunchFriendsClicked"
+            android:scaleType="fitCenter"
+            android:padding="15dp"
+            android:scaleX="1"
+            android:scaleY="1"
+            app:tint="?android:attr/textColorPrimary"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:srcCompat="@drawable/ic_friends" />
+
+        <ImageButton
+            android:id="@+id/favorite_tab_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#00FFFFFF"
+            android:contentDescription="favorites tab"
+            android:scaleType="fitCenter"
+            android:padding="15dp"
+            android:scaleX="1"
+            android:scaleY="1"
+            app:tint="?android:attr/textColorPrimary"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:srcCompat="@drawable/ic_favorite" />
+
+        <ImageButton
+            android:id="@+id/profile_tab_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#00FFFFFF"
+            android:contentDescription="profile tab"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="15dp"
+            android:scaleType="fitCenter"
+            android:scaleX="1"
+            android:scaleY="1"
+            app:srcCompat="@drawable/ic_profile"
+            app:tint="?attr/colorPrimaryVariant" />
+
+        <ImageButton
+            android:id="@+id/session_tab_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#00FFFFFF"
+            android:contentDescription="session tab"
+            android:scaleType="fitCenter"
+            android:padding="15dp"
+            android:scaleX="1"
+            android:scaleY="1"
+            app:tint="?android:attr/textColorPrimary"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:srcCompat="@drawable/ic_session" />
+
+        <ImageButton
+            android:id="@+id/debug_tab_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#00FFFFFF"
+            android:contentDescription="debug tab"
+            android:onClick="onLaunchDebugClicked"
+            android:scaleType="fitCenter"
+            android:padding="15dp"
+            android:scaleX="1"
+            android:scaleY="1"
+            app:tint="?android:attr/textColorPrimary"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:srcCompat="@drawable/ic_debug" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/edit_courses_title"
         android:layout_width="wrap_content"
@@ -65,20 +151,6 @@
         app:layout_constraintVertical_bias="0.840" />
 
     <Button
-        android:id="@+id/courses_button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onClickFinish"
-        android:text="done"
-        android:textColor="#000000"
-        android:textSize="@dimen/small"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.905" />
-
-    <Button
         android:id="@+id/view_my_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -87,11 +159,11 @@
         android:textColor="#000000"
         android:textSize="@dimen/small"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
+        app:layout_constraintVertical_bias="0.759" />
 
     <TextView
         android:id="@+id/textView"
