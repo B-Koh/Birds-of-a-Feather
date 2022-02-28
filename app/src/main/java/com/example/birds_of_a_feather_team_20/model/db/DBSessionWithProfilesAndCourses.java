@@ -5,7 +5,7 @@ import androidx.room.Relation;
 
 import java.util.List;
 
-public class SessionWithProfilesAndCourses {
+public class DBSessionWithProfilesAndCourses {
     @Embedded public DBSession session;
     @Relation(
             entity = DBProfile.class,

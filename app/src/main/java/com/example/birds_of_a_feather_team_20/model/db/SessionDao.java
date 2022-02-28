@@ -1,5 +1,7 @@
 package com.example.birds_of_a_feather_team_20.model.db;
 
+import android.util.Log;
+
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -19,7 +21,7 @@ public abstract class SessionDao {
 
     @Transaction
     @Query("SELECT * FROM DBSession WHERE sessionName=:sessionName")
-    abstract SessionWithProfilesAndCourses getSessionWithProfilesAndCourses(String sessionName);
+    abstract DBSessionWithProfilesAndCourses getSessionWithProfilesAndCourses(String sessionName);
 
     @Transaction
     @Query("SELECT * FROM DBProfile WHERE profileSessionId=:sessionId AND profileId=:profileId")
@@ -31,7 +33,7 @@ public abstract class SessionDao {
 
     @Transaction
     public DBSession getSession(String sessionName){
-        SessionWithProfilesAndCourses targetSession = getSessionWithProfilesAndCourses(sessionName);
+        DBSessionWithProfilesAndCourses targetSession = getSessionWithProfilesAndCourses(sessionName);
         if(targetSession == null) return null;
         return targetSession.session;
     }
@@ -40,7 +42,7 @@ public abstract class SessionDao {
     public List<Profile> getProfilesInSession(String sessionName){
         List<DBProfileWithCourses> dbProfiles = new ArrayList<DBProfileWithCourses>();
         List<Profile> profiles = new ArrayList<Profile>();
-        SessionWithProfilesAndCourses targetSession = getSessionWithProfilesAndCourses(sessionName);
+        DBSessionWithProfilesAndCourses targetSession = getSessionWithProfilesAndCourses(sessionName);
 
         if(targetSession == null){
             //Log.e("getProfiles error", "Target session not found");
@@ -55,7 +57,7 @@ public abstract class SessionDao {
 
     @Transaction
     public List<Course> getCoursesInProfile(String sessionName, String profileId){
-        SessionWithProfilesAndCourses targetSession = getSessionWithProfilesAndCourses(sessionName);
+        DBSessionWithProfilesAndCourses targetSession = getSessionWithProfilesAndCourses(sessionName);
         if(targetSession == null) return null;
 
         DBProfileWithCourses targetProfile = getDBProfileWithCourses(targetSession.session.dbSessionId, profileId);
@@ -80,12 +82,9 @@ public abstract class SessionDao {
     @Insert
     abstract long insertReference(DBCourseProfileCrossRef reference);
 
-    @Delete
-    public abstract void delete(DBSession session);
-
     @Transaction
     public void insertProfile(String sessionName, Profile profile){
-        SessionWithProfilesAndCourses targetSession = getSessionWithProfilesAndCourses(sessionName);
+        DBSessionWithProfilesAndCourses targetSession = getSessionWithProfilesAndCourses(sessionName);
         if(targetSession == null) return;
         //Log.e("insertProfile", "Target Session id is " + targetSession.session.sessionId);
 
@@ -99,7 +98,7 @@ public abstract class SessionDao {
 
     @Transaction
     public void insertCourse(String sessionName, String profileId, Course course){
-        SessionWithProfilesAndCourses targetSession = getSessionWithProfilesAndCourses(sessionName);
+        DBSessionWithProfilesAndCourses targetSession = getSessionWithProfilesAndCourses(sessionName);
         if(targetSession == null) return;
 
         DBProfileWithCourses targetProfile = getDBProfileWithCourses(targetSession.session.dbSessionId, profileId);
@@ -111,5 +110,25 @@ public abstract class SessionDao {
         int targetCourseId = (int)insertCourse(targetCourse);
 
         insertReference(new DBCourseProfileCrossRef(targetProfile.dbProfile.dbProfileId, targetCourseId));
+    }
+
+    @Delete
+    abstract void deleteProfile(DBProfile dbProfile);
+
+    @Delete
+    abstract void deleteSession(DBSession dbSession);
+
+    @Transaction
+    public void clearSession(String sessionName){
+        DBSessionWithProfilesAndCourses targetSession = getSessionWithProfilesAndCourses(sessionName);
+        if(targetSession == null) return;
+
+        for(DBProfileWithCourses profile:targetSession.profiles) deleteProfile(profile.dbProfile);
+    }
+
+    @Transaction
+    public void delete(String sessionName){
+        clearSession(sessionName);
+        if(getSession(sessionName) != null) deleteSession(getSession(sessionName));
     }
 }

@@ -96,4 +96,42 @@ public class SessionDatabaseBackendTest {
 
         assertEquals(3, sessionDao.getCoursesInProfile("testSession", "billId").size());
     }
+
+    @Test
+    public void deleteSession(){
+        DBSession testSession1 = new DBSession("testSession1");
+        DBSession testSession2 = new DBSession("testSession2");
+
+        sessionDao.insert(testSession1);
+        sessionDao.insert(testSession2);
+        assertEquals(2, sessionDao.getAll().size());
+
+        sessionDao.delete("testSession1");
+        assertEquals(1, sessionDao.getAll().size());
+    }
+
+    @Test
+    public void clearSession(){
+        DBSession testSession = new DBSession("testSession");
+
+        Profile billClinton = new Profile("Bill Clinton",
+                "https://upload.wikimedia.org/wikipedia/commons/d/d3/Bill_Clinton.jpg",
+                "billId");
+        Profile barackObama = new Profile("Barack Obama",
+                "https://upload.wikimedia.org/wikipedia/commons/8/8d/President_Barack_Obama.jpg",
+                "barackId");
+        Profile georgeWBush = new Profile("George W. Bush",
+                "https://upload.wikimedia.org/wikipedia/commons/d/d4/George-W-Bush.jpeg",
+                "georgeId");
+
+        sessionDao.insert(testSession);
+        sessionDao.insertProfile("testSession", billClinton);
+        sessionDao.insertProfile("testSession", barackObama);
+        sessionDao.insertProfile("testSession", georgeWBush);
+
+        assertEquals(3, sessionDao.getProfilesInSession("testSession").size());
+
+        sessionDao.clearSession("testSession");
+        assertEquals(0, sessionDao.getProfilesInSession("testSession").size());
+    }
 }
