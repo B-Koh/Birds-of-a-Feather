@@ -58,7 +58,7 @@ public abstract class SessionDao {
         SessionWithProfilesAndCourses targetSession = getSessionWithProfilesAndCourses(sessionName);
         if(targetSession == null) return null;
 
-        DBProfileWithCourses targetProfile = getDBProfileWithCourses(targetSession.session.sessionId, profileId);
+        DBProfileWithCourses targetProfile = getDBProfileWithCourses(targetSession.session.dbSessionId, profileId);
         if(targetProfile == null) return null;
 
         List<DBCourse> targetList = targetProfile.courses;
@@ -90,7 +90,7 @@ public abstract class SessionDao {
         //Log.e("insertProfile", "Target Session id is " + targetSession.session.sessionId);
 
         DBProfileWithCourses targetProfile = new DBProfileWithCourses(profile);
-        targetProfile.dbProfile.profileSessionId = targetSession.session.sessionId;
+        targetProfile.dbProfile.profileSessionId = targetSession.session.dbSessionId;
         insertProfile(targetProfile.dbProfile);
 
         //Log.e("insertProfile", "Target Session profile size is " + targetSession.profiles.size());
@@ -102,7 +102,7 @@ public abstract class SessionDao {
         SessionWithProfilesAndCourses targetSession = getSessionWithProfilesAndCourses(sessionName);
         if(targetSession == null) return;
 
-        DBProfileWithCourses targetProfile = getDBProfileWithCourses(targetSession.session.sessionId, profileId);
+        DBProfileWithCourses targetProfile = getDBProfileWithCourses(targetSession.session.dbSessionId, profileId);
         if(targetProfile == null) return;
 
         DBCourse targetCourse = getDBCourse(course.getYear(), course.getSession(), course.getDepartment(), course.getCourseNumber());

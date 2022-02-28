@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 public class DBSession {
     @PrimaryKey(autoGenerate = true)
     //@ColumnInfo(name = "session_id")
-    public int sessionId;
+    public int dbSessionId;
     //@ColumnInfo(name = "session_name")
     public String sessionName;
 
