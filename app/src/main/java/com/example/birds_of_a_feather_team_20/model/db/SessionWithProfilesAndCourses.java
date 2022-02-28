@@ -9,7 +9,7 @@ public class SessionWithProfilesAndCourses {
     @Embedded public DBSession session;
     @Relation(
             entity = DBProfile.class,
-            parentColumn = "sessionId",
+            parentColumn = "dbSessionId",
             entityColumn = "profileSessionId"
     )
     public List<DBProfileWithCourses> profiles;
