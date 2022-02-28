@@ -1,7 +1,5 @@
 package com.example.birds_of_a_feather_team_20.model.db;
 
-import android.util.Log;
-
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -16,11 +14,11 @@ import java.util.List;
 @Dao
 public abstract class SessionDao {
     @Transaction
-    @Query("SELECT * FROM Session")
-    public abstract List<Session> getAll();
+    @Query("SELECT * FROM DBSession")
+    public abstract List<DBSession> getAll();
 
     @Transaction
-    @Query("SELECT * FROM Session WHERE sessionName=:sessionName")
+    @Query("SELECT * FROM DBSession WHERE sessionName=:sessionName")
     abstract SessionWithProfilesAndCourses getSessionWithProfilesAndCourses(String sessionName);
 
     @Transaction
@@ -32,7 +30,7 @@ public abstract class SessionDao {
     abstract DBCourse getDBCourse(int year, String session, String department, String courseNumber);
 
     @Transaction
-    public Session getSession(String sessionName){
+    public DBSession getSession(String sessionName){
         SessionWithProfilesAndCourses targetSession = getSessionWithProfilesAndCourses(sessionName);
         if(targetSession == null) return null;
         return targetSession.session;
@@ -71,7 +69,7 @@ public abstract class SessionDao {
     }
 
     @Insert
-    public abstract long insert(Session session);
+    public abstract long insert(DBSession session);
 
     @Insert
     abstract long insertProfile(DBProfile dbProfile);
@@ -83,7 +81,7 @@ public abstract class SessionDao {
     abstract long insertReference(DBCourseProfileCrossRef reference);
 
     @Delete
-    public abstract void delete(Session session);
+    public abstract void delete(DBSession session);
 
     @Transaction
     public void insertProfile(String sessionName, Profile profile){

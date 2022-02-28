@@ -9,7 +9,7 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.example.birds_of_a_feather_team_20.model.db.Course;
-import com.example.birds_of_a_feather_team_20.model.db.Session;
+import com.example.birds_of_a_feather_team_20.model.db.DBSession;
 import com.example.birds_of_a_feather_team_20.model.db.SessionDao;
 import com.example.birds_of_a_feather_team_20.model.db.SessionDatabase;
 
@@ -45,7 +45,7 @@ public class SessionDatabaseBackendTest {
 
     @Test
     public void addSession(){
-        Session testSession = new Session("testSession");
+        DBSession testSession = new DBSession("testSession");
         sessionDao.insert(testSession);
 
         assertEquals(1, sessionDao.getAll().size());
@@ -55,7 +55,7 @@ public class SessionDatabaseBackendTest {
 
     @Test
     public void addProfiles(){
-        Session testSession = new Session("testSession");
+        DBSession testSession = new DBSession("testSession");
 
         Profile billClinton = new Profile("Bill Clinton",
                 "https://upload.wikimedia.org/wikipedia/commons/d/d3/Bill_Clinton.jpg",
@@ -70,7 +70,7 @@ public class SessionDatabaseBackendTest {
 
     @Test
     public void addCourses(){
-        Session testSession = new Session("testSession");
+        DBSession testSession = new DBSession("testSession");
 
         Profile billClinton = new Profile("Bill Clinton",
                 "https://upload.wikimedia.org/wikipedia/commons/d/d3/Bill_Clinton.jpg",

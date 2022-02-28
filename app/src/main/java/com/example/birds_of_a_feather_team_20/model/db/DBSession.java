@@ -5,14 +5,14 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Session {
+public class DBSession {
     @PrimaryKey(autoGenerate = true)
     //@ColumnInfo(name = "session_id")
     public int sessionId;
     //@ColumnInfo(name = "session_name")
     public String sessionName;
 
-    public Session(String sessionName) {
+    public DBSession(String sessionName) {
         this.sessionName = sessionName;
     }
 
