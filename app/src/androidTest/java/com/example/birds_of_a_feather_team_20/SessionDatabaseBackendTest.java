@@ -98,6 +98,33 @@ public class SessionDatabaseBackendTest {
     }
 
     @Test
+    public void addProfileWithCourses(){
+        DBSession testSession = new DBSession("testSession");
+
+        Profile billClinton = new Profile("Bill Clinton",
+                "https://upload.wikimedia.org/wikipedia/commons/d/d3/Bill_Clinton.jpg",
+                "billId");
+
+        Course ECE45 = new Course(2022, "WI", "ECE", "45");
+        Course CSE110 = new Course(2022, "WI", "CSE", "110");
+
+        billClinton.addCourse(ECE45);
+        billClinton.addCourse(CSE110);
+
+        sessionDao.insert(testSession);
+        sessionDao.insertProfile("testSession", billClinton);
+
+        assertEquals(2, sessionDao.getCoursesInProfile("testSession", "billId").size());
+
+        Course MATH20D = new Course(2021, "SP", "MATH", "20D");
+        billClinton.addCourse(MATH20D);
+
+        sessionDao.insertProfile("testSession", billClinton);
+
+        assertEquals(3, sessionDao.getCoursesInProfile("testSession", "billId").size());
+    }
+
+    @Test
     public void deleteSession(){
         DBSession testSession1 = new DBSession("testSession1");
         DBSession testSession2 = new DBSession("testSession2");
@@ -133,5 +160,55 @@ public class SessionDatabaseBackendTest {
 
         sessionDao.clearSession("testSession");
         assertEquals(0, sessionDao.getProfilesInSession("testSession").size());
+    }
+
+    @Test
+    public void duplicateProfile(){
+        DBSession testSession = new DBSession("testSession");
+
+        Profile billClinton = new Profile("Bill Clinton",
+                "https://upload.wikimedia.org/wikipedia/commons/d/d3/Bill_Clinton.jpg",
+                "billId");
+
+        sessionDao.insert(testSession);
+        sessionDao.insertProfile("testSession", billClinton);
+        assertEquals(1, sessionDao.getProfilesInSession("testSession").size());
+
+        sessionDao.insertProfile("testSession", billClinton);
+        assertEquals(1, sessionDao.getProfilesInSession("testSession").size());
+
+        Profile updatedBillClinton = new Profile("William Clinton",
+                "https://upload.wikimedia.org/wikipedia/commons/3/32/Bill_Clinton_in_1963_Old_Gold_Book.jpg",
+                "billId");
+        sessionDao.insertProfile("testSession", updatedBillClinton);
+        assertEquals(1, sessionDao.getProfilesInSession("testSession").size());
+    }
+
+    @Test
+    public void duplicateCourse(){
+        DBSession testSession = new DBSession("testSession");
+
+        Profile billClinton = new Profile("Bill Clinton",
+                "https://upload.wikimedia.org/wikipedia/commons/d/d3/Bill_Clinton.jpg",
+                "billId");
+
+        sessionDao.insert(testSession);
+        sessionDao.insertProfile("testSession", billClinton);
+
+        Course ECE45 = new Course(2022, "WI", "ECE", "45");
+        sessionDao.insertCourse("testSession", "billId", ECE45);
+        assertEquals(1, sessionDao.getCoursesInProfile("testSession", "billId").size());
+
+        Course AnotherECE45 = new Course(2022, "WI", "ECE", "45");
+        sessionDao.insertCourse("testSession", "billId", AnotherECE45);
+        assertEquals(1, sessionDao.getCoursesInProfile("testSession", "billId").size());
+
+        Course LowercaseECE45 = new Course(2022, "wi", "ece", "45");
+        sessionDao.insertCourse("testSession", "billId", LowercaseECE45);
+        assertEquals(1, sessionDao.getCoursesInProfile("testSession", "billId").size());
+
+        Course SpacesECE45 = new Course(2022, "  WI  ", "  ECE   ", "  45  ");
+        sessionDao.insertCourse("testSession", "billId", SpacesECE45);
+        assertEquals(1, sessionDao.getCoursesInProfile("testSession", "billId").size());
     }
 }

@@ -30,7 +30,7 @@ public class DBProfileWithCourses {
         dbProfile.profileId = profile.getId();
         dbProfile.photoURL = profile.getPhotoURL();
 
-        for(Course course:profile.getCourses()) courses.add(new DBCourse(course));
+        //for(Course course:profile.getCourses()) courses.add(new DBCourse(course));
     }
 
     public Profile toProfile(){
