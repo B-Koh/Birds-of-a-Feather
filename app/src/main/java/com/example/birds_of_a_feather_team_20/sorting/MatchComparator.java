@@ -18,6 +18,7 @@ public class MatchComparator implements ProfileComparator {
     /**
      * Result should be greater than zero if p1 has more matches, less than 0 if p2 has more, and
      * equal to 0 if p1 and p2 have an equal number of matches
+     * @return
      */
     @Override
     public int compare(Profile p1, Profile p2) {

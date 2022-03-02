@@ -2,21 +2,27 @@ package com.example.birds_of_a_feather_team_20.sorting;
 
 import com.example.birds_of_a_feather_team_20.Profile;
 
-public class MatchScoreTimeWeighted {
+public class MatchScoreTimeWeighted implements ProfileComparator{
 
     private final String currentSession;
-    private final Profile myProfile;
     private final int currentYear;
 
-    public MatchScoreTimeWeighted(Profile myProfile, String currentSession, int currentYear){
+    public MatchScoreTimeWeighted(String currentSession, int currentYear){
 
         this.currentSession = currentSession;
-        this.myProfile = myProfile;
         this.currentYear = currentYear;
     }
 
-    public int calculateTimeWeighted(Profile otherProfile){
+
+
+    @Override
+    public int compare(Profile p1, Profile p2) {
         int score = 0;
+
+
+
+
+
 
         return score;
     }

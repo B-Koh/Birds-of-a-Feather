@@ -4,18 +4,19 @@ import com.example.birds_of_a_feather_team_20.Profile;
 
 import java.util.List;
 
-public class MatchScoreSizeWeighted {
+public class MatchScoreSizeWeighted implements ProfileComparator {
 
-    private final Profile myProfile;
 
-    public MatchScoreSizeWeighted(Profile myProfile){
-        this.myProfile = myProfile;
-    }
-
-    public float calculateSizeWeight(Profile otherProfile){
-
+    /**
+     * compares the matches based on the size of the classroom
+     * @param p1 first profile to compare with
+     * @param p2 second profile to compare with
+     * @return float of the scare multiplied by 100
+     */
+    @Override
+    public int compare(Profile p1, Profile p2) {
         float score = 0;
-        List courses = myProfile.matchingCourses(otherProfile);
+        List courses = p1.matchingCourses(p2);
 
         for(int i = 0; i < courses.size(); i++){
             int classSize = courses.get(i).getClassSize();
@@ -38,6 +39,6 @@ public class MatchScoreSizeWeighted {
                 score += 0.03;
             }
         }
-        return score;
+        return (int) (score * 100);
     }
 }
