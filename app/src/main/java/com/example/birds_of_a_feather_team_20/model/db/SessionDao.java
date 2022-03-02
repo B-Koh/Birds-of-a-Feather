@@ -149,6 +149,20 @@ public abstract class SessionDao {
         insertReference(new DBCourseProfileCrossRef(targetProfile.dbProfile.dbProfileId, targetCourseId));
     }
 
+    @Transaction
+    public void updateSession(String sessionName, List<Profile> profiles){
+        DBSessionWithProfilesAndCourses targetSession = getSessionWithProfilesAndCourses(sessionName);
+        if(targetSession == null) {
+            targetSession = new DBSessionWithProfilesAndCourses();
+            targetSession.session.sessionName = sessionName;
+            insert(targetSession.session);
+        }
+
+        for(Profile profile:profiles){
+            insertProfile(sessionName, profile);
+        }
+    }
+
     @Delete
     abstract void deleteProfile(DBProfile dbProfile);
 

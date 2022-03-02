@@ -18,6 +18,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SessionDatabaseBackendTest {
     private SessionDao sessionDao;
@@ -160,6 +162,40 @@ public class SessionDatabaseBackendTest {
 
         sessionDao.clearSession("testSession");
         assertEquals(0, sessionDao.getProfilesInSession("testSession").size());
+    }
+
+    @Test
+    public void updateSession(){
+        DBSession testSession = new DBSession("testSession");
+
+        Profile billClinton = new Profile("Bill Clinton",
+                "https://upload.wikimedia.org/wikipedia/commons/d/d3/Bill_Clinton.jpg",
+                "billId");
+
+        sessionDao.insert(testSession);
+        sessionDao.insertProfile("testSession", billClinton);
+
+        assertEquals(0, sessionDao.getCoursesInProfile("testSession", "billId").size());
+
+        Course ECE45 = new Course(2022, "WI", "ECE", "45");
+        Course MATH20D = new Course(2021, "SP", "MATH", "20D");
+
+        billClinton.addCourse(ECE45);
+
+        Profile barackObama = new Profile("Barack Obama",
+                "https://upload.wikimedia.org/wikipedia/commons/8/8d/President_Barack_Obama.jpg",
+                "barackId");
+        barackObama.addCourse(ECE45);
+        barackObama.addCourse(MATH20D);
+
+        List<Profile> profileList = new ArrayList<Profile>();
+        profileList.add(billClinton);
+        profileList.add(barackObama);
+
+        sessionDao.updateSession("testSession", profileList);
+
+        assertEquals(2, sessionDao.getProfilesInSession("testSession").size());
+        assertEquals(1, sessionDao.getCoursesInProfile("testSession", "billId").size());
     }
 
     @Test
