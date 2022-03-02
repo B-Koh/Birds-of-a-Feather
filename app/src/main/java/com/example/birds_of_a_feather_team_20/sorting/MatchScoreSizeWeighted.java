@@ -1,6 +1,7 @@
 package com.example.birds_of_a_feather_team_20.sorting;
 
 import com.example.birds_of_a_feather_team_20.Profile;
+import com.example.birds_of_a_feather_team_20.model.db.Course;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class MatchScoreSizeWeighted implements ProfileComparator {
     @Override
     public int compare(Profile p1, Profile p2) {
         float score = 0;
-        List courses = p1.matchingCourses(p2);
+        List<Course> courses = p1.matchingCourses(p2);
 
         for(int i = 0; i < courses.size(); i++){
             int classSize = courses.get(i).getClassSize();

@@ -33,7 +33,6 @@ public class Profile {
     private String lastDownloadedURL;
     private List<Course> courses;
 
-
     public Profile(String name, String photoURL, String id) {
 //        Log.e("New PROFILE", name + " | " + photoURL);
         this.name = (name != null) ? name : "";
@@ -60,7 +59,6 @@ public class Profile {
     public void setName(String name) {
         this.name = name;
     }
-
     public void setId(String id) {
         this.id = id;
     }
@@ -112,10 +110,10 @@ public class Profile {
      * @param otherProfile profile to compare courses to
      * @return list of matching courses
      */
-    public List matchingCourses(Profile otherProfile){
+    public List<Course> matchingCourses(Profile otherProfile){
 
         //arraylist to return the list of matching courses
-        List matchCourseList = new ArrayList();
+        List<Course> matchCourseList = new ArrayList();
 
         for(int i = 0; i < getCourses().size(); i++){
             for(int j = 0; j < otherProfile.getCourses().size(); j++){
