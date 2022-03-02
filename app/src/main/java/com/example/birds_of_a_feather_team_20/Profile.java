@@ -108,6 +108,28 @@ public class Profile {
     }
 
     /**
+     * get a list of matching courses
+     * @param otherProfile profile to compare courses to
+     * @return list of matching courses
+     */
+    public List matchingCourses(Profile otherProfile){
+
+        //arraylist to return the list of matching courses
+        List matchCourseList = new ArrayList();
+
+        for(int i = 0; i < getCourses().size(); i++){
+            for(int j = 0; j < otherProfile.getCourses().size(); j++){
+
+                //check if courses are equal
+                if(getCourses().get(i).equals(otherProfile.getCourses().get(j))){
+                    matchCourseList.add(getCourses().get(i));
+                }
+            }
+        }
+        return matchCourseList;
+    }
+
+    /**
      * Two profiles are strongly equal if all their data match.
      */
     public boolean strongEquals(Profile other) {
