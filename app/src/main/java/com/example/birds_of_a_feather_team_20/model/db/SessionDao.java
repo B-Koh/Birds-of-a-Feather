@@ -80,8 +80,16 @@ public abstract class SessionDao {
         return returnList;
     }
 
+    @Transaction
+    public long insert(DBSession session){
+        DBSessionWithProfilesAndCourses possibleDuplicateSession = getSessionWithProfilesAndCourses(session.sessionName);
+        if(possibleDuplicateSession != null) return -1;
+
+        return insertSession(session);
+    }
+
     @Insert
-    public abstract long insert(DBSession session);
+    abstract long insertSession(DBSession session);
 
     @Insert
     abstract long insertProfile(DBProfile dbProfile);
@@ -178,6 +186,16 @@ public abstract class SessionDao {
         if(targetSession == null) return;
 
         for(DBProfileWithCourses profile:targetSession.profiles) deleteProfile(profile.dbProfile);
+    }
+
+    @Transaction
+    public void renameSession(String sessionName, String newName){
+        DBSessionWithProfilesAndCourses targetSession = getSessionWithProfilesAndCourses(sessionName);
+        DBSessionWithProfilesAndCourses possibleDuplicateSession = getSessionWithProfilesAndCourses(newName);
+
+        if(possibleDuplicateSession != null) return;
+
+        targetSession.session.sessionName = newName;
     }
 
     @Transaction
