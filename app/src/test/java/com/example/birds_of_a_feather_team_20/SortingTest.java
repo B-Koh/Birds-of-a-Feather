@@ -130,5 +130,22 @@ public class SortingTest {
         person2.addCourse(course2);
         assertEquals(7, comp.compare(person1, person2));
     }
+    @Test
+    public void testCurrentDate() {
+        Profile person1 = new Profile("Person1", "photo", "this_is_person1");
+        Course course1 = new Course(2021, "FA", "CSE", "100");
+        Course course2 = new Course(2031, "FA", "CSE", "100");
+
+        // Current year and quarter to compare to
+        MatchScoreTimeWeighted comp = new MatchScoreTimeWeighted("FA", 2021);
+
+        // Quarter is current
+        person1.addCourse(course1);
+        assert comp.checkCurrent(person1.getCourses().get(0));
+
+        // Quarter is not current
+        person1.addCourse(course2);
+        assert !comp.checkCurrent(person1.getCourses().get(1));
+    }
 
 }

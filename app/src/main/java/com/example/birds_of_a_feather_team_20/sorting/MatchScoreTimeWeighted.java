@@ -47,6 +47,16 @@ public class MatchScoreTimeWeighted implements ProfileComparator {
     }
 
     /**
+     * Checks if the course is current
+     *
+     * @param course - course being checked to see if it is current
+     * @return - bool that is true if current / false if not current
+     */
+    public boolean checkCurrent(Course course) {
+        return (course.getYear() == this.currentYear) && (course.getSession().equals(this.currentSession));
+    }
+
+    /**
      * Compares the matches based on the recency of matched courses
      *
      * @param p1 first profile to compare with
