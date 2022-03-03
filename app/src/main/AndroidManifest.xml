@@ -53,6 +53,10 @@
             android:name=".DisplayProfile"
             android:exported="false" />
         <activity
+            android:name=".StopSessionActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
