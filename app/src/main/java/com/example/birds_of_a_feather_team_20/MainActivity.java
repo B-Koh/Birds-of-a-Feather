@@ -4,15 +4,11 @@ package com.example.birds_of_a_feather_team_20;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.birds_of_a_feather_team_20.model.db.Course;
@@ -20,7 +16,6 @@ import com.example.birds_of_a_feather_team_20.model.db.Course;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -48,21 +43,6 @@ public class MainActivity extends AppCompatActivity {
         BluetoothManager bt = new BluetoothManager(this);
         bt.initializeBluetooth();
 
-
-        /**
-         * =======
-         */
-        String[] sortList = {"Default", "Recent", "Class Size"};
-
-        Spinner sort_dropdown = findViewById(R.id.sort_dropdown);
-        ArrayAdapter<String> sort_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sortList);
-        sort_adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        sort_dropdown.setAdapter(sort_adapter);
-        /**
-         * ===========
-         */
-
-
         MyProfile.singleton(getApplicationContext()); // This line is probably unnecessary
 
         nearbyManager = new NearbyManager(this);
@@ -79,18 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onStart();
         nearbyManager.republish();
-
-        Spinner s = findViewById(R.id.sort_dropdown);
-        Context c = this;
-        s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Utilities.logToast(c, "Sort Method: " + s.getSelectedItem().toString());
-                nearbyManager.changeSort(s.getSelectedItem().toString());
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {}
-        });
     }
 
     @Override

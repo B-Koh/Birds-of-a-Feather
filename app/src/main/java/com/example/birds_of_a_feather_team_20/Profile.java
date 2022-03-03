@@ -33,6 +33,7 @@ public class Profile {
     private String lastDownloadedURL;
     private List<Course> courses;
 
+
     public Profile(String name, String photoURL, String id) {
 //        Log.e("New PROFILE", name + " | " + photoURL);
         this.name = (name != null) ? name : "";
@@ -59,6 +60,7 @@ public class Profile {
     public void setName(String name) {
         this.name = name;
     }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -103,28 +105,6 @@ public class Profile {
             }
         }
         return numMatchCourse;
-    }
-
-    /**
-     * get a list of matching courses
-     * @param otherProfile profile to compare courses to
-     * @return list of matching courses
-     */
-    public List<Course> matchingCourses(Profile otherProfile){
-
-        //arraylist to return the list of matching courses
-        List<Course> matchCourseList = new ArrayList();
-
-        for(int i = 0; i < getCourses().size(); i++){
-            for(int j = 0; j < otherProfile.getCourses().size(); j++){
-
-                //check if courses are equal
-                if(getCourses().get(i).equals(otherProfile.getCourses().get(j))){
-                    matchCourseList.add(getCourses().get(i));
-                }
-            }
-        }
-        return matchCourseList;
     }
 
     /**
@@ -354,29 +334,29 @@ public class Profile {
         return courses;
     }
 
-//    private static void readCourses1(Profile profile, String coursesData) throws IOException {
-//        if (coursesData == null || coursesData.equals("")) return;
-//
-////        profile.addCourse();
-//        StringReader in = new StringReader(coursesData);
-//        JsonReader reader = new JsonReader(in);
-////        String id = "";
-////        String name = "";
-////        String photoURL = "";
-////        String coursesData = "";
-////        Profile profile = null;
-//        reader.beginArray();
-//        while (reader.hasNext()) {
-////            profile.addCourse(readCourse(reader));
-//        }
-//        reader.endArray();
-//        reader.close();
-////        try {
-////             read name and URL
-////            reader.beginObject();
-////            while(reader.hasNext()) {
-////                String key = reader.nextName();
-//    }
+    private static void readCourses1(Profile profile, String coursesData) throws IOException {
+        if (coursesData == null || coursesData.equals("")) return;
+
+//        profile.addCourse();
+        StringReader in = new StringReader(coursesData);
+        JsonReader reader = new JsonReader(in);
+//        String id = "";
+//        String name = "";
+//        String photoURL = "";
+//        String coursesData = "";
+//        Profile profile = null;
+        reader.beginArray();
+        while (reader.hasNext()) {
+//            profile.addCourse(readCourse(reader));
+        }
+        reader.endArray();
+        reader.close();
+//        try {
+//             read name and URL
+//            reader.beginObject();
+//            while(reader.hasNext()) {
+//                String key = reader.nextName();
+    }
 
 //    private static Course readCourse(JsonReader reader) throws IOException {
 //        Course course = null;
