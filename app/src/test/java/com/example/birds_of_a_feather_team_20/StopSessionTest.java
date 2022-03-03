@@ -7,7 +7,6 @@ import android.content.Context;
 import androidx.room.Room;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.birds_of_a_feather_team_20.model.db.Course;
 import com.example.birds_of_a_feather_team_20.model.db.CourseDao;
@@ -17,20 +16,22 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
-@RunWith(AndroidJUnit4.class)
+@RunWith(RobolectricTestRunner.class)
 public class StopSessionTest {
-    private CourseDao courseDao;
 
+    private CourseDao courseDao;
     private CourseDatabase db;
-    private MyProfile mp;
+
+    List<String> currCourses;
+
 
     @Before
     public void createDb() {
         Context context = ApplicationProvider.getApplicationContext();
-//        mp = MyProfile.singleton(context);
         db = Room.inMemoryDatabaseBuilder(context, CourseDatabase.class)
                 .allowMainThreadQueries()
                 .build();
@@ -40,22 +41,29 @@ public class StopSessionTest {
     @After
     public void closeDb() {db.close();}
 
+    //Helper Method
+    private void currentCourses(StopSessionActivity activity, List<Course> courses){
+        activity.getCurrCourses(courses);
+        this.currCourses = activity.currCourses;
+    }
     @Test
     public void testCurrentCourseList() {
+        try(ActivityScenario<StopSessionActivity> scenario = ActivityScenario.launch(StopSessionActivity.class)) {
+            scenario.onActivity(activity -> {
+                Course firstCourse = new Course(2021, "FA", "CSE", "100");
+                courseDao.insert(firstCourse);
 
-        Course firstCourse = new Course(2021, "Fall", "CSE", "100");
-        courseDao.insert(firstCourse);
+                Course secondCourse = new Course(2022, "WI", "CSE", "110");
+                courseDao.insert(secondCourse);
 
-        Course secondCourse = new Course(2022, "Winter", "CSE", "110");
-        courseDao.insert(secondCourse);
+                List<Course> courses = courseDao.getAll();
 
-        List<Course> courses = courseDao.getAll();
-//        StopSessionActivity.getInstance().getCurrCourses(courses);
-//        List<String> currCourses =  StopSessionActivity.getInstance().currCourses;
+                currentCourses(activity, courses);
 
-        assertEquals(1, 1);
+                assertEquals(1, 1);
 
-
+            });
+        }
 
     }
 

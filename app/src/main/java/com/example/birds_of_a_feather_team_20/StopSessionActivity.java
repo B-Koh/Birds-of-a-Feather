@@ -51,7 +51,7 @@ public class StopSessionActivity extends AppCompatActivity {
         }
     }
 
-    private void getCurrCourses(List<Course> myCourses) {
+    public void getCurrCourses(List<Course> myCourses) {
         for( int i = 0; i < myCourses.size(); i++){
             String quarter = myCourses.get(i).getSession();
             String year = String.valueOf(myCourses.get(i).getYear());
@@ -63,9 +63,10 @@ public class StopSessionActivity extends AppCompatActivity {
             }
         }
         current_classes = new String[currCourses.size()];
-        for(int i = 0; i < currCourses.size(); i++) {
-            current_classes[i] = currCourses.get(i);
-        }
+//        for(int i = 0; i < currCourses.size(); i++) {
+//            current_classes[i] = currCourses.get(i);
+//        }
+        current_classes = currCourses.toArray(current_classes);
     }
 
     private void saveSession() {
@@ -92,6 +93,10 @@ public class StopSessionActivity extends AppCompatActivity {
             Toast.makeText(this, "Only Choose One: Enter or Select Name", Toast.LENGTH_SHORT).show();
             return false;
         }
+//        if(sd.sessionDao().getSession(sessionText) != null){
+//            Toast.makeText(this, "Session name already exists: Select Different Name", Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
 
         if(!courseSelected.equals("")){
             sessionName = courseSelected;
