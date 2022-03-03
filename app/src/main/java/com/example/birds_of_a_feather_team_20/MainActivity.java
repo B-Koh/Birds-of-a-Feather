@@ -4,10 +4,12 @@ package com.example.birds_of_a_feather_team_20;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -77,6 +79,18 @@ public class MainActivity extends AppCompatActivity {
 
         super.onStart();
         nearbyManager.republish();
+
+        Spinner s = findViewById(R.id.sort_dropdown);
+        Context c = this;
+        s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Utilities.logToast(c, "Sort Method: " + s.getSelectedItem().toString());
+                nearbyManager.changeSort(s.getSelectedItem().toString());
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
     }
 
     @Override

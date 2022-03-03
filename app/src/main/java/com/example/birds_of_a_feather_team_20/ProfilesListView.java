@@ -2,6 +2,8 @@ package com.example.birds_of_a_feather_team_20;
 
 
 import android.app.Activity;
+import android.util.Pair;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,8 +40,8 @@ public class ProfilesListView {
     /**
      * Notifies the adapter of any changes to the data
      */
-    public void notifyAdapter(Stack<Integer> modifications, Stack<Integer> additions) {
-
+    public void notifyAdapter(Stack<Integer> modifications, Stack<Integer> additions, Stack<Pair<Integer, Integer>> movements) {
+        Utilities.logToast(activity, "Notify Adapter");
         while(!modifications.isEmpty()) {
             Integer i = modifications.pop();
             if (i != null)
@@ -50,6 +52,14 @@ public class ProfilesListView {
             if (i != null)
                 adapter.notifyItemInserted(i);
         }
+        while(!movements.isEmpty()) {
+            Pair<Integer, Integer> p = movements.pop();
+            if (p != null && p.first != null && p.second != null) {
+                adapter.notifyItemMoved(p.first, p.second);
+            }
+        }
+
+        adapter.notifyDataSetChanged(); // Comment this out once movements stack works
     }
 
     /**
@@ -71,7 +81,7 @@ public class ProfilesListView {
     /**
      * On a background thread, download any new thumbnails, then notify the view adapter of changes
      */
-    public void refreshProfileListView(Stack<Integer> modifications, Stack<Integer> additions) {
+    public void refreshProfileListView(Stack<Integer> modifications, Stack<Integer> additions, Stack<Pair<Integer, Integer>> movements) {
         // Show
         if (foundProfiles.size() > 0)
             activity.setTitle("Find Friends (" + foundProfiles.size() + ")");
@@ -80,7 +90,7 @@ public class ProfilesListView {
         Executors.newSingleThreadExecutor().submit(() -> {
 //            updateThumbnailsBackground(modifications, additions);
             activity.runOnUiThread(() -> {
-                notifyAdapter(modifications, additions);
+                notifyAdapter(modifications, additions, movements);
             });
             return null;
         });

@@ -4,17 +4,43 @@ import com.example.birds_of_a_feather_team_20.model.db.Course;
 import com.example.birds_of_a_feather_team_20.sorting.MatchComparator;
 import com.example.birds_of_a_feather_team_20.sorting.MatchScoreTimeWeighted;
 import com.example.birds_of_a_feather_team_20.sorting.ProfileComparator;
+import com.google.android.gms.nearby.messages.Message;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.*;
 
+import android.content.Context;
+
+import androidx.test.core.app.ActivityScenario;
+
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 
+@RunWith(RobolectricTestRunner.class)
 public class SortingTest {
+
+    // HELPER METHODS
+    private void sendMessage(MainActivity activity, String messageStr) {
+        Message message = new Message(messageStr.getBytes(StandardCharsets.UTF_8));
+        activity.getNearbyManager().getProfileMessageListener().onFound(message);
+        activity.getNearbyManager().getProfileMessageListener().onLost(message);
+    }
+    private void sendMessage(MainActivity activity, Profile profile) {
+        String msg = profile.serialize();
+        sendMessage(activity, msg);
+    }
+    private void reset(Context context) {
+        ProfilesCollection.singleton().getProfiles().clear();
+        MyProfile.singleton(context).getCourses().clear();
+    }
+
+
     @Test
     public void testMatchCompare() {
         Profile myProfile = new Profile("Jim", "photo", "this_is_me");

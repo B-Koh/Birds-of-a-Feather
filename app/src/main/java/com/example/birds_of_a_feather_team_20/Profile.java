@@ -354,29 +354,29 @@ public class Profile {
         return courses;
     }
 
-    private static void readCourses1(Profile profile, String coursesData) throws IOException {
-        if (coursesData == null || coursesData.equals("")) return;
-
-//        profile.addCourse();
-        StringReader in = new StringReader(coursesData);
-        JsonReader reader = new JsonReader(in);
-//        String id = "";
-//        String name = "";
-//        String photoURL = "";
-//        String coursesData = "";
-//        Profile profile = null;
-        reader.beginArray();
-        while (reader.hasNext()) {
-//            profile.addCourse(readCourse(reader));
-        }
-        reader.endArray();
-        reader.close();
-//        try {
-//             read name and URL
-//            reader.beginObject();
-//            while(reader.hasNext()) {
-//                String key = reader.nextName();
-    }
+//    private static void readCourses1(Profile profile, String coursesData) throws IOException {
+//        if (coursesData == null || coursesData.equals("")) return;
+//
+////        profile.addCourse();
+//        StringReader in = new StringReader(coursesData);
+//        JsonReader reader = new JsonReader(in);
+////        String id = "";
+////        String name = "";
+////        String photoURL = "";
+////        String coursesData = "";
+////        Profile profile = null;
+//        reader.beginArray();
+//        while (reader.hasNext()) {
+////            profile.addCourse(readCourse(reader));
+//        }
+//        reader.endArray();
+//        reader.close();
+////        try {
+////             read name and URL
+////            reader.beginObject();
+////            while(reader.hasNext()) {
+////                String key = reader.nextName();
+//    }
 
 //    private static Course readCourse(JsonReader reader) throws IOException {
 //        Course course = null;

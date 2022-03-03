@@ -6,6 +6,10 @@ import android.content.pm.PackageManager;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.birds_of_a_feather_team_20.sorting.MatchComparator;
+import com.example.birds_of_a_feather_team_20.sorting.MatchScoreSizeWeighted;
+import com.example.birds_of_a_feather_team_20.sorting.MatchScoreTimeWeighted;
+import com.example.birds_of_a_feather_team_20.sorting.ProfileComparator;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
@@ -15,6 +19,7 @@ import com.google.android.gms.nearby.messages.NearbyPermissions;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Comparator;
 import java.util.concurrent.Executors;
 
 /**
@@ -122,7 +127,7 @@ public class NearbyManager {
         // Store the Profile in our list of profiles
         ProfilesCollection profiles = ProfilesCollection.singleton();
         profiles.addOrUpdateProfile(profile, courseMatches);
-        profilesListView.refreshProfileListView(profiles.getModifications(), profiles.getAdditions());
+        profilesListView.refreshProfileListView(profiles.getModifications(), profiles.getAdditions(), profiles.getMovements());
     }
 
 
@@ -191,5 +196,19 @@ public class NearbyManager {
             unpublish();
             publish();
         }
+    }
+
+    public void changeSort(String sortType) {
+        // UPDATE LIST
+        ProfilesCollection coll = ProfilesCollection.singleton();
+        ProfileComparator comp = new MatchComparator(MyProfile.singleton(activity));
+        if (sortType.equals("Recent")) {
+            comp = new MatchScoreTimeWeighted("WI", 2022);
+        } else if (sortType.equals("Class Size")) {
+            comp = new MatchScoreSizeWeighted();
+        }
+        coll.changeSort(comp);
+        // UPDATE ADAPTER - TODO
+        profilesListView.refreshProfileListView(coll.getModifications(), coll.getAdditions(), coll.getMovements());
     }
 }
