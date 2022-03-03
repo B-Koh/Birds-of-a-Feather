@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.birds_of_a_feather_team_20.model.db.Course;
@@ -16,6 +18,7 @@ import com.example.birds_of_a_feather_team_20.model.db.Course;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -42,6 +45,21 @@ public class MainActivity extends AppCompatActivity {
         // Checks bluetooth if enabled
         BluetoothManager bt = new BluetoothManager(this);
         bt.initializeBluetooth();
+
+
+        /**
+         * =======
+         */
+        String[] sortList = {"Default", "Recent", "Class Size"};
+
+        Spinner sort_dropdown = findViewById(R.id.sort_dropdown);
+        ArrayAdapter<String> sort_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sortList);
+        sort_adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        sort_dropdown.setAdapter(sort_adapter);
+        /**
+         * ===========
+         */
+
 
         MyProfile.singleton(getApplicationContext()); // This line is probably unnecessary
 

@@ -23,6 +23,5 @@ public class MatchComparator implements ProfileComparator {
     @Override
     public int compare(Profile p1, Profile p2) {
         return p1.countMatchingCourses(myProfile) - p2.countMatchingCourses(myProfile);
-
     }
 }

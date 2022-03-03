@@ -33,8 +33,8 @@ public class Course {
     @ColumnInfo(name = "course_number")
     private String courseNumber; //Must be a string due to A/B courses
 
-    @ColumnInfo(name = "course_classSize")
-    private int classSize;
+    //@ColumnInfo(name = "course_classSize")
+    //private int classSize;
 
     public Course(int year, String session, String department, String courseNumber){
         this.year = year;
@@ -64,7 +64,7 @@ public class Course {
 
     public void setCourseNumber(String courseNumber) { this.courseNumber = courseNumber; }
 
-    public int getClassSize() { return this.classSize; }
+    //public int getClassSize() { return this.classSize; }
 
     @Override
     public boolean equals(Object o) {

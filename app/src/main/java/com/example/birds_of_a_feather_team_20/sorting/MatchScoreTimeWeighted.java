@@ -26,27 +26,28 @@ public class MatchScoreTimeWeighted implements ProfileComparator {
         this.currentYear = currentYear;
     }
 
+
     /**
      * Helper method that converts a season to a predetermined number
      *
      * @param currentSeason - season that will be converted to int
      * @return int of the season
      */
-    private int convertSessionToInt(String currentSeason) {
+    private int convertQuarterToInt(String currentSeason) {
         switch (currentSeason) {
-            case "Winter":
+            case "WI":
                 return 1;
-            case "Spring":
+            case "SP":
                 return 2;
-            case "Summer":
+            case "SS":
                 return 3;
+            default:
+                return 4;
         }
-        return 4;
     }
 
-
     /**
-     * Compares the matches based on the size of the classroom
+     * Compares the matches based on the recency of matched courses
      *
      * @param p1 first profile to compare with
      * @param p2 second profile to compare with
@@ -60,25 +61,32 @@ public class MatchScoreTimeWeighted implements ProfileComparator {
 
         // Loops through each matched course and calculates the age
         for (int i = 0; i < courses.size(); i++) {
-            int totalP1 = (currentYear * 4) + convertSessionToInt(this.currentSession);
-            int totalP2 = (courses.get(i).getYear() * 4) + convertSessionToInt(courses.get(i).getSession());
+            int totalP1 = (currentYear * 4) + convertQuarterToInt(this.currentSession);
+            int totalP2 = (courses.get(i).getYear() * 4) + convertQuarterToInt(courses.get(i).getSession());
 
+            // Finds the difference of quarters between current quarter and matched quarter
             int age = (totalP1 - totalP2) - 1;
 
             // Determines score based on age
             switch (age) {
                 case 0:
                     score += 5;
+                    break;
                 case 1:
                     score += 4;
+                    break;
                 case 2:
                     score += 3;
+                    break;
                 case 3:
                     score += 2;
-                case 4:
+                    break;
+                default:
                     score += 1;
+                    break;
             }
         }
         return score;
     }
+
 }
