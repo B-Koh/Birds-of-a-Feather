@@ -113,7 +113,7 @@ public class Profile {
     public List<Course> matchingCourses(Profile otherProfile){
 
         //arraylist to return the list of matching courses
-        List<Course> matchCourseList = new ArrayList();
+        List<Course> matchCourseList = new ArrayList<>();
 
         for(int i = 0; i < getCourses().size(); i++){
             for(int j = 0; j < otherProfile.getCourses().size(); j++){
@@ -394,7 +394,8 @@ public class Profile {
 
     // TODO match this up with what brandon added
     public void addCourse(Course course) {
-        getCourses().add(course);
+        if (!getCourses().contains(course))
+            getCourses().add(course);
     }
 
     public boolean isValid() {

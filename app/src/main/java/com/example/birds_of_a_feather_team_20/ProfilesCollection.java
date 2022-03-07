@@ -54,12 +54,13 @@ public class ProfilesCollection {
         if (profile == null) return;
 
         if (courseMatches == 0) {
-            return; // TODO Don't add to list if no matches
+            return; // Don't add to list if no matches
         }
 
         int index = getProfiles().indexOf(profile);
         if (index == -1) {
             insertNewProfile(profile, getProfiles().size());
+            applySort();
         }
         else {
             updateExistingProfile(profile, index);
