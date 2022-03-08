@@ -37,6 +37,7 @@
             android:layout_weight="1"
             android:background="#00FFFFFF"
             android:contentDescription="favorites tab"
+            android:onClick="onLaunchFavoritesClicked"
             android:scaleType="fitCenter"
             android:padding="15dp"
             android:scaleX="1"

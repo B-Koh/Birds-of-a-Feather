@@ -87,6 +87,12 @@ public class EditProfile extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void onLaunchFavoritesClicked(View view) {
+        onLaunchFriendsClicked(view);
+        Intent intent = new Intent(this, FavoriteActivity.class);
+        startActivity(intent);
+    }
+
     public void onLaunchFriendsClicked(View view) {
         onClickFinish(view);
     }

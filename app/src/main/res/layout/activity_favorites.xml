@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".FavoriteActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/profile_list"
@@ -17,31 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/profile_row" />
-
-    <Button
-        android:id="@+id/start_stop_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:onClick="onClickStartStop"
-        android:text="Start"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Spinner
-        android:id="@+id/sort_dropdown"
-        android:layout_width="160dp"
-        android:layout_height="48dp"
-        android:background="@android:drawable/btn_dropdown"
-        android:spinnerMode="dropdown"
-        android:contentDescription="filter dropdown"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.011" />
+        tools:listitem="@layout/favorites_row" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -58,13 +34,13 @@
             android:layout_weight="1"
             android:background="#00FFFFFF"
             android:contentDescription="friends tab"
+            android:onClick="onLaunchFriendsClicked"
             android:foreground="?android:attr/selectableItemBackground"
             android:padding="15dp"
             android:scaleType="fitCenter"
             android:scaleX="1"
             android:scaleY="1"
-            app:srcCompat="@drawable/ic_friends"
-            app:tint="?attr/colorPrimaryVariant" />
+            app:srcCompat="@drawable/ic_friends" />
 
         <ImageButton
             android:id="@+id/favorite_tab_button"
@@ -73,14 +49,13 @@
             android:layout_weight="1"
             android:background="#00FFFFFF"
             android:contentDescription="favorites tab"
-            android:onClick="onLaunchFavoritesClicked"
             android:scaleType="fitCenter"
             android:padding="15dp"
             android:scaleX="1"
             android:scaleY="1"
-            app:tint="?android:attr/textColorPrimary"
             android:foreground="?android:attr/selectableItemBackground"
-            app:srcCompat="@drawable/ic_favorite" />
+            app:srcCompat="@drawable/ic_favorite"
+            app:tint="?attr/colorPrimaryVariant"/>
 
         <ImageButton
             android:id="@+id/profile_tab_button"
@@ -129,6 +104,7 @@
             android:foreground="?android:attr/selectableItemBackground"
             app:srcCompat="@drawable/ic_debug" />
     </LinearLayout>
+
 
 
 
