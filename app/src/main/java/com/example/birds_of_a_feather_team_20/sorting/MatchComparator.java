@@ -18,13 +18,14 @@ public class MatchComparator implements ProfileComparator {
     }
 
     /**
-     * Result should be greater than zero if p1 has more matches, less than 0 if p2 has more, and
+     * Result should be less than zero if p1 has more matches, greater than 0 if p2 has more, and
      * equal to 0 if p1 and p2 have an equal number of matches
      * @return
      */
     @Override
     public int compare(Profile p1, Profile p2) {
-        int result = p1.countMatchingCourses(myProfile) - p2.countMatchingCourses(myProfile);
+        // Sort more matches first, so when p1 > p2, compare should be negative
+        int result = p2.countMatchingCourses(myProfile) - p1.countMatchingCourses(myProfile);
 //        Log.d("Sorted(MC)", p1.getName() + " vs " + p2.getName() + " -> " + result);
         return result;
     }

@@ -55,6 +55,17 @@ public class DebugActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    public void onClickedAddMyOwnProfile(View view) {
+        Profile myProfile = MyProfile.singleton(this);
+        Profile copy = new Profile(myProfile.getName(), myProfile.getPhotoURL(), String.valueOf(new Random().nextInt()));
+        copy.setCourses(myProfile.getCourses());
+        profilesToAdd().add(copy);
+    }
+    public void onClickedGenerateProfile(View view) {
+        Profile myProfile = MyProfile.singleton(this);
+        Profile copy = Utilities.generateProfile(this);
+        profilesToAdd().add(copy);
+    }
 
     public void onLaunchProfileClicked(View view) {
         onLaunchFriendsClicked(view); // return to MainActivity first
