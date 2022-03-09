@@ -56,8 +56,6 @@
         android:padding="15dp"
         android:scaleX="1.5"
         android:scaleY="1.5"
-        app:tint="?android:attr/textColorPrimary"
-        android:foreground="?android:attr/selectableItemBackground"
         app:srcCompat="@drawable/ic_favorite"
         app:layout_constraintBottom_toBottomOf="@+id/profile_photo"
         app:layout_constraintEnd_toEndOf="parent"
