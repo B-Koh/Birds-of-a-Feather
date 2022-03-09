@@ -421,9 +421,6 @@ public class Profile {
      * Sets a profile to favorited
      */
     public void setFavorite() {
-        if (this.isFavorite) {
-            return;
-        }
         this.isFavorite = true;
     }
 
@@ -431,9 +428,6 @@ public class Profile {
      * Sets a profile to not favorited
      */
     public void unFavorite() {
-        if (!this.isFavorite) {
-            return;
-        }
         this.isFavorite = false;
     }
 

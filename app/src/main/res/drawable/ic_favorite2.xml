@@ -10,9 +10,9 @@
         android:fillType="evenOdd"
         android:pathData="m18.693,187.622l169.064,0.001l52.243,-160.571l52.243,160.571l169.064,-0.001l-136.776,99.237l52.245,160.57l-136.775,-99.239l-136.775,99.239l52.245,-160.57z"
         android:strokeColor="#00000000" android:strokeLineCap="square"/>
-    <path android:fillColor="@color/yellow" android:fillType="evenOdd"
+    <path android:fillColor="@color/orange" android:fillType="evenOdd"
         android:pathData="m18.693,187.622l169.064,0.001l52.243,-160.571l52.243,160.571l169.064,-0.001l-136.776,99.237l52.245,160.57l-136.775,-99.239l-136.775,99.239l52.245,-160.57z"
         android:strokeColor="#000000" android:strokeLineCap="butt"
-        android:strokeLineJoin="round" android:strokeWidth="24.0"/>
+        android:strokeLineJoin="round" android:strokeWidth="18.0"/>
   </group>
 </vector>

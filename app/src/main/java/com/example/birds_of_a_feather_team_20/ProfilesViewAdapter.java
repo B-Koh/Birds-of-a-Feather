@@ -3,13 +3,16 @@ package com.example.birds_of_a_feather_team_20;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -37,7 +40,7 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
                 .from(parent.getContext())
                 .inflate(R.layout.profile_row, parent, false);
 
-        return new ViewHolder(view);
+        return new ViewHolder(view, activity, profiles);
     }
 
     @Override
@@ -56,20 +59,51 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
             extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
-        private Profile profile;
+        //private Profile profile;
         private int index;
 
         private final TextView profileNameText;
         private final TextView urlText;
         private final ImageView photo;
+        private final ImageButton favorite;
 
-        ViewHolder(View itemView) {
+        ViewHolder(View itemView, Context context, List<Profile> profiles) {
             super(itemView);
             this.profileNameText = itemView.findViewById(R.id.profile_name);
             this.urlText = itemView.findViewById(R.id.profile_photo_url);
             this.photo = itemView.findViewById(R.id.profile_photo);
+            this.favorite = itemView.findViewById(R.id.set_favorite_button);
 
             itemView.setOnClickListener(this);
+
+
+
+
+            ImageButton button = this.favorite;
+            Profile profile = profiles.get(index);
+
+            updateFavoriteGraphic(button, context, profile.isFavorite());
+
+            this.favorite.setOnClickListener((View view) -> {
+                Profile thisProfile = profiles.get(index);
+                if (!thisProfile.isFavorite()) {
+                    thisProfile.setFavorite();
+                }
+                else {
+                    thisProfile.unFavorite();
+                }
+                updateFavoriteGraphic(button, context, thisProfile.isFavorite());
+                //ProfilesCollection.singleton().getModifications().add(ProfilesCollection.singleton().getProfiles().indexOf(thisProfile));
+            });
+        }
+
+        private void updateFavoriteGraphic(ImageButton imagebutton, Context context, boolean favorited) {
+            if (favorited) {
+                imagebutton.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_favorite2));
+            }
+            else {
+                imagebutton.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_favorite));
+            }
         }
 
         public void setProfile(Activity activity, Profile profile, int index) {
@@ -80,7 +114,7 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
                 profile.fetchThumbnail();
                 activity.runOnUiThread(() -> {
                     this.index = index;
-                    this.profile = profile;
+                    //this.profile = profile;
                     this.profileNameText.setText(profile.getName());
                     this.urlText.setText(profile.getPhotoURL());
                     this.photo.setImageBitmap(profile.getPrefetchedThumbnail());

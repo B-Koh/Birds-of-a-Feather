@@ -104,13 +104,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickFavorite(View view) {
-        ImageButton button = (ImageButton) view;
-
-
-        Drawable star = AppCompatResources.getDrawable(this, R.drawable.ic_favorite2);
-        button.setImageDrawable(star);
-        //button.getDrawable().setTint(ContextCompat.getColor(this, R.color.yellow));
-        //button.setColorFilter(ContextCompat.getColor(this, R.color.yellow));
+//        ImageButton button = (ImageButton) view;
+//
+//
+//        Drawable star = AppCompatResources.getDrawable(this, R.drawable.ic_favorite2);
+//        button.setImageDrawable(star);
     }
 
 
