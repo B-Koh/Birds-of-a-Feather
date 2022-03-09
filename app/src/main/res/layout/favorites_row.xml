@@ -45,12 +45,12 @@
         tools:text="@tools:sample/lorem[4:10]" />
 
     <ImageButton
-        android:id="@+id/unfavorite_button"
+        android:id="@+id/set_favorite_button"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginEnd="6dp"
         android:background="#00FFFFFF"
-        android:contentDescription="unfavorites profile"
+        android:contentDescription="favorites/unfavorites a profile"
         android:scaleType="fitCenter"
         android:padding="15dp"
         android:scaleX="1.5"

@@ -3,15 +3,19 @@ package com.example.birds_of_a_feather_team_20;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 
@@ -99,6 +103,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void onClickFavorite(View view) {
+        ImageButton button = (ImageButton) view;
+
+
+        Drawable star = AppCompatResources.getDrawable(this, R.drawable.ic_favorite2);
+        button.setImageDrawable(star);
+        //button.getDrawable().setTint(ContextCompat.getColor(this, R.color.yellow));
+        //button.setColorFilter(ContextCompat.getColor(this, R.color.yellow));
+    }
+
 
     public void onLaunchFavoritesClicked(View view) {
         Intent intent = new Intent(this, FavoriteActivity.class);
@@ -130,5 +144,6 @@ public class MainActivity extends AppCompatActivity {
         PermissionsManager pm = new PermissionsManager(this);
         pm.onPermissionsResult(grantResults);
     }
+
 
 }
