@@ -103,15 +103,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickFavorite(View view) {
-//        ImageButton button = (ImageButton) view;
-//
-//
-//        Drawable star = AppCompatResources.getDrawable(this, R.drawable.ic_favorite2);
-//        button.setImageDrawable(star);
-    }
-
-
     public void onLaunchFavoritesClicked(View view) {
         Intent intent = new Intent(this, FavoriteActivity.class);
         startActivity(intent);
