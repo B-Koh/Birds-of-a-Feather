@@ -42,22 +42,25 @@ public class ProfilesListView {
      */
     public void notifyAdapter(Stack<Integer> modifications, Stack<Integer> additions, Stack<Pair<Integer, Integer>> movements) {
         Utilities.logToast(activity, "Notify Adapter");
-        while(!modifications.isEmpty()) {
-            Integer i = modifications.pop();
-            if (i != null)
-                adapter.notifyItemChanged(i);
-        }
-        while(!additions.isEmpty()) {
-            Integer i = additions.pop();
-            if (i != null)
-                adapter.notifyItemInserted(i);
-        }
-        while(!movements.isEmpty()) {
-            Pair<Integer, Integer> p = movements.pop();
-            if (p != null && p.first != null && p.second != null) {
-                adapter.notifyItemMoved(p.first, p.second);
-            }
-        }
+        modifications.clear();
+        additions.clear();
+        movements.clear();
+//        while(!modifications.isEmpty()) {
+//            Integer i = modifications.pop();
+//            if (i != null)
+//                adapter.notifyItemChanged(i);
+//        }
+//        while(!additions.isEmpty()) {
+//            Integer i = additions.pop();
+//            if (i != null)
+//                adapter.notifyItemInserted(i);
+//        }
+//        while(!movements.isEmpty()) {
+//            Pair<Integer, Integer> p = movements.pop();
+//            if (p != null && p.first != null && p.second != null) {
+//                adapter.notifyItemMoved(p.first, p.second);
+//            }
+//        }
 
         adapter.notifyDataSetChanged(); // Comment this out once movements stack works
     }

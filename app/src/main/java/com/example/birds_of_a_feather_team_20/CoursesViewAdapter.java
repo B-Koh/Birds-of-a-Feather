@@ -53,6 +53,7 @@ public class CoursesViewAdapter extends RecyclerView.Adapter<CoursesViewAdapter.
         private final TextView courseNumber;
         private final TextView courseSession;
         private final TextView courseYear;
+        private final TextView courseSize;
         private final Button deleteButton;
         private final Context context;
         private final CoursesViewAdapter adapter;
@@ -65,6 +66,7 @@ public class CoursesViewAdapter extends RecyclerView.Adapter<CoursesViewAdapter.
             this.courseNumber = itemView.findViewById(R.id.course_number_textview);
             this.courseSession = itemView.findViewById(R.id.course_session_textview);
             this.courseYear = itemView.findViewById(R.id.course_year_textview);
+            this.courseSize = itemView.findViewById(R.id.course_size_textview);
             deleteButton = itemView.findViewById(R.id.delete_course_button);
             if (!isMyProfile)
                 deleteButton.setVisibility(View.GONE);
@@ -78,6 +80,7 @@ public class CoursesViewAdapter extends RecyclerView.Adapter<CoursesViewAdapter.
             this.courseNumber.setText(course.getCourseNumber());
             this.courseSession.setText(course.getSession());
             this.courseYear.setText(String.valueOf(course.getYear()));
+            this.courseSize.setText(Course.courseSizeList[course.getClassSize()]);
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

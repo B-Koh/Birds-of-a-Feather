@@ -6,6 +6,7 @@ import android.util.JsonWriter;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.example.birds_of_a_feather_team_20.Profile;
@@ -36,12 +37,23 @@ public class Course {
     @ColumnInfo(name = "course_classSize")
     private int classSize;
 
+    @Ignore
     public Course(int year, String session, String department, String courseNumber){
         this.year = year;
         this.session = session;
         this.department = department;
         this.courseNumber = courseNumber;
     }
+    public Course(int year, String session, String department, String courseNumber, int classSize){
+        this.year = year;
+        this.session = session;
+        this.department = department;
+        this.courseNumber = courseNumber;
+        this.classSize = classSize;
+    }
+
+    public static final String[] courseSizeList = { "Tiny (<40)", "Small (40-75)",
+            "Medium (75-150)", "Large (150-250)", "Huge (250-400)", "Gigantic (400+)" };
 
 
     public int getCourseId(){ return courseId; }
@@ -212,4 +224,17 @@ public class Course {
         c.setClassSize(size);
         return c;
     }
+
+//    public String serialize() {
+//        try {
+//            StringWriter out = new StringWriter();
+//            JsonWriter writer = new JsonWriter(out);
+//            writeCourse(writer);
+//            writer.close();
+//            return out.toString();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return "";
+//    }
 }

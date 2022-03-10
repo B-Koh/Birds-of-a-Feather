@@ -16,4 +16,5 @@
     <string name="save">Save</string>
     <string name="add_courses">Add Courses</string>
     <string name="profile_title">Profile</string>
+    <string name="enter_session_name">Enter Session Name...</string>
 </resources>

@@ -10,6 +10,8 @@ import com.example.birds_of_a_feather_team_20.sorting.MatchComparator;
 import com.example.birds_of_a_feather_team_20.sorting.MatchScoreSizeWeighted;
 import com.example.birds_of_a_feather_team_20.sorting.MatchScoreTimeWeighted;
 import com.example.birds_of_a_feather_team_20.sorting.ProfileComparator;
+import com.example.birds_of_a_feather_team_20.sorting.SizeWeightComparator;
+import com.example.birds_of_a_feather_team_20.sorting.TimeWeightComparator;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
@@ -203,9 +205,9 @@ public class NearbyManager {
         ProfilesCollection coll = ProfilesCollection.singleton();
         ProfileComparator comp = new MatchComparator(MyProfile.singleton(activity));
         if (sortType.equals("Recent")) {
-            comp = new MatchScoreTimeWeighted("WI", 2022);
+            comp = new TimeWeightComparator("WI", 2022, MyProfile.singleton(activity));
         } else if (sortType.equals("Class Size")) {
-            comp = new MatchScoreSizeWeighted();
+            comp = new SizeWeightComparator(MyProfile.singleton(activity));
         }
         coll.changeSort(comp);
         // UPDATE ADAPTER - TODO

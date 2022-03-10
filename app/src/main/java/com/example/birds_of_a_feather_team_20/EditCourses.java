@@ -25,6 +25,7 @@ import java.util.List;
  */
 public class EditCourses extends AppCompatActivity {
     int year;
+    int courseSize;
     Integer[] yearList = {2022, 2021, 2020, 2019, 2018};
     String quarter;
 //    String[] quarterList = {"Fall", "Winter", "Spring", "Summer Session I", "Summer Session II"};
@@ -51,6 +52,12 @@ public class EditCourses extends AppCompatActivity {
         ArrayAdapter<String> quarter_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, quarterList);
         quarter_adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         quarter_dropdown.setAdapter(quarter_adapter);
+
+
+        Spinner size_dropdown = findViewById(R.id.size_dropdown);
+        ArrayAdapter<String> size_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Course.courseSizeList);
+        size_adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        size_dropdown.setAdapter(size_adapter);
 
         db = CourseDatabase.singleton(this);
         mp = MyProfile.singleton(this);
@@ -106,7 +113,10 @@ public class EditCourses extends AppCompatActivity {
         Spinner quarter_spinner = findViewById(R.id.quarter_dropdown);
         quarter = quarter_spinner.getSelectedItem().toString();
 
-        Course currCourse = new Course(year, quarter, subject, courseNumber);
+        Spinner size_spinner = findViewById(R.id.size_dropdown);
+        courseSize = size_spinner.getSelectedItemPosition();
+
+        Course currCourse = new Course(year, quarter, subject, courseNumber, courseSize);
 
         return currCourse;
     }
