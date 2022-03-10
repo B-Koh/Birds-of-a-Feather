@@ -33,6 +33,9 @@ public class Profile {
     private String lastDownloadedURL;
     private List<Course> courses;
 
+    private boolean isFavorite = false;
+
+
     public Profile(String name, String photoURL, String id) {
 //        Log.e("New PROFILE", name + " | " + photoURL);
         this.name = (name != null) ? name : "";
@@ -403,4 +406,30 @@ public class Profile {
         return getName() != null && getId() != null && getPhotoURL() != null &&
                 !getName().trim().equals("") && !getId().trim().equals("");
     }
+
+
+
+
+    /**
+     * Checks if profile is a favorited or not
+     * @return true if profile is favorite / false if profile is not favorite
+     */
+    public boolean getIsFavorite() {
+        return this.isFavorite;
+    }
+
+    /**
+     * Sets a profile to favorited
+     */
+    public void setFavorite() {
+        this.isFavorite = true;
+    }
+
+    /**
+     * Sets a profile to not favorited
+     */
+    public void unFavorite() {
+        this.isFavorite = false;
+    }
+
 }
