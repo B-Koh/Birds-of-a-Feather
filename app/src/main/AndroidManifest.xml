@@ -36,6 +36,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Birdsofafeatherteam20">
         <activity
+            android:name=".FavoriteActivity"
+            android:exported="false" />
+        <activity
             android:name=".DebugActivity"
             android:exported="false" />
 

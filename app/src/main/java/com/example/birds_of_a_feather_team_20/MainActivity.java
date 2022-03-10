@@ -3,26 +3,20 @@ package com.example.birds_of_a_feather_team_20;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.TextView;
-
-import com.example.birds_of_a_feather_team_20.model.db.Course;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -49,18 +43,13 @@ public class MainActivity extends AppCompatActivity {
         bt.initializeBluetooth();
 
 
-        /**
-         * =======
-         */
+        // Dropdown
         String[] sortList = {"Default", "Recent", "Class Size"};
 
         Spinner sort_dropdown = findViewById(R.id.sort_dropdown);
         ArrayAdapter<String> sort_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sortList);
         sort_adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         sort_dropdown.setAdapter(sort_adapter);
-        /**
-         * ===========
-         */
 
 
         MyProfile.singleton(getApplicationContext()); // This line is probably unnecessary
@@ -114,9 +103,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-
+    public void onLaunchFavoritesClicked(View view) {
+        Intent intent = new Intent(this, FavoriteActivity.class);
+        startActivity(intent);
+    }
     public void onLaunchProfileClicked(View view) {
         Intent intent = new Intent(this, EditProfile.class);
         startActivity(intent);
@@ -143,5 +133,6 @@ public class MainActivity extends AppCompatActivity {
         PermissionsManager pm = new PermissionsManager(this);
         pm.onPermissionsResult(grantResults);
     }
+
 
 }
