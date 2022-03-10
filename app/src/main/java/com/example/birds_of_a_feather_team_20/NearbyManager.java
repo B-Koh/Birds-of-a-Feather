@@ -213,4 +213,9 @@ public class NearbyManager {
         // UPDATE ADAPTER - TODO
         profilesListView.refreshProfileListView(coll.getModifications(), coll.getAdditions(), coll.getMovements());
     }
+
+    public void refreshList() {
+        ProfilesCollection coll = ProfilesCollection.singleton();
+        profilesListView.refreshProfileListView(coll.getModifications(), coll.getAdditions(), coll.getMovements());
+    }
 }

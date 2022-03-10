@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         DebugActivity.profilesToAdd().clear();
 
         super.onStart();
+        nearbyManager.refreshList();
         nearbyManager.republish();
 
         Spinner s = findViewById(R.id.sort_dropdown);

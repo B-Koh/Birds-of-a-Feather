@@ -101,6 +101,8 @@ public class Utilities {
         Random rand = new Random();
         List<Course> myCourses = myProfile.getCourses();
         int numberOfCoursesMax = rand.nextInt(myCourses.size() + 1);
+        if (myCourses.size() > 0 && numberOfCoursesMax == 0)
+            numberOfCoursesMax = 1;
         List<Course> courses = new ArrayList<>();
         for (int i = 0; i < numberOfCoursesMax; i++) {
             Course c = myCourses.get(rand.nextInt(myCourses.size()));
