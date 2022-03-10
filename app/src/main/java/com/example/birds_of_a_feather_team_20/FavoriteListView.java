@@ -8,11 +8,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class handles the favorite tabs view and manages it's recycler. Also contains a helper
+ * method filterFavorites that filters the current profiles list to a list of favorited profiles.
+ */
 public class FavoriteListView {
 
     private List<Profile> favorites;
     private ProfilesViewAdapter adapter;
 
+    /**
+     * Handles the recycler view of the Favorites list
+     * @param activity - activity that holds recycler
+     */
     public FavoriteListView(Activity activity) {
         this.favorites = filterFavorites(ProfilesCollection.singleton().getProfiles());
         this.adapter = new ProfilesViewAdapter(activity, favorites);
@@ -20,21 +28,25 @@ public class FavoriteListView {
         RecyclerView basicRecycler = activity.findViewById(R.id.profile_list);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(activity);
         basicRecycler.setLayoutManager(layoutManager);
-        basicRecycler.setAdapter(adapter);
+        basicRecycler.setAdapter(this.adapter);
 
         //Log.d("favorites", String.valueOf(favorites.size()) );
         //Log.d("favorites1", String.valueOf(filterFavorites(favorites).size()) );
     }
 
-    private static List<Profile> filterFavorites(List<Profile> profiles) {
+    /**
+     * Filters all current profiles that are favorited
+     * @param profiles - all profiles in current list
+     * @return - list of profiles that are favorited
+     */
+    public List<Profile> filterFavorites(List<Profile> profiles) {
         List<Profile> favorites = new ArrayList<>();
 
         for (Profile profile : profiles) {
-            if (profile.isFavorite()) {
+            if (profile.getIsFavorite()) {
                 favorites.add(profile);
             }
         }
-
         return favorites;
     }
 }

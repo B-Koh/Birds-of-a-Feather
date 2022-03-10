@@ -413,7 +413,7 @@ public class Profile {
      * Checks if profile is a favorited or not
      * @return true if profile is favorite / false if profile is not favorite
      */
-    public boolean isFavorite() {
+    public boolean getIsFavorite() {
         return this.isFavorite;
     }
 

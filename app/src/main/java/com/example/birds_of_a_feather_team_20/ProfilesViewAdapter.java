@@ -76,27 +76,33 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
 
             itemView.setOnClickListener(this);
 
-
-
-
             ImageButton button = this.favorite;
             Profile profile = profiles.get(index);
 
-            updateFavoriteGraphic(button, context, profile.isFavorite());
+            // Updates graphic before click
+            updateFavoriteGraphic(button, context, profile.getIsFavorite());
 
+            // On favorite click, set drawable and logic to favorite/unfavorite
             this.favorite.setOnClickListener((View view) -> {
                 Profile thisProfile = profiles.get(index);
-                if (!thisProfile.isFavorite()) {
+                if (!thisProfile.getIsFavorite()) {
                     thisProfile.setFavorite();
                 }
                 else {
                     thisProfile.unFavorite();
                 }
-                updateFavoriteGraphic(button, context, thisProfile.isFavorite());
+                // Updates graphic after click
+                updateFavoriteGraphic(button, context, thisProfile.getIsFavorite());
                 //ProfilesCollection.singleton().getModifications().add(ProfilesCollection.singleton().getProfiles().indexOf(thisProfile));
             });
         }
 
+        /**
+         * Updates the image button of star when it is clicked
+         * @param imagebutton - button that is clicked
+         * @param context - context where button is clicked
+         * @param favorited - checks if favorited or not
+         */
         private void updateFavoriteGraphic(ImageButton imagebutton, Context context, boolean favorited) {
             if (favorited) {
                 imagebutton.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_favorite2));
