@@ -14,6 +14,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.example.birds_of_a_feather_team_20.sorting.MatchComparator;
+import com.example.birds_of_a_feather_team_20.sorting.SizeWeightComparator;
+import com.example.birds_of_a_feather_team_20.sorting.SortDropdown;
+import com.example.birds_of_a_feather_team_20.sorting.TimeWeightComparator;
 import com.example.birds_of_a_feather_team_20.wave.WavePublisher;
 
 
@@ -24,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     public NearbyManager getNearbyManager() {
         return nearbyManager;
     }
+    private SortDropdown sortDropdown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +46,14 @@ public class MainActivity extends AppCompatActivity {
         bt.initializeBluetooth();
 
 
-        // Dropdown
-        String[] sortList = {"Default", "Recent", "Class Size"};
+        sortDropdown = new SortDropdown(findViewById(R.id.sort_dropdown), this);
 
-        Spinner sort_dropdown = findViewById(R.id.sort_dropdown);
-        ArrayAdapter<String> sort_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sortList);
-        sort_adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        sort_dropdown.setAdapter(sort_adapter);
+        // Dropdown
+//        String[] sortList = {MatchComparator.LABEL, TimeWeightComparator.LABEL, SizeWeightComparator.LABEL};
+//        Spinner sort_dropdown = findViewById(R.id.sort_dropdown);
+//        ArrayAdapter<String> sort_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sortList);
+//        sort_adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+//        sort_dropdown.setAdapter(sort_adapter);
 
 
         MyProfile.singleton(getApplicationContext()); // This line is probably unnecessary
@@ -69,17 +75,7 @@ public class MainActivity extends AppCompatActivity {
         nearbyManager.refreshList();
         nearbyManager.republish();
 
-        Spinner s = findViewById(R.id.sort_dropdown);
-        Context c = this;
-        s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Utilities.logToast(c, "Sort Method: " + s.getSelectedItem().toString());
-                nearbyManager.changeSort(s.getSelectedItem().toString());
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {}
-        });
+        sortDropdown.onStart(getNearbyManager());
     }
 
     @Override

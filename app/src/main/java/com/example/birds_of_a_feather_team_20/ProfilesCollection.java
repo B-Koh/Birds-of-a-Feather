@@ -50,21 +50,24 @@ public class ProfilesCollection {
         oldPositions = new HashMap<>();
     }
 
-    public void addOrUpdateProfile(Profile profile, int courseMatches) {
+    public void addOrUpdateProfile(Profile profile) {
+
+
         if (profile == null) return;
 
-        if (courseMatches == 0) {
-            return; // Don't add to list if no matches
-        }
+//        if (courseMatches == 0) {
+//            return; // Don't add to list if no matches
+//        } // Not handled here anymore
 
         int index = getProfiles().indexOf(profile);
         if (index == -1) {
             insertNewProfile(profile, getProfiles().size());
-            applySort();
+//            applySort();
         }
         else {
             updateExistingProfile(profile, index);
         }
+        applySort();
     }
 
 
@@ -119,22 +122,6 @@ public class ProfilesCollection {
             if (i != oldPos) {
                 getMovements().add(new Pair(oldPos, i));
             }
-        }
-    }
-
-    // Not implemented yet. Will need to store the number of matches that each Profile has.
-    public static class MatchProfilePair implements Comparable<MatchProfilePair> {
-        int matchesCount;
-        Profile profile;
-
-        public MatchProfilePair(int matches, Profile p) {
-            this.matchesCount = matches;
-            this.profile = p;
-        }
-
-        @Override
-        public int compareTo(MatchProfilePair m) {
-            return this.matchesCount - m.matchesCount;
         }
     }
 }

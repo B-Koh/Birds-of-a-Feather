@@ -11,6 +11,7 @@ public class MatchComparator implements ProfileComparator {
     // Need a reference to my profile, better to not use singleton here so it will be passed into
     // the constructor.
     private final Profile myProfile;
+    public static final String LABEL = "Default";
 
     public MatchComparator(Profile myProfile) {
         super();

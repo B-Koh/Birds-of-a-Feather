@@ -3,10 +3,9 @@ package com.example.birds_of_a_feather_team_20;
 import android.app.Activity;
 import android.util.Log;
 
-import com.example.birds_of_a_feather_team_20.sorting.MatchComparator;
 import com.example.birds_of_a_feather_team_20.sorting.ProfileComparator;
-import com.example.birds_of_a_feather_team_20.sorting.SizeWeightComparator;
-import com.example.birds_of_a_feather_team_20.sorting.TimeWeightComparator;
+import com.example.birds_of_a_feather_team_20.sorting.ComparatorFactory;
+import com.example.birds_of_a_feather_team_20.wave.WaveComparatorFactory;
 import com.example.birds_of_a_feather_team_20.wave.WaveManager;
 import com.example.birds_of_a_feather_team_20.wave.WavePublisher;
 import com.google.android.gms.nearby.Nearby;
@@ -129,9 +128,11 @@ public class NearbyManager {
                 + " matching courses.");
 
         // Store the Profile in our list of profiles
-        ProfilesCollection profiles = ProfilesCollection.singleton();
-        profiles.addOrUpdateProfile(profile, courseMatches);
-        profilesListView.refreshProfileListView(profiles.getModifications(), profiles.getAdditions(), profiles.getMovements());
+        ProfilesCollection coll = ProfilesCollection.singleton();
+        if (courseMatches > 0)
+            coll.addOrUpdateProfile(profile);
+//        profilesListView.refreshProfileListView(profiles.getModifications(), profiles.getAdditions(), profiles.getMovements());
+        refreshList();
     }
 
     private void onFoundWave(String message) {
@@ -147,8 +148,11 @@ public class NearbyManager {
             if (profile.getId().equals(senderId)) {
                 Utilities.logToast(activity, "Found a Wave from: " + profile.getName());
                 profile.setWavedAtMe(true);
+//                int courseMatches = profile.countMatchingCourses(MyProfile.singleton(activity));
+                ProfilesCollection.singleton().addOrUpdateProfile(profile);
             }
         }
+        refreshList();
     }
 
     /**
@@ -220,15 +224,20 @@ public class NearbyManager {
     public void changeSort(String sortType) {
         // UPDATE LIST
         ProfilesCollection coll = ProfilesCollection.singleton();
-        ProfileComparator comp = new MatchComparator(MyProfile.singleton(activity));
-        if (sortType.equals("Recent")) {
-            comp = new TimeWeightComparator("WI", 2022, MyProfile.singleton(activity));
-        } else if (sortType.equals("Class Size")) {
-            comp = new SizeWeightComparator(MyProfile.singleton(activity));
-        }
+//        ProfileComparator comp = new MatchComparator(MyProfile.singleton(activity));
+//        if (sortType.equals("Recent")) {
+//            comp = new TimeWeightComparator("WI", 2022, MyProfile.singleton(activity));
+//        } else if (sortType.equals("Class Size")) {
+//            comp = new SizeWeightComparator(MyProfile.singleton(activity));
+//        }
+//        coll.changeSort(comp);
+        Profile myProfile = MyProfile.singleton(activity);
+        ComparatorFactory factory = new WaveComparatorFactory();
+        ProfileComparator comp = factory.chooseComp(sortType, activity, myProfile);
         coll.changeSort(comp);
-        // UPDATE ADAPTER - TODO
-        profilesListView.refreshProfileListView(coll.getModifications(), coll.getAdditions(), coll.getMovements());
+
+//        profilesListView.refreshProfileListView(coll.getModifications(), coll.getAdditions(), coll.getMovements());
+        refreshList();
     }
 
     public void refreshList() {

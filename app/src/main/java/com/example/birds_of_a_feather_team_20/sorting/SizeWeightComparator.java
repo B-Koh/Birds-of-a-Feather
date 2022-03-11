@@ -9,6 +9,7 @@ import java.util.List;
 
 public class SizeWeightComparator implements ProfileComparator {
     private final Profile myProfile;
+    public static final String LABEL = "Class Size";
 
     public SizeWeightComparator(Profile myProfile) {
         this.myProfile = myProfile;

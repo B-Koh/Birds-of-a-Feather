@@ -2,23 +2,22 @@ package com.example.birds_of_a_feather_team_20;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.birds_of_a_feather_team_20.model.db.Course;
-import com.example.birds_of_a_feather_team_20.model.db.CourseDatabase;
 import com.example.birds_of_a_feather_team_20.wave.WavePublisher;
 
-import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.Executors;
 
@@ -107,16 +106,17 @@ public class DisplayProfile extends AppCompatActivity {
         // Need to do some refactoring
         WavePublisher.singleton(this).sendWave(profile, this, (success) -> {
             if (success)
-                onWaveSuccess();
+                onWaveSuccess(view);
             else
-                onWaveFailure();
+                onWaveFailure(view);
         });
     }
 
-    private void onWaveSuccess() {
+    private void onWaveSuccess(View view) {
         Toast.makeText(this, "Wave sent!", Toast.LENGTH_LONG).show();
+        ((ImageButton)view).setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_waving_hand_filled));
     }
-    private void onWaveFailure() {
+    private void onWaveFailure(View view) {
         Toast.makeText(this, "Something went wrong.", Toast.LENGTH_SHORT).show();
     }
 }

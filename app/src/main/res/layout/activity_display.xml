@@ -78,6 +78,26 @@
                     app:tint="?android:colorBackground"
                     tools:visibility="visible" />
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/name_textview"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:paddingTop="16dp"
+                    android:text="Name"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/medium"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <ImageButton
                     android:id="@+id/wave_button"
                     android:layout_width="64dp"
@@ -91,19 +111,9 @@
                     android:scaleY="1.5"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_waving_hand" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <TextView
-                android:id="@+id/name_textview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="16dp"
-                android:text="Name"
-                android:textAlignment="center"
-                android:textSize="@dimen/medium"
-                android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/course_view"

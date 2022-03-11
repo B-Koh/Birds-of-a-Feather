@@ -18,6 +18,7 @@ public class TimeWeightComparator implements ProfileComparator {
     private final String currentSession;
     private final int currentYear;
     private final Profile myProfile;
+    public static final String LABEL = "Recent";
 
     /**
      * Constructor
