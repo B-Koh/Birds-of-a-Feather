@@ -20,24 +20,6 @@ public class DBProfile {
     //@ColumnInfo(name = "url")
     public String photoURL;
 
-//    public int getDBProfileId() { return dbProfileId; }
-//
-//    public void setDBProfileId(int dbProfileId) { this.dbProfileId = dbProfileId; }
-//
-//    public int getProfileSessionId() { return profileSessionId; }
-//
-//    public void setProfileSessionId(int sessionId) { this.profileSessionId = sessionId; }
-//
-//    public int getProfileId() { return profileId; }
-//
-//    public void setProfileId(int profileId) { this.profileId = profileId; }
-//
-//    public String getName() { return name; }
-//
-//    public void setName(String name) { this.name = name; }
-//
-//    public String getPhotoURL() { return photoURL; }
-//
-//    public void setPhotoURL(String photoURL) { this.photoURL = photoURL; }
+    public boolean isFavorite;
 }
 
