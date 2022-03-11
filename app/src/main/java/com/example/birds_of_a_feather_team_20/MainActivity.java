@@ -48,15 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         sortDropdown = new SortDropdown(findViewById(R.id.sort_dropdown), this);
 
-        // Dropdown
-//        String[] sortList = {MatchComparator.LABEL, TimeWeightComparator.LABEL, SizeWeightComparator.LABEL};
-//        Spinner sort_dropdown = findViewById(R.id.sort_dropdown);
-//        ArrayAdapter<String> sort_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sortList);
-//        sort_adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-//        sort_dropdown.setAdapter(sort_adapter);
-
-
-        MyProfile.singleton(getApplicationContext()); // This line is probably unnecessary
+        MyProfile.singleton(getApplicationContext()); //
 
         nearbyManager = new NearbyManager(this);
     }
