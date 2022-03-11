@@ -135,4 +135,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void onViewSessionsClicked(View view) {
+        Intent intent = new Intent(this, ViewSessionsActivity.class);
+        startActivity(intent);
+    }
 }

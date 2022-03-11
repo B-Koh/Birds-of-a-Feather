@@ -11,6 +11,9 @@ import androidx.room.Room;
 import com.example.birds_of_a_feather_team_20.model.db.Course;
 import com.example.birds_of_a_feather_team_20.model.db.CourseDao;
 import com.example.birds_of_a_feather_team_20.model.db.CourseDatabase;
+import com.example.birds_of_a_feather_team_20.model.db.DBSession;
+import com.example.birds_of_a_feather_team_20.model.db.SessionDao;
+import com.example.birds_of_a_feather_team_20.model.db.SessionDatabase;
 
 import java.util.List;
 
@@ -19,35 +22,33 @@ public class ViewSessionsActivity extends AppCompatActivity {
 
     private RecyclerView sessionsRecyclerView;
     private RecyclerView.LayoutManager sessionsLayoutManager;
-//    private SessionsViewAdapter sessionsViewAdapter;
+    private SessionsViewAdapter sessionsViewAdapter;
 
-//    private SessionDatabase db;
-//    private SessionDao sessionDao;
-//    private List<DBSession> sessions;
+    private SessionDatabase db;
+    private SessionDao sessionDao;
+    private List<DBSession> sessions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_sessions);
 
-//        db = Room.inMemoryDatabaseBuilder(context, SessionDatabase.class)
-//                .allowMainThreadQueries()
-//                .build();
-//        sessionDao = db.sessionDao();
+        db = SessionDatabase.singleton(this);
+        sessionDao = db.sessionDao();
 
-//        setSessions();
+        setSessions();
     }
 
     public void setSessions(){
-//        sessions = sessionDao.getAll();
+        sessions = sessionDao.getAll();
 
         //Set up the recycler view to show our database contents
         sessionsRecyclerView = findViewById(R.id.course_view);
         sessionsLayoutManager = new LinearLayoutManager(this);
         sessionsRecyclerView.setLayoutManager(sessionsLayoutManager);
-//        sessionsViewAdapter = new SessionsViewAdapter(sessions);
+        sessionsViewAdapter = new SessionsViewAdapter(sessions, this);
 
-//        sessionsRecyclerView.setAdapter(sessionsViewAdapter);
+        sessionsRecyclerView.setAdapter(sessionsViewAdapter);
 
     }
 
