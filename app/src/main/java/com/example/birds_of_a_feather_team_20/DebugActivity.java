@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.birds_of_a_feather_team_20.model.db.Course;
+import com.example.birds_of_a_feather_team_20.wave.WaveManager;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -18,8 +20,8 @@ import java.util.Random;
 
 public class DebugActivity extends AppCompatActivity {
 
-    private static List<Profile> profiles;
-    public static List<Profile> profilesToAdd() {
+    private static List<String> profiles;
+    public static List<String> messagesToAdd() {
         if (profiles == null) {
             profiles = new ArrayList<>();
         }
@@ -49,7 +51,7 @@ public class DebugActivity extends AppCompatActivity {
                 Course course = new Course(year, ((String[]) thisList.get(i))[1], ((String[]) thisList.get(i))[2], ((String[]) thisList.get(i))[3]);
                 profile.addCourse(course);
             }
-            profilesToAdd().add(profile);
+            messagesToAdd().add(profile.serialize());
 //            nearbyManager.sendFakeMessage(this, profile);
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,12 +61,25 @@ public class DebugActivity extends AppCompatActivity {
         Profile myProfile = MyProfile.singleton(this);
         Profile copy = new Profile(myProfile.getName(), myProfile.getPhotoURL(), String.valueOf(new Random().nextInt()));
         copy.setCourses(myProfile.getCourses());
-        profilesToAdd().add(copy);
+        messagesToAdd().add(copy.serialize());
     }
     public void onClickedGenerateProfile(View view) {
         Profile myProfile = MyProfile.singleton(this);
         Profile copy = Utilities.generateProfile(this);
-        profilesToAdd().add(copy);
+        messagesToAdd().add(copy.serialize());
+    }
+    public void onClickedGenerateWave(View view) {
+//        Profile myProfile = MyProfile.singleton(this);
+//        Profile copy = Utilities.generateProfile(this);
+//        profilesToAdd().add(copy);
+        Profile p = (Utilities.pickRandomProfile());
+        if (p == null)
+            return;
+        WaveManager manager = new WaveManager(p.getId());
+        manager.addWave(MyProfile.singleton(this));
+        Log.d("Wave", "Picked For Wave - " + p.getName());
+        messagesToAdd().add(manager.makeWaveMessage());
+
     }
 
     public void onLaunchProfileClicked(View view) {

@@ -3,19 +3,15 @@ package com.example.birds_of_a_feather_team_20;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 
 
@@ -61,10 +57,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         Log.i("START", "MainActivity.onStart");
 
-        for (Profile profile : DebugActivity.profilesToAdd()) {
-            nearbyManager.sendFakeMessage(this, profile);
+        for (String message : DebugActivity.messagesToAdd()) {
+//            nearbyManager.sendFakeMessage(this, profile);
+            nearbyManager.sendFakeMessage(message);
         }
-        DebugActivity.profilesToAdd().clear();
+        DebugActivity.messagesToAdd().clear();
 
         super.onStart();
         nearbyManager.refreshList();

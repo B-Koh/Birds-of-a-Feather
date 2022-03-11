@@ -1,28 +1,20 @@
 package com.example.birds_of_a_feather_team_20;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.pm.PackageManager;
-
-import androidx.core.content.ContextCompat;
+import android.util.Log;
 
 import com.example.birds_of_a_feather_team_20.sorting.MatchComparator;
-import com.example.birds_of_a_feather_team_20.sorting.MatchScoreSizeWeighted;
-import com.example.birds_of_a_feather_team_20.sorting.MatchScoreTimeWeighted;
 import com.example.birds_of_a_feather_team_20.sorting.ProfileComparator;
 import com.example.birds_of_a_feather_team_20.sorting.SizeWeightComparator;
 import com.example.birds_of_a_feather_team_20.sorting.TimeWeightComparator;
+import com.example.birds_of_a_feather_team_20.wave.WaveManager;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
-import com.google.android.gms.nearby.messages.MessagesClient;
-import com.google.android.gms.nearby.messages.MessagesOptions;
-import com.google.android.gms.nearby.messages.NearbyPermissions;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Comparator;
-import java.util.concurrent.Executors;
+import java.util.List;
 
 /**
  * This class is responsible for handling the Nearby messaging.
@@ -36,6 +28,7 @@ public class NearbyManager {
     private final Activity activity;
     private final ProfilesListView profilesListView;
     private final MessageListener profileMessageListener;
+    private final WaveManager waveManager;
 
     private Message profileMessage;
     private boolean isScanning;
@@ -54,6 +47,8 @@ public class NearbyManager {
         // Set up the list view of nearby profiles
         profilesListView = new ProfilesListView(activity);
 
+        waveManager = new WaveManager(MyProfile.singleton(activity).getId());
+
         // Set up the MessageListener and its callbacks
         profileMessageListener = new MessageListener() {
             @Override
@@ -61,6 +56,10 @@ public class NearbyManager {
                 if (message == null || !getIsScanning()) return;
                 String msgBody = new String(message.getContent(), CHARSET);
 //                activity.runOnUiThread(() -> {});
+                if(waveManager.isWaveMessage(msgBody)) {
+                    onFoundWave(msgBody);
+                    return;
+                }
                 Utilities.logToast(activity, "Found profile: " + msgBody);
 
                 onFoundProfile(msgBody); // Handle the profile we found
@@ -71,6 +70,7 @@ public class NearbyManager {
             public void onLost(final Message message) {
                 if (message == null || !getIsScanning()) return;
                 String msgBody = new String(message.getContent(), CHARSET);
+                if (waveManager.isWaveMessage(msgBody)) return;
                 Utilities.logToast(activity, "Lost profile: " + msgBody);
             }
         };
@@ -132,7 +132,22 @@ public class NearbyManager {
         profilesListView.refreshProfileListView(profiles.getModifications(), profiles.getAdditions(), profiles.getMovements());
     }
 
-
+    private void onFoundWave(String message) {
+        Log.d("Wave", "Got message:" + message);
+        if (!waveManager.someoneWavedAtMe(message)) {
+            Log.e("Wave", "NO MESSAGE!");
+            return;
+        }
+        String senderId = waveManager.whoWavedAtMe(message);
+        List<Profile> allProfiles = ProfilesCollection.singleton().getProfiles();
+        for (int i = 0; i < allProfiles.size(); i++) {
+            Profile profile = allProfiles.get(i);
+            if (profile.getId().equals(senderId)) {
+                Utilities.logToast(activity, "Found a Wave from: " + profile.getName());
+                profile.setWavedAtMe(true);
+            }
+        }
+    }
 
     /**
      * Send a mock message (for testing purposes)

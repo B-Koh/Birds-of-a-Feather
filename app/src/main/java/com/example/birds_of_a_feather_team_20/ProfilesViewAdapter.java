@@ -3,7 +3,6 @@ package com.example.birds_of_a_feather_team_20;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +65,7 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
         private final TextView urlText;
         private final ImageView photo;
         private final ImageButton favorite;
+        private final ImageButton waved;
 
         ViewHolder(View itemView, Context context, List<Profile> profiles) {
             super(itemView);
@@ -73,14 +73,17 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
             this.urlText = itemView.findViewById(R.id.profile_photo_url);
             this.photo = itemView.findViewById(R.id.profile_photo);
             this.favorite = itemView.findViewById(R.id.set_favorite_button);
-
+            this.waved = itemView.findViewById(R.id.waved_icon);
             itemView.setOnClickListener(this);
 
-            ImageButton button = this.favorite;
-            Profile profile = profiles.get(index);
+            //            Profile profile = profiles.get(index);
 
             // Updates graphic before click
-            updateFavoriteGraphic(button, context, profile.getIsFavorite());
+//            updateFavoriteGraphic(button, context, profile.getIsFavorite());
+//
+//            updateWavedGraphic(this.waved, profile.getWavedAtMe());
+            updateWavedGraphic(this.waved, false); // set it false until everything loads
+            this.favorite.setVisibility(View.INVISIBLE);
 
             // On favorite click, set drawable and logic to favorite/unfavorite
             this.favorite.setOnClickListener((View view) -> {
@@ -92,9 +95,17 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
                     thisProfile.unFavorite();
                 }
                 // Updates graphic after click
-                updateFavoriteGraphic(button, context, thisProfile.getIsFavorite());
+                updateFavoriteGraphic(this.favorite, context, thisProfile.getIsFavorite());
                 //ProfilesCollection.singleton().getModifications().add(ProfilesCollection.singleton().getProfiles().indexOf(thisProfile));
             });
+        }
+
+        private void updateWavedGraphic(ImageView wavedIcon, boolean waved) {
+            if (waved) {
+                wavedIcon.setVisibility(View.VISIBLE);
+            } else {
+                wavedIcon.setVisibility(View.INVISIBLE);
+            }
         }
 
         /**
@@ -104,6 +115,7 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
          * @param favorited - checks if favorited or not
          */
         private void updateFavoriteGraphic(ImageButton imagebutton, Context context, boolean favorited) {
+            imagebutton.setVisibility(View.VISIBLE);
             if (favorited) {
                 imagebutton.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_favorite2));
             }
@@ -122,8 +134,12 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
                     this.index = index;
                     //this.profile = profile;
                     this.profileNameText.setText(profile.getName());
-                    this.urlText.setText(profile.getPhotoURL());
+//                    this.urlText.setText(profile.getPhotoURL());
+                    this.urlText.setText(Utilities.coursesToString(profile.getCourses()));
                     this.photo.setImageBitmap(profile.getPrefetchedThumbnail());
+
+                    updateFavoriteGraphic(this.favorite, activity, profile.getIsFavorite());
+                    updateWavedGraphic(this.waved, profile.getWavedAtMe());
                 });
                 return null;
             });

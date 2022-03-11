@@ -16,7 +16,7 @@ import java.util.Random;
  */
 public class Utilities {
 
-    public static boolean debugToast = true; // instance variable that can turn on/off toasts
+    public static boolean debugToast = false; // instance variable that can turn on/off toasts
 
     /**
      * Method helps determine whether a toast will appear depending on instance variable
@@ -114,6 +114,25 @@ public class Utilities {
 
     public static String getFirstName(String fullName) {
         return fullName.trim().split(" ")[0];
+    }
+
+    public static Profile pickRandomProfile() {
+        List<Profile> profiles = ProfilesCollection.singleton().getProfiles();
+        if (profiles.isEmpty())
+            return null;
+        return profiles.get(new Random().nextInt(profiles.size()));
+    }
+
+    public static String coursesToString(List<Course> courses) {
+//        courses.sort();
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0, coursesSize = courses.size(); i < coursesSize; i++) {
+            Course course = courses.get(i);
+            boolean isLast = (i == coursesSize - 1);
+            builder.append(course.getDepartment()).append(" ").append(course.getCourseNumber());
+            if (!isLast) builder.append(", ");
+        }
+        return builder.toString();
     }
 }
 
