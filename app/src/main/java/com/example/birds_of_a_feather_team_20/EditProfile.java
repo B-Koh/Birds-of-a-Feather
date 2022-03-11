@@ -96,4 +96,10 @@ public class EditProfile extends AppCompatActivity {
     public void onLaunchFriendsClicked(View view) {
         onClickFinish(view);
     }
+
+    public void onViewSessionsClicked(View view) {
+        onLaunchFriendsClicked(view);
+        Intent intent = new Intent(this, ViewSessionsActivity.class);
+        startActivity(intent);
+    }
 }

@@ -48,4 +48,9 @@ public class FavoriteActivity extends AppCompatActivity {
         finish();
     }
 
+    public void onViewSessionsClicked(View view) {
+        onLaunchFriendsClicked(view);
+        Intent intent = new Intent(this, ViewSessionsActivity.class);
+        startActivity(intent);
+    }
 }

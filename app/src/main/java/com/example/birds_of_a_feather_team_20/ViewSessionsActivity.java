@@ -1,7 +1,9 @@
 package com.example.birds_of_a_feather_team_20;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.se.omapi.Session;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -50,6 +52,28 @@ public class ViewSessionsActivity extends AppCompatActivity {
 
         sessionsRecyclerView.setAdapter(sessionsViewAdapter);
 
+    }
+
+    public void onLaunchFriendsClicked(View view) {
+        finish();
+    }
+
+    public void onLaunchFavoritesClicked(View view) {
+        onLaunchFriendsClicked(view);
+        Intent intent = new Intent(this, FavoriteActivity.class);
+        startActivity(intent);
+    }
+
+    public void onLaunchProfileClicked(View view) {
+        onLaunchFriendsClicked(view);
+        Intent intent = new Intent(this, EditProfile.class);
+        startActivity(intent);
+    }
+
+    public void onLaunchDebugClicked(View view) {
+        onLaunchFriendsClicked(view);
+        Intent intent = new Intent(this, DebugActivity.class);
+        startActivity(intent);
     }
 
 }

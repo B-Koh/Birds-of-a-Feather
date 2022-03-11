@@ -2,6 +2,7 @@ package com.example.birds_of_a_feather_team_20;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -47,5 +48,10 @@ public class ViewSessionProfilesActivity extends AppCompatActivity {
 
         profilesRecyclerView.setAdapter(profilesViewAdapter);
 
+    }
+
+    public void onReturnToSessionsClicked(View view) {
+        Intent intent = new Intent(this, ViewSessionsActivity.class);
+        startActivity(intent);
     }
 }
