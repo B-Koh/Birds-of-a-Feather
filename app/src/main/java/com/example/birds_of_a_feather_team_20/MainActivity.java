@@ -18,10 +18,13 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
     private NearbyManager nearbyManager;
+    private String sessionName;
 
     public NearbyManager getNearbyManager() {
         return nearbyManager;
@@ -98,9 +101,17 @@ public class MainActivity extends AppCompatActivity {
                 button.setText("Start");
         } else {
             boolean success = nearbyManager.startScanning();
-            if (success)
+            if (success) {
                 button.setText("Stop");
+                newSessionSetName();
+            }
         }
+    }
+
+    public void newSessionSetName(){
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        Date date = new Date();
+        sessionName = formatter.format(date);
     }
 
     public void onLaunchFavoritesClicked(View view) {
@@ -133,7 +144,6 @@ public class MainActivity extends AppCompatActivity {
         PermissionsManager pm = new PermissionsManager(this);
         pm.onPermissionsResult(grantResults);
     }
-
 
     public void onViewSessionsClicked(View view) {
         Intent intent = new Intent(this, ViewSessionsActivity.class);
