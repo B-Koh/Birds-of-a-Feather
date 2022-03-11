@@ -1,7 +1,5 @@
 package com.example.birds_of_a_feather_team_20.wave;
 
-import android.util.Log;
-
 import com.example.birds_of_a_feather_team_20.Profile;
 
 import java.util.ArrayList;
@@ -22,9 +20,9 @@ public class WaveManager {
 
     public static String WAVE_HEADER = "Wave:";
 
-    private List<Profile> waveRecipients;
+    private final List<Profile> waveRecipients;
 
-    private String myId;
+    private final String myId;
 
     public WaveManager(String myId) {
         this.myId = myId;

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.birds_of_a_feather_team_20.model.db.Course;
 import com.example.birds_of_a_feather_team_20.model.db.CourseDatabase;
+import com.example.birds_of_a_feather_team_20.wave.WavePublisher;
 
 import java.io.InputStream;
 import java.util.List;
@@ -101,5 +103,20 @@ public class DisplayProfile extends AppCompatActivity {
         finish();
     }
 
+    public void onWaveClicked(View view) {
+        // Need to do some refactoring
+        WavePublisher.singleton(this).sendWave(profile, this, (success) -> {
+            if (success)
+                onWaveSuccess();
+            else
+                onWaveFailure();
+        });
+    }
 
+    private void onWaveSuccess() {
+        Toast.makeText(this, "Wave sent!", Toast.LENGTH_LONG).show();
+    }
+    private void onWaveFailure() {
+        Toast.makeText(this, "Something went wrong.", Toast.LENGTH_SHORT).show();
+    }
 }

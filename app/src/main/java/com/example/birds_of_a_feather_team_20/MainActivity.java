@@ -14,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.example.birds_of_a_feather_team_20.wave.WavePublisher;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -132,5 +134,9 @@ public class MainActivity extends AppCompatActivity {
         pm.onPermissionsResult(grantResults);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        WavePublisher.singleton(this).finalize(this);
+        super.onDestroy();
+    }
 }

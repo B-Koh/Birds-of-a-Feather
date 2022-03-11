@@ -65,15 +65,6 @@ public class WaveTest {
     }
 
     @Test
-    public void testWavedAtMe() {
-        WaveManager waveManager = new WaveManager("727610921");
-        String str = "Wave:\n" +
-                "99a32c35-5091-4d7f-a1e3-fe0bfe4b1334\n" +
-                "727610921";
-        assert waveManager.someoneWavedAtMe(str);
-    }
-
-    @Test
     public void testParse() {
         WaveManager myWaveManager = new WaveManager("my_profile_id");
         Profile George = new Profile("Name0", "Url", "george_id");

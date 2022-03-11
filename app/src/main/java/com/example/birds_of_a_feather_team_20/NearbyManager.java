@@ -8,6 +8,7 @@ import com.example.birds_of_a_feather_team_20.sorting.ProfileComparator;
 import com.example.birds_of_a_feather_team_20.sorting.SizeWeightComparator;
 import com.example.birds_of_a_feather_team_20.sorting.TimeWeightComparator;
 import com.example.birds_of_a_feather_team_20.wave.WaveManager;
+import com.example.birds_of_a_feather_team_20.wave.WavePublisher;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
@@ -47,7 +48,8 @@ public class NearbyManager {
         // Set up the list view of nearby profiles
         profilesListView = new ProfilesListView(activity);
 
-        waveManager = new WaveManager(MyProfile.singleton(activity).getId());
+//        waveManager = new WaveManager(MyProfile.singleton(activity).getId());
+        waveManager = WavePublisher.singleton(activity).getWaveManager();
 
         // Set up the MessageListener and its callbacks
         profileMessageListener = new MessageListener() {

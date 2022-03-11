@@ -20,6 +20,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:overScrollMode="ifContentScrolls"
@@ -69,11 +70,28 @@
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
                     app:srcCompat="@drawable/ic_gradient_30"
                     app:tint="?android:colorBackground"
                     tools:visibility="visible" />
+
+                <ImageButton
+                    android:id="@+id/wave_button"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:background="#00FFFFFF"
+                    android:contentDescription="send a wave"
+                    android:onClick="onWaveClicked"
+                    android:padding="15dp"
+                    android:scaleType="fitCenter"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:srcCompat="@drawable/ic_waving_hand" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
