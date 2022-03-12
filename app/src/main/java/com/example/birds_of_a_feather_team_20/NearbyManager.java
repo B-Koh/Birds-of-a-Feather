@@ -57,6 +57,7 @@ public class NearbyManager {
                 if (message == null || !getIsScanning()) return;
                 String msgBody = new String(message.getContent(), CHARSET);
 //                activity.runOnUiThread(() -> {});
+                Utilities.logToast(activity, "Found message: " + msgBody);
                 if(waveManager.isWaveMessage(msgBody)) {
                     onFoundWave(msgBody);
                     return;
@@ -75,6 +76,10 @@ public class NearbyManager {
                 Utilities.logToast(activity, "Lost profile: " + msgBody);
             }
         };
+    }
+
+    private void setupCallbacks() {
+
     }
     /**
      * Start listening for nearby profiles
@@ -219,6 +224,7 @@ public class NearbyManager {
             unpublish();
             publish();
         }
+//        else publish();
     }
 
     public void changeSort(String sortType) {
@@ -243,5 +249,12 @@ public class NearbyManager {
     public void refreshList() {
         ProfilesCollection coll = ProfilesCollection.singleton();
         profilesListView.refreshProfileListView(coll.getModifications(), coll.getAdditions(), coll.getMovements());
+    }
+
+    public void resubscribe() {
+        if (getIsScanning()) {
+            unsubscribe();
+            subscribe();
+        }
     }
 }

@@ -16,7 +16,7 @@ import java.util.Random;
  */
 public class Utilities {
 
-    public static boolean debugToast = false; // instance variable that can turn on/off toasts
+    public static boolean debugToast = true; // instance variable that can turn on/off toasts
 
     /**
      * Prints a log and (if debugToast == true) displays a Toast

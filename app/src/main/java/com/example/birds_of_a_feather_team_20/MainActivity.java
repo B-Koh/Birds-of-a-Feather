@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         nearbyManager.refreshList();
         nearbyManager.republish();
+        nearbyManager.resubscribe();
 
         sortDropdown.onStart(getNearbyManager());
     }
