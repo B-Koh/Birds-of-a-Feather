@@ -38,14 +38,14 @@
             android:layout_weight="1"
             android:background="#00FFFFFF"
             android:contentDescription="friends tab"
-            android:onClick="onLaunchFriendsClicked"
             android:foreground="?android:attr/selectableItemBackground"
+            android:onClick="onLaunchFriendsClicked"
             android:padding="15dp"
             android:scaleType="fitCenter"
             android:scaleX="1"
             android:scaleY="1"
             app:srcCompat="@drawable/ic_friends"
-            app:tint="?attr/colorPrimaryVariant" />
+            app:tint="?android:attr/textColorPrimary" />
 
         <ImageButton
             android:id="@+id/favorite_tab_button"
@@ -86,13 +86,13 @@
             android:layout_weight="1"
             android:background="#00FFFFFF"
             android:contentDescription="session tab"
-            android:scaleType="fitCenter"
+            android:foreground="?android:attr/selectableItemBackground"
             android:padding="15dp"
+            android:scaleType="fitCenter"
             android:scaleX="1"
             android:scaleY="1"
-            app:tint="?android:attr/textColorPrimary"
-            android:foreground="?android:attr/selectableItemBackground"
-            app:srcCompat="@drawable/ic_session" />
+            app:srcCompat="@drawable/ic_session"
+            app:tint="?attr/colorPrimaryVariant" />
 
         <ImageButton
             android:id="@+id/debug_tab_button"

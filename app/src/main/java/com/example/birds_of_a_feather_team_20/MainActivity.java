@@ -30,7 +30,7 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
 
     private NearbyManager nearbyManager;
-    private String sessionName;
+    public static String sessionName;
 
     private SessionDatabase db;
     private SessionDao sessionDao;
@@ -106,7 +106,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void newSessionSetName(){
+    public void newSessionSetName() {
+        nearbyManager.clearProfiles();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date date = new Date();
         sessionName = formatter.format(date);

@@ -41,9 +41,9 @@ public class ProfilesCollectionTest {
         ProfilesCollection coll = ProfilesCollection.singleton();
         coll.getProfiles().clear();
         assertEquals(coll.getProfiles().size(), 0);
-        coll.addOrUpdateProfile(new Profile("John", "url", "id"));
+        coll.addOrUpdateProfile(new Profile("John", "url", "id"), null);
         assertEquals(coll.getProfiles().size(), 1);
-        coll.addOrUpdateProfile(new Profile("John1", "url", "id"));
+        coll.addOrUpdateProfile(new Profile("John1", "url", "id"), null);
         assertEquals(coll.getProfiles().size(), 1);
     }
 
@@ -69,8 +69,8 @@ public class ProfilesCollectionTest {
         coll.changeSort(new SizeWeightComparator(myProfile));
 
         // Insert the profiles
-        coll.addOrUpdateProfile(p1);
-        coll.addOrUpdateProfile(p2);
+        coll.addOrUpdateProfile(p1, null);
+        coll.addOrUpdateProfile(p2, null);
 
         // Should be 2 profiles
         assertEquals(coll.getProfiles().size(), 2);

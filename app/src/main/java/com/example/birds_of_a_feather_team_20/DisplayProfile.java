@@ -49,17 +49,35 @@ public class DisplayProfile extends AppCompatActivity {
         waveButton = findViewById(R.id.wave_button);
 
         int index = intent.getIntExtra("index_in_profilesList", 0);
+        String profileData = intent.getStringExtra("profile_data");
+        profile = Profile.deserialize(profileData);
 
-        List<Profile> profiles = ProfilesCollection.singleton().getProfiles();
-        if (index == -1) {
-            profile = MyProfile.singleton(this);
-            isMyProfile = true;
+//        List<Profile> profiles = ProfilesCollection.singleton().getProfiles();
+
+        isMyProfile = profile.getId().equals(MyProfile.singleton(this).getId());
+        boolean isInCurrentSession = false;
+        for (Profile p : ProfilesCollection.singleton().getProfiles()) {
+            if (p.getId().equals(profile.getId())) {
+                isInCurrentSession = true;
+                break;
+            }
+        }
+        if (isMyProfile || !isInCurrentSession) {
             if (waveButton != null)
                 waveButton.setVisibility(View.INVISIBLE);
-        } else {
-            profile = profiles.get(index);
-            isMyProfile = false;
         }
+
+//        if (index == -1) {
+//            profile = MyProfile.singleton(this);
+//            isMyProfile = true;
+//            if (waveButton != null)
+//                waveButton.setVisibility(View.INVISIBLE);
+//        }
+//        else {
+//            profile = profiles.get(index);
+//            isMyProfile = false;
+//        }
+
         setName();
         setCourses();
         setImage();

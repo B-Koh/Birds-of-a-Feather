@@ -96,6 +96,23 @@ public class ProfilesListView {
         // Show
         if (foundProfiles.size() > 0)
             activity.setTitle("Find Friends (" + foundProfiles.size() + ")");
+        else
+            activity.setTitle("Find Friends");
+
+        Log.d("ProfileListView", "refreshProfileListView");
+        setup();
+    }
+
+
+    /**
+     * On a background thread, download any new thumbnails, then notify the view adapter of changes
+     */
+    public void refreshProfileListView() {
+        // Show
+        if (foundProfiles.size() > 0)
+            activity.setTitle("Find Friends (" + foundProfiles.size() + ")");
+        else
+            activity.setTitle("Find Friends");
 
         Log.d("ProfileListView", "refreshProfileListView");
         setup();

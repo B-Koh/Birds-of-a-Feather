@@ -30,10 +30,15 @@ public class DBProfileWithCourses {
         dbProfile.profileId = profile.getId();
         dbProfile.photoURL = profile.getPhotoURL();
         dbProfile.isFavorite = profile.getIsFavorite();
+
+        if(profile.getSessionId() != -1){
+            dbProfile.profileSessionId = profile.getSessionId();
+        }
     }
 
     public Profile toProfile(){
         Profile newProfile = new Profile(dbProfile.name, dbProfile.photoURL, dbProfile.profileId);
+        newProfile.setSessionId(this.dbProfile.profileSessionId);
         if(dbProfile.isFavorite) newProfile.setFavorite();
         for(DBCourse dbCourse:courses)newProfile.addCourse(dbCourse.toCourse());
         return newProfile;

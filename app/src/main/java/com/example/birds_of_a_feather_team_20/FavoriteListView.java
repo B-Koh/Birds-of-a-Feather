@@ -5,6 +5,10 @@ import android.app.Activity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.birds_of_a_feather_team_20.model.db.CourseDatabase;
+import com.example.birds_of_a_feather_team_20.model.db.SessionDao;
+import com.example.birds_of_a_feather_team_20.model.db.SessionDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +26,13 @@ public class FavoriteListView {
      * @param activity - activity that holds recycler
      */
     public FavoriteListView(Activity activity) {
-        this.favorites = filterFavorites(ProfilesCollection.singleton().getProfiles());
+
+        List<Profile> favorites = SessionDatabase.singleton(activity).sessionDao().getAllFavorites(); // TODO
+        this.favorites = favorites;
+
+        if (favorites.size() == 0)
+            this.favorites = filterFavorites(ProfilesCollection.singleton().getProfiles());
+
         this.adapter = new ProfilesViewAdapter(activity, favorites);
 
         RecyclerView basicRecycler = activity.findViewById(R.id.profile_list);

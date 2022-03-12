@@ -33,6 +33,11 @@ public class NearbyManager {
     private Message profileMessage;
     private boolean isScanning;
 
+    public void clearProfiles() {
+        ProfilesCollection.singleton().getProfiles().clear();
+        profilesListView.refreshProfileListView();
+    }
+
     public boolean getIsScanning() {
         return isScanning;
     }
@@ -135,7 +140,7 @@ public class NearbyManager {
         // Store the Profile in our list of profiles
         ProfilesCollection coll = ProfilesCollection.singleton();
         if (courseMatches > 0)
-            coll.addOrUpdateProfile(profile);
+            coll.addOrUpdateProfile(profile, activity);
 //        profilesListView.refreshProfileListView(profiles.getModifications(), profiles.getAdditions(), profiles.getMovements());
         refreshList();
     }
@@ -154,7 +159,7 @@ public class NearbyManager {
                 Utilities.logToast(activity, "Found a Wave from: " + profile.getName());
                 profile.setWavedAtMe(true);
 //                int courseMatches = profile.countMatchingCourses(MyProfile.singleton(activity));
-                ProfilesCollection.singleton().addOrUpdateProfile(profile);
+                ProfilesCollection.singleton().addOrUpdateProfile(profile, activity);
             }
         }
         refreshList();
