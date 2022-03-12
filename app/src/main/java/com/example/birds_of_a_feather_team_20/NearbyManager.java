@@ -1,28 +1,20 @@
 package com.example.birds_of_a_feather_team_20;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.pm.PackageManager;
+import android.util.Log;
 
-import androidx.core.content.ContextCompat;
-
-import com.example.birds_of_a_feather_team_20.sorting.MatchComparator;
-import com.example.birds_of_a_feather_team_20.sorting.MatchScoreSizeWeighted;
-import com.example.birds_of_a_feather_team_20.sorting.MatchScoreTimeWeighted;
 import com.example.birds_of_a_feather_team_20.sorting.ProfileComparator;
-import com.example.birds_of_a_feather_team_20.sorting.SizeWeightComparator;
-import com.example.birds_of_a_feather_team_20.sorting.TimeWeightComparator;
+import com.example.birds_of_a_feather_team_20.sorting.ComparatorFactory;
+import com.example.birds_of_a_feather_team_20.wave.WaveComparatorFactory;
+import com.example.birds_of_a_feather_team_20.wave.WaveManager;
+import com.example.birds_of_a_feather_team_20.wave.WavePublisher;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
-import com.google.android.gms.nearby.messages.MessagesClient;
-import com.google.android.gms.nearby.messages.MessagesOptions;
-import com.google.android.gms.nearby.messages.NearbyPermissions;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Comparator;
-import java.util.concurrent.Executors;
+import java.util.List;
 
 /**
  * This class is responsible for handling the Nearby messaging.
@@ -36,6 +28,7 @@ public class NearbyManager {
     private final Activity activity;
     private final ProfilesListView profilesListView;
     private final MessageListener profileMessageListener;
+    private final WaveManager waveManager;
 
     private Message profileMessage;
     private boolean isScanning;
@@ -54,6 +47,9 @@ public class NearbyManager {
         // Set up the list view of nearby profiles
         profilesListView = new ProfilesListView(activity);
 
+//        waveManager = new WaveManager(MyProfile.singleton(activity).getId());
+        waveManager = WavePublisher.singleton(activity).getWaveManager();
+
         // Set up the MessageListener and its callbacks
         profileMessageListener = new MessageListener() {
             @Override
@@ -61,6 +57,11 @@ public class NearbyManager {
                 if (message == null || !getIsScanning()) return;
                 String msgBody = new String(message.getContent(), CHARSET);
 //                activity.runOnUiThread(() -> {});
+                Utilities.logToast(activity, "Found message: " + msgBody);
+                if(waveManager.isWaveMessage(msgBody)) {
+                    onFoundWave(msgBody);
+                    return;
+                }
                 Utilities.logToast(activity, "Found profile: " + msgBody);
 
                 onFoundProfile(msgBody); // Handle the profile we found
@@ -71,9 +72,14 @@ public class NearbyManager {
             public void onLost(final Message message) {
                 if (message == null || !getIsScanning()) return;
                 String msgBody = new String(message.getContent(), CHARSET);
+                if (waveManager.isWaveMessage(msgBody)) return;
                 Utilities.logToast(activity, "Lost profile: " + msgBody);
             }
         };
+    }
+
+    private void setupCallbacks() {
+
     }
     /**
      * Start listening for nearby profiles
@@ -127,12 +133,32 @@ public class NearbyManager {
                 + " matching courses.");
 
         // Store the Profile in our list of profiles
-        ProfilesCollection profiles = ProfilesCollection.singleton();
-        profiles.addOrUpdateProfile(profile, courseMatches);
-        profilesListView.refreshProfileListView(profiles.getModifications(), profiles.getAdditions(), profiles.getMovements());
+        ProfilesCollection coll = ProfilesCollection.singleton();
+        if (courseMatches > 0)
+            coll.addOrUpdateProfile(profile);
+//        profilesListView.refreshProfileListView(profiles.getModifications(), profiles.getAdditions(), profiles.getMovements());
+        refreshList();
     }
 
-
+    private void onFoundWave(String message) {
+        Log.d("Wave", "Got message:" + message);
+        if (!waveManager.someoneWavedAtMe(message)) {
+            Log.e("Wave", "NO MESSAGE!");
+            return;
+        }
+        String senderId = waveManager.whoWavedAtMe(message);
+        List<Profile> allProfiles = ProfilesCollection.singleton().getProfiles();
+        for (int i = 0; i < allProfiles.size(); i++) {
+            Profile profile = allProfiles.get(i);
+            if (profile.getId().equals(senderId)) {
+                Utilities.logToast(activity, "Found a Wave from: " + profile.getName());
+                profile.setWavedAtMe(true);
+//                int courseMatches = profile.countMatchingCourses(MyProfile.singleton(activity));
+                ProfilesCollection.singleton().addOrUpdateProfile(profile);
+            }
+        }
+        refreshList();
+    }
 
     /**
      * Send a mock message (for testing purposes)
@@ -198,19 +224,37 @@ public class NearbyManager {
             unpublish();
             publish();
         }
+//        else publish();
     }
 
     public void changeSort(String sortType) {
         // UPDATE LIST
         ProfilesCollection coll = ProfilesCollection.singleton();
-        ProfileComparator comp = new MatchComparator(MyProfile.singleton(activity));
-        if (sortType.equals("Recent")) {
-            comp = new TimeWeightComparator("WI", 2022, MyProfile.singleton(activity));
-        } else if (sortType.equals("Class Size")) {
-            comp = new SizeWeightComparator(MyProfile.singleton(activity));
-        }
+//        ProfileComparator comp = new MatchComparator(MyProfile.singleton(activity));
+//        if (sortType.equals("Recent")) {
+//            comp = new TimeWeightComparator("WI", 2022, MyProfile.singleton(activity));
+//        } else if (sortType.equals("Class Size")) {
+//            comp = new SizeWeightComparator(MyProfile.singleton(activity));
+//        }
+//        coll.changeSort(comp);
+        Profile myProfile = MyProfile.singleton(activity);
+        ComparatorFactory factory = new WaveComparatorFactory();
+        ProfileComparator comp = factory.chooseComp(sortType, activity, myProfile);
         coll.changeSort(comp);
-        // UPDATE ADAPTER - TODO
+
+//        profilesListView.refreshProfileListView(coll.getModifications(), coll.getAdditions(), coll.getMovements());
+        refreshList();
+    }
+
+    public void refreshList() {
+        ProfilesCollection coll = ProfilesCollection.singleton();
         profilesListView.refreshProfileListView(coll.getModifications(), coll.getAdditions(), coll.getMovements());
+    }
+
+    public void resubscribe() {
+        if (getIsScanning()) {
+            unsubscribe();
+            subscribe();
+        }
     }
 }

@@ -7,15 +7,21 @@ import com.example.birds_of_a_feather_team_20.model.db.Course;
 
 import java.util.List;
 
+/**
+ * This is a comparator which compares Profiles, prioritizing the Profiles with smaller classes
+ */
 public class SizeWeightComparator implements ProfileComparator {
     private final Profile myProfile;
+    public static final String LABEL = "Class Size";
 
     public SizeWeightComparator(Profile myProfile) {
         this.myProfile = myProfile;
     }
 
+    /**
+     * Calculates the total weight of all the courses on the given Profile.
+     */
     private float getWeight(Profile profile) {
-
         List<Course> courses = profile.matchingCourses(myProfile);
         float score = 0;
 
@@ -50,7 +56,7 @@ public class SizeWeightComparator implements ProfileComparator {
      * compares the matches based on the size of the classroom
      * @param p1 first profile to compare with
      * @param p2 second profile to compare with
-     * @return float of the scare multiplied by 100
+     * @return negative if weight of p1 > p2, equal if they are the same, positive if p1 < p2
      */
     @Override
     public int compare(Profile p1, Profile p2) {

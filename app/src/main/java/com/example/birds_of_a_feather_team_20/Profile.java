@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,6 +35,9 @@ public class Profile {
     private List<Course> courses;
 
     private boolean isFavorite = false;
+    private boolean waved = false;
+
+
 
 
     public Profile(String name, String photoURL, String id) {
@@ -163,7 +167,7 @@ public class Profile {
         Bitmap photo; //Bitmap to return to user
         //Send provided URL to input stream
         try {
-            InputStream photoURLstream = new java.net.URL(photoURL).openStream();
+            InputStream photoURLstream = new URL(photoURL).openStream();
             //photo will be null if the URL cannot be decoded to an image.
             photo = BitmapFactory.decodeStream(photoURLstream);
 
@@ -432,4 +436,11 @@ public class Profile {
         this.isFavorite = false;
     }
 
+    public void setWavedAtMe(boolean waved) {
+        this.waved = waved;
+    }
+
+    public boolean getWavedAtMe() {
+        return waved;
+    }
 }

@@ -33,13 +33,16 @@
             android:layout_weight="1"
             android:background="#00FFFFFF"
             android:contentDescription="friends tab"
-            android:onClick="onLaunchFriendsClicked"
             android:foreground="?android:attr/selectableItemBackground"
+            android:onClick="onLaunchFriendsClicked"
             android:padding="15dp"
             android:scaleType="fitCenter"
             android:scaleX="1"
             android:scaleY="1"
-            app:srcCompat="@drawable/ic_friends" />
+            app:srcCompat="@drawable/ic_friends"
+            app:tint="?android:attr/textColorPrimary"
+            />
+
 
         <ImageButton
             android:id="@+id/favorite_tab_button"

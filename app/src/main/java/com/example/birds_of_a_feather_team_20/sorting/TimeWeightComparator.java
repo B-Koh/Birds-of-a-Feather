@@ -14,10 +14,10 @@ import java.util.List;
  */
 public class TimeWeightComparator implements ProfileComparator {
 
-
     private final String currentSession;
     private final int currentYear;
     private final Profile myProfile;
+    public static final String LABEL = "Recent";
 
     /**
      * Constructor
@@ -31,7 +31,6 @@ public class TimeWeightComparator implements ProfileComparator {
         this.myProfile = myProfile;
     }
 
-
     /**
      * Helper method that converts a season to a predetermined number
      *
@@ -40,18 +39,23 @@ public class TimeWeightComparator implements ProfileComparator {
      */
     private int convertQuarterToInt(String currentSeason) {
         switch (currentSeason) {
-            case "FA":
+            case Course.FA:
                 return 0;
-            case "WI":
+            case Course.WI:
                 return 1;
-            case "SP":
+            case Course.SP:
                 return 2;
-            default: // summer sessions
+            default: // summer sessions should all be 4
                 return 4;
         }
     }
 
-
+    /**
+     * Get the total weight of the Profile's classes based on their recency.
+     *
+     * @param profile Profile to get classes from
+     * @return the total weight
+     */
     public int getWeight(Profile profile) {
         int score = 0;
         // Matching courses
@@ -76,23 +80,12 @@ public class TimeWeightComparator implements ProfileComparator {
         return score;
     }
 
-
-//    /**
-//     * Checks if the course is current
-//     *
-//     * @param course - course being checked to see if it is current
-//     * @return - bool that is true if current / false if not current
-//     */
-//    public boolean checkCurrent(Course course) {
-//        return (course.getYear() == this.currentYear) && (course.getSession().equals(this.currentSession));
-//    }
-
     /**
      * Compares the matches based on the recency of matched courses
      *
      * @param p1 first profile to compare with
      * @param p2 second profile to compare with
-     * @return int of the scare
+     * @return int of the score
      */
     @Override
     public int compare(Profile p1, Profile p2) {

@@ -172,30 +172,30 @@
         android:id="@+id/save_continue_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="onSaveExitClicked"
         android:text="@string/save_course_exit"
         android:textColor="#000000"
         android:textSize="14dp"
-        android:onClick="onSaveExitClicked"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.83"
-        app:layout_constraintHorizontal_bias="0.14"/>
+        app:layout_constraintVertical_bias="0.878" />
 
     <Button
         android:id="@+id/save_and_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="onSaveAddClicked"
         android:text="@string/save_add_course"
         android:textColor="#000000"
         android:textSize="14dp"
-        android:onClick="onSaveAddClicked"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.90" />
+        app:layout_constraintVertical_bias="0.948" />
 
     <Button
         android:id="@+id/delete_course"
@@ -209,7 +209,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.86"
-        app:layout_constraintVertical_bias="0.83" />
+        app:layout_constraintVertical_bias="0.808" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

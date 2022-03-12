@@ -19,7 +19,7 @@ public class Utilities {
     public static boolean debugToast = true; // instance variable that can turn on/off toasts
 
     /**
-     * Method helps determine whether a toast will appear depending on instance variable
+     * Prints a log and (if debugToast == true) displays a Toast
      * @param context - context of where toast will appear
      * @param message - message that toast will contain
      */
@@ -31,6 +31,9 @@ public class Utilities {
         toast(context, message);
     }
 
+    /**
+     * Displays a Toast
+     */
     public static void toast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
@@ -69,7 +72,7 @@ public class Utilities {
             "Keisha", "Irene", "Ethan", "Alice", "Allyson"};
 
     private static final String[] photoURLs = new String[] {
-            "https://upload.wikimedia.org/wikipedia/commons/e/e7/African_daisy_(Osteospermum_sp._'Pink_Whirls').jpg",
+//            "https://upload.wikimedia.org/wikipedia/commons/e/e7/African_daisy_(Osteospermum_sp._'Pink_Whirls').jpg",
             "https://upload.wikimedia.org/wikipedia/commons/e/eb/Apple_park_cupertino_2019.jpg",
             "https://upload.wikimedia.org/wikipedia/commons/d/d4/George-W-Bush.jpeg",
             "https://upload.wikimedia.org/wikipedia/commons/e/e4/Canaan_Dog.jpg",
@@ -80,12 +83,18 @@ public class Utilities {
             "https://upload.wikimedia.org/wikipedia/commons/5/59/Soyuz_TMA-13_Edit.jpg",
             "https://upload.wikimedia.org/wikipedia/commons/e/e2/Henry_Highland_Garnet_by_James_U._Stead.jpg",
             "https://upload.wikimedia.org/wikipedia/commons/6/64/Heart_Nebula_(2020-08-11).jpg",
-            "https://upload.wikimedia.org/wikipedia/commons/6/63/Ely_Cathedral_Lady_Chapel,_Cambridgeshire,_UK_-_Diliff.jpg",
+//            "https://upload.wikimedia.org/wikipedia/commons/6/63/Ely_Cathedral_Lady_Chapel,_Cambridgeshire,_UK_-_Diliff.jpg",
             "https://upload.wikimedia.org/wikipedia/commons/e/e2/Khalili_Collections_A_Composite_Imaginary_View_of_Japan.jpg",
-            "https://upload.wikimedia.org/wikipedia/commons/9/90/Zayapa_(Grapsus_grapsus),_Las_Bachas,_isla_Santa_Cruz,_islas_Gal%C3%A1pagos,_Ecuador,_2015-07-23,_DD_30.jpg",
-            "https://upload.wikimedia.org/wikipedia/commons/2/2e/Lama_glama_Laguna_Colorada_2.jpg"
+//            "https://upload.wikimedia.org/wikipedia/commons/9/90/Zayapa_(Grapsus_grapsus),_Las_Bachas,_isla_Santa_Cruz,_islas_Gal%C3%A1pagos,_Ecuador,_2015-07-23,_DD_30.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/2/2e/Lama_glama_Laguna_Colorada_2.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Nursery_web_spider_(Pisaura_mirabilis)_2.jpg/1024px-Nursery_web_spider_(Pisaura_mirabilis)_2.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Staring_Down_Hurricane_Florence.jpg/1920px-Staring_Down_Hurricane_Florence.jpg"
+
     };
 
+    /**
+     * Generates a profile with courses based on the predefined list of names and URLs
+     */
     public static Profile generateProfile(Context context) {
         Random rand = new Random();
 
@@ -97,10 +106,16 @@ public class Utilities {
         return profile;
 
     }
+
+    /**
+     * Generates a subset of the courses that are in myProfile
+     */
     public static List<Course> generateCourses(Profile myProfile) {
         Random rand = new Random();
         List<Course> myCourses = myProfile.getCourses();
         int numberOfCoursesMax = rand.nextInt(myCourses.size() + 1);
+        if (myCourses.size() > 0 && numberOfCoursesMax == 0)
+            numberOfCoursesMax = 1;
         List<Course> courses = new ArrayList<>();
         for (int i = 0; i < numberOfCoursesMax; i++) {
             Course c = myCourses.get(rand.nextInt(myCourses.size()));
@@ -110,8 +125,37 @@ public class Utilities {
         return courses;
     }
 
+    /**
+     * From a name with a first name and surname (and middle names), extracts the first name
+     */
     public static String getFirstName(String fullName) {
         return fullName.trim().split(" ")[0];
+    }
+
+    /**
+     * @return random profile from the ProfilesCollection
+     */
+    public static Profile pickRandomProfile() {
+        List<Profile> profiles = ProfilesCollection.singleton().getProfiles();
+        if (profiles.isEmpty())
+            return null;
+        return profiles.get(new Random().nextInt(profiles.size()));
+    }
+
+    /**
+     * Generates a string from the list of courses, including only the department and course number.
+     * E.g. "CSE 100, CSE 110, MATH 18"
+     */
+    public static String coursesToString(List<Course> courses) {
+//        courses.sort();
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0, coursesSize = courses.size(); i < coursesSize; i++) {
+            Course course = courses.get(i);
+            boolean isLast = (i == coursesSize - 1);
+            builder.append(course.getDepartment()).append(" ").append(course.getCourseNumber());
+            if (!isLast) builder.append(", ");
+        }
+        return builder.toString();
     }
 }
 

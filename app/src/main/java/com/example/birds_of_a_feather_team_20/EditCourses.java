@@ -3,6 +3,7 @@ package com.example.birds_of_a_feather_team_20;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -29,7 +30,7 @@ public class EditCourses extends AppCompatActivity {
     Integer[] yearList = {2022, 2021, 2020, 2019, 2018};
     String quarter;
 //    String[] quarterList = {"Fall", "Winter", "Spring", "Summer Session I", "Summer Session II"};
-    String[] quarterList = {"FA", "WI", "SP", "SS1", "SS2", "SSS"};
+    String[] quarterList = {Course.FA, Course.WI, Course.SP, Course.SS1, Course.SS2, Course.SSS};
     String subject;
     String courseNumber;
     CourseDatabase db;
@@ -74,14 +75,15 @@ public class EditCourses extends AppCompatActivity {
 
 //        Intent intent = new Intent(this, MainActivity.class);
 //        startActivity(intent);
-        Toast.makeText(this, "Course Saved", Toast.LENGTH_SHORT).show();
+        Log.d("Courses", "Course Saved");
         finish();
     }
 
     public void onDeleteClicked(View view) {
         Course newCourse = getCourseInfo();
-        deleteCourse(newCourse);
-        Toast.makeText(this, "Course Deleted", Toast.LENGTH_SHORT).show();
+//        deleteCourse(newCourse);
+//        Toast.makeText(this, "Course Canceled & Removed", Toast.LENGTH_SHORT).show();
+        Log.d("Courses", "Course Canceled & Removed");
         finish();
 //        Intent intent = new Intent(this, MainActivity.class);
 //        startActivity(intent);
@@ -90,11 +92,11 @@ public class EditCourses extends AppCompatActivity {
     public void onSaveAddClicked(View view) {
         Course newCourse = getCourseInfo();
         addCourse(newCourse);
-        Toast.makeText(this, "Course Saved, Continue Adding", Toast.LENGTH_SHORT).show();
+        Log.d("Courses", "Course Saved, Continue Adding");
         // reload intent with blank template
-        Intent intent = new Intent(this, EditCourses.class);
-        startActivity(intent);
-        finish();
+//        Intent intent = new Intent(this, EditCourses.class);
+//        startActivity(intent);
+//        finish();
     }
 
     /**
@@ -125,11 +127,23 @@ public class EditCourses extends AppCompatActivity {
         if (newCourse == null || newCourse.getCourseNumber() == null
                 || newCourse.getCourseNumber().equals("") || newCourse.getDepartment() == null
                 || newCourse.getDepartment().equals("")) {
+
+            Toast.makeText(this, "Missing course info", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!isCourseUnique(newCourse)) {
+            Toast.makeText(this, "Course already added", Toast.LENGTH_SHORT).show();
             return;
         }
         db.courseDao().insert(newCourse);
         myCourses = db.courseDao().getAll();
         mp.setMyCourses(myCourses);
+        Toast.makeText(this, "Course added", Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean isCourseUnique(Course course) {
+        return !db.courseDao().getAll().contains(course);
+//        return db.courseDao().get(course.getYear(), course.getSession(), course.getDepartment(), course.getCourseNumber()) == null;
     }
 
     private void deleteCourse(Course newCourse) {

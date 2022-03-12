@@ -2,6 +2,7 @@ package com.example.birds_of_a_feather_team_20;
 
 
 import android.app.Activity;
+import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
 
@@ -18,7 +19,7 @@ import java.util.concurrent.Executors;
  */
 public class ProfilesListView {
     private final Activity activity;
-    private final ProfilesViewAdapter adapter;
+    private ProfilesViewAdapter adapter;
     private final List<Profile> foundProfiles;
 
     /**
@@ -30,6 +31,13 @@ public class ProfilesListView {
         this.foundProfiles = ProfilesCollection.singleton().getProfiles();
 //        this.nearbyManager = mainActivity.getNearbyManager();
 
+        setup();
+    }
+
+    /**
+     * Creates the adapter for the recycler view and sets it up
+     */
+    private void setup() {
         RecyclerView basicRecycler = activity.findViewById(R.id.profile_list);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(activity);
         basicRecycler.setLayoutManager(layoutManager);
@@ -62,7 +70,7 @@ public class ProfilesListView {
 //            }
 //        }
 
-        adapter.notifyDataSetChanged(); // Comment this out once movements stack works
+//        adapter.notifyDataSetChanged(); // Comment this out once movements stack works
     }
 
     /**
@@ -89,13 +97,7 @@ public class ProfilesListView {
         if (foundProfiles.size() > 0)
             activity.setTitle("Find Friends (" + foundProfiles.size() + ")");
 
-        // Refresh on background thread
-        Executors.newSingleThreadExecutor().submit(() -> {
-//            updateThumbnailsBackground(modifications, additions);
-            activity.runOnUiThread(() -> {
-                notifyAdapter(modifications, additions, movements);
-            });
-            return null;
-        });
+        Log.d("ProfileListView", "refreshProfileListView");
+        setup();
     }
 }
