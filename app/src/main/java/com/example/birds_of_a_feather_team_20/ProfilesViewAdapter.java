@@ -90,12 +90,16 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
                 Profile thisProfile = profiles.get(index);
                 if (!thisProfile.getIsFavorite()) {
                     thisProfile.setFavorite();
+//                    ProfilesCollection.singleton().addOrUpdateProfile(thisProfile, context);
                 }
                 else {
                     thisProfile.unFavorite();
                 }
                 // Updates graphic after click
                 updateFavoriteGraphic(this.favorite, context, thisProfile.getIsFavorite());
+//                ProfilesCollection.singleton().addOrUpdateProfile(thisProfile, context);
+                ProfilesCollection.singleton().updateProfileInDB(thisProfile, context);
+
                 //ProfilesCollection.singleton().getModifications().add(ProfilesCollection.singleton().getProfiles().indexOf(thisProfile));
             });
         }

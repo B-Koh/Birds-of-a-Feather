@@ -36,8 +36,7 @@ public class Profile {
 
     private boolean isFavorite = false;
     private boolean waved = false;
-
-
+    private int sessionId = -1;
 
 
     public Profile(String name, String photoURL, String id) {
@@ -442,5 +441,13 @@ public class Profile {
 
     public boolean getWavedAtMe() {
         return waved;
+    }
+
+    public void setSessionId(int sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public int getSessionId() {
+        return sessionId;
     }
 }

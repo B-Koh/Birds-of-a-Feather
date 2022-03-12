@@ -243,4 +243,10 @@ public abstract class SessionDao {
         clearSession(sessionName);
         if(getSession(sessionName) != null) deleteSession(getSession(sessionName));
     }
+
+    @Transaction
+    public void deleteProfile(Profile profile){
+        DBProfileWithCourses dbCopy = new DBProfileWithCourses(profile);
+        deleteProfile(profile);
+    }
 }

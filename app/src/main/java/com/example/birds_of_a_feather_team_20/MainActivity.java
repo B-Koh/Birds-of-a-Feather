@@ -30,7 +30,7 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
 
     private NearbyManager nearbyManager;
-    private String sessionName;
+    public static String sessionName;
 
     private SessionDatabase db;
     private SessionDao sessionDao;

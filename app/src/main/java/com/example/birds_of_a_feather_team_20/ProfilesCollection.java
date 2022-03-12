@@ -1,8 +1,10 @@
 package com.example.birds_of_a_feather_team_20;
 
+import android.content.Context;
 import android.util.Log;
 import android.util.Pair;
 
+import com.example.birds_of_a_feather_team_20.model.db.SessionDatabase;
 import com.example.birds_of_a_feather_team_20.sorting.ProfileComparator;
 
 import java.util.ArrayList;
@@ -18,6 +20,8 @@ public class ProfilesCollection {
 //    private final List<MatchProfilePair> matchPairs;
 //    ProfilesViewAdapter adapter;
     private static ProfilesCollection singletonInstance;
+
+    public static boolean databaseDebug = false;
 
     private final Stack<Integer> additions;
     private final Stack<Integer> modifications;
@@ -58,7 +62,7 @@ public class ProfilesCollection {
      * with its id
      * @param profile
      */
-    public void addOrUpdateProfile(Profile profile) {
+    public void addOrUpdateProfile(Profile profile, Context context) {
 
         if (profile == null) return;
 
@@ -74,8 +78,42 @@ public class ProfilesCollection {
         else {
             updateExistingProfile(profile, index);
         }
+
+//        String sessionName = MainActivity.sessionName;
+//        if (context != null && SessionDatabase.singleton(context) != null
+//                && SessionDatabase.singleton(context).sessionDao() != null && sessionName != null
+//                && !databaseDebug)
+//            SessionDatabase.singleton(context).sessionDao().insertProfile(sessionName, profile);
+        updateProfileInDB(profile, context);
         applySort();
     }
+
+    public void updateProfileInDB(Profile profile, Context context) {
+        List<Profile> profiles = getProfiles();
+        for(int i = 0; i < profiles.size(); i++)
+        {
+            if (profiles.get(i).getId().equals(profile.getId())) {
+
+                if(profile.getIsFavorite()) {
+                    profiles.get(i).setFavorite();
+                } else{
+                    profiles.get(i).unFavorite();
+                }
+//                if(profiles.get(i).getIsFavorite()) {
+//                    profile.setFavorite();
+//                } else{
+//                    profile.unFavorite();
+//                }
+            }
+        }
+
+        String sessionName = MainActivity.sessionName;
+        if (context != null && SessionDatabase.singleton(context) != null
+                && SessionDatabase.singleton(context).sessionDao() != null && sessionName != null
+                && !databaseDebug)
+            SessionDatabase.singleton(context).sessionDao().insertProfile(sessionName, profile);
+    }
+
 
 
     private void updateExistingProfile(Profile newProfile, int index) {
