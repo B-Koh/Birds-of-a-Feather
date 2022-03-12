@@ -88,6 +88,9 @@ public class ProfilesCollection {
         applySort();
     }
 
+    /**
+     * Inserts the changes into the database of sessions
+     */
     public void updateProfileInDB(Profile profile, Context context) {
         List<Profile> profiles = getProfiles();
         for(int i = 0; i < profiles.size(); i++)
@@ -99,11 +102,6 @@ public class ProfilesCollection {
                 } else{
                     profiles.get(i).unFavorite();
                 }
-//                if(profiles.get(i).getIsFavorite()) {
-//                    profile.setFavorite();
-//                } else{
-//                    profile.unFavorite();
-//                }
             }
         }
 
@@ -125,7 +123,9 @@ public class ProfilesCollection {
     }
 
 
-
+    /**
+     * Updates a profile that already exists in the collection with new data
+     */
     private void updateExistingProfile(Profile newProfile, int index) {
 //        Utilities.logToast(activity, "Update existing profile: " + newProfile.getName());
 
@@ -137,6 +137,10 @@ public class ProfilesCollection {
         existing.updateProfile(newProfile);
         getModifications().add(index);
     }
+
+    /**
+     * Insert a profile not already in the collection
+     */
     private void insertNewProfile(Profile profile, int index) {
 //        Utilities.logToast(activity, "Adding to List: " + profile.serialize());
         getAdditions().add(index);
@@ -144,14 +148,22 @@ public class ProfilesCollection {
         // Note, not sure if it is necessary to tell the adapter that all the other items moved down
     }
 
+    /**
+     * Sets a new comparator for sorting
+     * @param comparator
+     */
     public void changeSort(ProfileComparator comparator) {
         this.comparator = comparator;
         applySort();
     }
+
+    /**
+     * Sorts the list according to the currently set comparator
+     */
     private void applySort() {
-        recordMovementsStart();
+//        recordMovementsStart();
         getProfiles().sort(comparator);
-        recordMovementsStop();
+//        recordMovementsStop();
         Log.d("Sorted Profiles", "-------");
         for(Profile profile : getProfiles()) {
             Log.d("Sorted Profile", profile.getName());
@@ -159,24 +171,24 @@ public class ProfilesCollection {
         /// RECORD MOVEMENTS
     }
 
-    private void recordMovementsStart() {
-        oldPositions.clear();
-        List<Profile> profileList = getProfiles();
-        for (int i = 0; i < profileList.size(); i++) {
-            Profile p = profileList.get(i);
-            oldPositions.put(p, i);
-        }
-    }
-    private void recordMovementsStop() {
-        List<Profile> profileList = getProfiles();
-        for (int i = 0; i < profileList.size(); i++) {
-            Profile profile = profileList.get(i);
+//    private void recordMovementsStart() {
+//        oldPositions.clear();
+//        List<Profile> profileList = getProfiles();
+//        for (int i = 0; i < profileList.size(); i++) {
+//            Profile p = profileList.get(i);
 //            oldPositions.put(p, i);
-            int oldPos = oldPositions.get(profile);
-
-            if (i != oldPos) {
-                getMovements().add(new Pair(oldPos, i));
-            }
-        }
-    }
+//        }
+//    }
+//    private void recordMovementsStop() {
+//        List<Profile> profileList = getProfiles();
+//        for (int i = 0; i < profileList.size(); i++) {
+//            Profile profile = profileList.get(i);
+////            oldPositions.put(p, i);
+//            int oldPos = oldPositions.get(profile);
+//
+//            if (i != oldPos) {
+//                getMovements().add(new Pair(oldPos, i));
+//            }
+//        }
+//    }
 }
