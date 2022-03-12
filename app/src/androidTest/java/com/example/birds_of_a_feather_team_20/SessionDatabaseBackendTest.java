@@ -71,6 +71,31 @@ public class SessionDatabaseBackendTest {
     }
 
     @Test
+    public void favoriteProfiles(){
+        DBSession testSession = new DBSession("testSession");
+
+        Profile billClinton = new Profile("Bill Clinton",
+                "https://upload.wikimedia.org/wikipedia/commons/d/d3/Bill_Clinton.jpg",
+                "billId");
+        billClinton.setFavorite();
+
+        Profile jfk = new Profile("John F. Kennedy",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/John_F._Kennedy%2C_White_House_color_photo_portrait.jpg/800px-John_F._Kennedy%2C_White_House_color_photo_portrait.jpg",
+                "johnId");
+
+        sessionDao.insert(testSession);
+        sessionDao.insertProfile("testSession", billClinton);
+        sessionDao.insertProfile("testSession", jfk);
+
+
+        assertEquals(2, sessionDao.getProfilesInSession("testSession").size());
+        assertEquals("John F. Kennedy", sessionDao.getProfilesInSession("testSession").get(1).getName());
+
+        assertEquals(1, sessionDao.getFavoritesInSession("testSession").size());
+        assertEquals("Bill Clinton", sessionDao.getFavoritesInSession("testSession").get(0).getName());
+    }
+
+    @Test
     public void addCourses(){
         DBSession testSession = new DBSession("testSession");
 
