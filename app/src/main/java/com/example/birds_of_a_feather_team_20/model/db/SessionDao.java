@@ -66,6 +66,25 @@ public abstract class SessionDao {
     }
 
     @Transaction
+    public List<Profile> getFavoritesInSession(String sessionName){
+        List<DBProfileWithCourses> dbProfiles = new ArrayList<DBProfileWithCourses>();
+        List<Profile> profiles = new ArrayList<Profile>();
+        DBSessionWithProfilesAndCourses targetSession = getSessionWithProfilesAndCourses(sessionName);
+
+        if(targetSession == null){
+            //Log.e("getProfiles error", "Target session not found");
+            return profiles;
+        }
+        //Log.e("getProfiles no error", "Target session found");
+        //Log.e("getProfiles", "Target Session profile size is " + targetSession.profiles.size());
+        for(DBProfileWithCourses profile:targetSession.profiles){
+            if(profile.dbProfile.isFavorite) profiles.add(profile.toProfile());
+        }
+
+        return profiles;
+    }
+
+    @Transaction
     public List<Course> getCoursesInProfile(String sessionName, String profileId){
         DBSessionWithProfilesAndCourses targetSession = getSessionWithProfilesAndCourses(sessionName);
         if(targetSession == null) return null;

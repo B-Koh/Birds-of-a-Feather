@@ -21,11 +21,14 @@ public class DBCourse {
     //@ColumnInfo(name = "course_number")
     public String courseNumber; //Must be a string due to A/B courses
 
-    public DBCourse(int year, String session, String department, String courseNumber) {
+    public int classSize;
+
+    public DBCourse(int year, String session, String department, String courseNumber, int classSize) {
         this.year = year;
         this.session = session.toUpperCase(Locale.ROOT).replaceAll(" ", "");
         this.department = department.toUpperCase(Locale.ROOT).replaceAll(" ", "");
         this.courseNumber = courseNumber.toUpperCase(Locale.ROOT).replaceAll(" ", "");
+        this.classSize = classSize;
     }
 
     public DBCourse(Course course){
@@ -33,9 +36,10 @@ public class DBCourse {
         session = course.getSession();
         department = course.getDepartment();
         courseNumber = course.getCourseNumber();
+        classSize = course.getClassSize();
     }
 
     public Course toCourse(){
-        return new Course(year, session, department, courseNumber);
+        return new Course(year, session, department, courseNumber, classSize);
     }
 }
