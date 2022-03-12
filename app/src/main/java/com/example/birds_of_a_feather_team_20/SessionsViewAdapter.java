@@ -77,9 +77,13 @@ public class SessionsViewAdapter extends RecyclerView.Adapter<SessionsViewAdapte
                 int index = sd.getAll().indexOf(session);
                 if (index == -1) return;
 
+                if(sd.getSession(session.getSessionName()) != null) {
+                    sd.delete(session.getSessionName());
+                }
+
                 adapter.sessions = sd.getAll();
                 adapter.notifyItemRemoved(index);
-                sd.delete(session.getSessionName());
+
             });
         }
 
