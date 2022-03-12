@@ -195,4 +195,10 @@ public class EditProfile extends AppCompatActivity {
     }
 
     /* Code above handles google login */
+
+    public void onViewSessionsClicked(View view) {
+        onLaunchFriendsClicked(view);
+        Intent intent = new Intent(this, ViewSessionsActivity.class);
+        startActivity(intent);
+    }
 }
