@@ -56,7 +56,14 @@ public class ViewSessionProfilesActivity extends AppCompatActivity {
     }
 
     public void onReturnToSessionsClicked(View view) {
-        Intent intent = new Intent(this, ViewSessionsActivity.class);
+        finish();
+//        Intent intent = new Intent(this, ViewSessionsActivity.class);
+//        startActivity(intent);
+    }
+
+    public void onRenameSessionClicked(View view) {
+        Intent intent = new Intent(this, StopSessionActivity.class);
+        intent.putExtra("autosave_session", this.sessionName);
         startActivity(intent);
     }
 }

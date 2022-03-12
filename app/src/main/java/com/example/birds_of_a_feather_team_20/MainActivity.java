@@ -93,8 +93,10 @@ public class MainActivity extends AppCompatActivity {
         Button button = (Button)view;
         if (nearbyManager.getIsScanning()) {
             boolean success = nearbyManager.stopScanning();
-            if (success)
+            if (success) {
                 button.setText("Start");
+                stopSession();
+            }
         } else {
             boolean success = nearbyManager.startScanning();
             if (success) {
@@ -113,6 +115,12 @@ public class MainActivity extends AppCompatActivity {
         sessionDao = db.sessionDao();
         DBSession dbSession = new DBSession(sessionName);
         sessionDao.insert(dbSession);
+    }
+
+    public void stopSession(){
+        Intent intent = new Intent(this, StopSessionActivity.class);
+        intent.putExtra("autosave_session", this.sessionName);
+        this.startActivity(intent);
     }
 
     public void onLaunchFavoritesClicked(View view) {

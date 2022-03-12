@@ -23,5 +23,17 @@ public class DBSession {
     public String getSessionName() { return sessionName; }
 
     public void setSessionName(String sessionName) { this.sessionName = sessionName; }
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (!(o instanceof DBSession)) return false;
+        DBSession session = (DBSession) o;
+
+        if((dbSessionId == session.getSessionId()) && sessionName.equals(session.getSessionName())){
+            return true;
+        }
+        return false;
+    }
 }
 

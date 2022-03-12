@@ -1,6 +1,8 @@
 package com.example.birds_of_a_feather_team_20;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -11,7 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.birds_of_a_feather_team_20.model.db.Course;
 import com.example.birds_of_a_feather_team_20.model.db.CourseDatabase;
+import com.example.birds_of_a_feather_team_20.model.db.DBSession;
+import com.example.birds_of_a_feather_team_20.model.db.SessionDatabase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StopSessionActivity extends AppCompatActivity {
@@ -20,27 +25,33 @@ public class StopSessionActivity extends AppCompatActivity {
     List<String> currCourses;
     CourseDatabase db;
     MyProfile mp;
-    //SessionDatabase sd;
-    String sessionName = "";
+    SessionDatabase sd;
+    String newSession = "";
+    String oldSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stop_session);
 
+        setTitle("Save Your Session");
+
+        Intent intent = getIntent();
+        oldSession = intent.getStringExtra("autosave_session");
 
         db = CourseDatabase.singleton(this);
         mp = MyProfile.singleton(this);
-        //sd = SessionDatabase.singleton(this);
-        myCourses = db.courseDao().getAll();
+        sd = SessionDatabase.singleton(this);
+        myCourses = mp.getMyCourses();
+        currCourses =  new ArrayList<String>();
 
-        getCurrCourses(myCourses);
+        current_classes =  getCurrCourses(myCourses);
 
 
-        Spinner year_dropdown = findViewById(R.id.curr_courses_dropdown);
+        Spinner curr_courses = findViewById(R.id.curr_courses_dropdown);
         ArrayAdapter<String> curr_course_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, current_classes);
         curr_course_adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        year_dropdown.setAdapter(curr_course_adapter);
+        curr_courses.setAdapter(curr_course_adapter);
 
     }
 
@@ -48,10 +59,13 @@ public class StopSessionActivity extends AppCompatActivity {
         if(validateName()){
             saveSession();
             finish();
+            Intent intent = new Intent(this, MainActivity.class);
+            this.startActivity(intent);
         }
     }
 
-    public void getCurrCourses(List<Course> myCourses) {
+    public String[] getCurrCourses(List<Course> myCourses) {
+        currCourses.add("");
         for( int i = 0; i < myCourses.size(); i++){
             String quarter = myCourses.get(i).getSession();
             String year = String.valueOf(myCourses.get(i).getYear());
@@ -60,30 +74,29 @@ public class StopSessionActivity extends AppCompatActivity {
             if(quarter.equals("WI") && year.equals("2022")) {
                 String courseName = department + " " + courseNum;
                 currCourses.add(courseName);
+                Log.i(this.getClass().getSimpleName(), "Current Course Added");
             }
         }
-        current_classes = new String[currCourses.size()];
+        String[] current_courses = new String[currCourses.size()];
 //        for(int i = 0; i < currCourses.size(); i++) {
 //            current_classes[i] = currCourses.get(i);
 //        }
-        current_classes = currCourses.toArray(current_classes);
+        current_courses = currCourses.toArray(current_courses);
+
+        return current_courses;
     }
 
     private void saveSession() {
-        //save session using Session Database insert method
-        //need to pass in SessionId with intent
-        //use SessionId to setName of already existing session (with date/time)
-        //DBSession currSession = DBSession(sessionName);
-        //sd.sessionDao().insert(sessionName);
-        //OR
-        //sd.sessionDao().setSessionName(sessionName);
+        sd.sessionDao().renameSession(oldSession, newSession);
+//        DBSession oldDB = sd.sessionDao().getSession(oldSession);
+//        DBSession newDB = sd.sessionDao().getSession(newSession);
     }
 
-    private boolean validateName() {
+    public boolean validateName() {
         TextView sessionTextView = findViewById(R.id.enter_session);
         String sessionText = sessionTextView.getText().toString();
 
-        Spinner courseSpinner = findViewById(R.id.quarter_dropdown);
+        Spinner courseSpinner = findViewById(R.id.curr_courses_dropdown);
         String courseSelected = courseSpinner.getSelectedItem().toString();
 
         if(sessionText.equals("") && courseSelected.equals("")){
@@ -93,17 +106,28 @@ public class StopSessionActivity extends AppCompatActivity {
             Toast.makeText(this, "Only Choose One: Enter or Select Name", Toast.LENGTH_SHORT).show();
             return false;
         }
-//        if(sd.sessionDao().getSession(sessionText) != null){
-//            Toast.makeText(this, "Session name already exists: Select Different Name", Toast.LENGTH_SHORT).show();
-//            return false;
-//        }
+
 
         if(!courseSelected.equals("")){
-            sessionName = courseSelected;
+            if(sd.sessionDao().getSession(courseSelected) != null){
+                Toast.makeText(this, "Session name already exists: Select Different Name", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            newSession = courseSelected;
         } else if(!sessionText.equals("")) {
-            sessionName = sessionText;
+            if(sd.sessionDao().getSession(sessionText) != null){
+                Toast.makeText(this, "Session name already exists: Select Different Name", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            newSession = sessionText;
         }
 
+        Log.i("Session Added", newSession);
         return true;
+    }
+
+    public void onClickCancelSession(View view) {
+        sd.sessionDao().delete(oldSession);
+        finish();
     }
 }
