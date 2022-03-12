@@ -66,6 +66,7 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
         private final ImageView photo;
         private final ImageButton favorite;
         private final ImageButton waved;
+        private Profile cacheProfile;
 
         ViewHolder(View itemView, Context context, List<Profile> profiles) {
             super(itemView);
@@ -136,7 +137,7 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
                 profile.fetchThumbnail();
                 activity.runOnUiThread(() -> {
                     this.index = index;
-                    //this.profile = profile;
+                    this.cacheProfile = profile;
                     this.profileNameText.setText(profile.getName());
 //                    this.urlText.setText(profile.getPhotoURL());
                     this.urlText.setText(Utilities.coursesToString(profile.getCourses()));
@@ -153,6 +154,7 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
         public void onClick(View view) {
             Context context = view.getContext();
             Intent intent = new Intent(context, DisplayProfile.class);
+            intent.putExtra("profile_data", this.cacheProfile.serialize());
             intent.putExtra("index_in_profilesList", this.index);
             context.startActivity(intent);
         }

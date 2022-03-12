@@ -106,6 +106,7 @@ public class EditProfile extends AppCompatActivity {
         Context context = view.getContext();
         Intent intent = new Intent(context, DisplayProfile.class);
         intent.putExtra("index_in_profilesList", -1);
+        intent.putExtra("profile_data", MyProfile.singleton(this).serialize());
         context.startActivity(intent);
     }
 
