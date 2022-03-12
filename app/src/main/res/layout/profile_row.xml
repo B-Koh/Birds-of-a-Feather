@@ -55,7 +55,6 @@
         android:scaleType="fitCenter"
         android:scaleX="1.5"
         android:scaleY="1.5"
-        app:tint="?android:attr/textColorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/profile_photo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
