@@ -33,11 +33,14 @@ public class DisplayProfile extends AppCompatActivity {
     private Bitmap profileIm;
     private boolean isMyProfile = false;
 
+    private ImageButton waveButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display);
         Intent intent = getIntent();
+        waveButton = findViewById(R.id.wave_button);
 
         int index = intent.getIntExtra("index_in_profilesList", 0);
 
@@ -45,6 +48,8 @@ public class DisplayProfile extends AppCompatActivity {
         if (index == -1) {
             profile = MyProfile.singleton(this);
             isMyProfile = true;
+            if (waveButton != null)
+                waveButton.setVisibility(View.INVISIBLE);
         } else {
             profile = profiles.get(index);
             isMyProfile = false;
@@ -93,7 +98,6 @@ public class DisplayProfile extends AppCompatActivity {
         coursesViewAdapter = new CoursesViewAdapter(courses, this, isMyProfile);
 
         coursesRecyclerView.setAdapter(coursesViewAdapter);
-
     }
 
     public void onBackClicked(View view) {
@@ -117,6 +121,6 @@ public class DisplayProfile extends AppCompatActivity {
         ((ImageButton)view).setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_waving_hand_filled));
     }
     private void onWaveFailure(View view) {
-        Toast.makeText(this, "Something went wrong.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Please try to wave again.", Toast.LENGTH_SHORT).show();
     }
 }
