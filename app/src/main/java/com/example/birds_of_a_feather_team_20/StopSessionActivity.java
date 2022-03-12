@@ -128,5 +128,6 @@ public class StopSessionActivity extends AppCompatActivity {
 
     public void onClickCancelSession(View view) {
         sd.sessionDao().delete(oldSession);
+        finish();
     }
 }
