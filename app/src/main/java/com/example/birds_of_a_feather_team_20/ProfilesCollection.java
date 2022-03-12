@@ -109,9 +109,19 @@ public class ProfilesCollection {
 
         String sessionName = MainActivity.sessionName;
         if (context != null && SessionDatabase.singleton(context) != null
-                && SessionDatabase.singleton(context).sessionDao() != null && sessionName != null
-                && !databaseDebug)
-            SessionDatabase.singleton(context).sessionDao().insertProfile(sessionName, profile);
+                && SessionDatabase.singleton(context).sessionDao() != null)
+        {/*sessionName != null*/
+            if (profile.getSessionId() == -1) {
+                if (sessionName != null) {
+
+                    SessionDatabase.singleton(context).sessionDao().insertProfile(sessionName, profile);
+                }
+            }
+            else {
+
+                SessionDatabase.singleton(context).sessionDao().insertProfileViaId(profile.getSessionId(), profile);
+            }
+        }
     }
 
 

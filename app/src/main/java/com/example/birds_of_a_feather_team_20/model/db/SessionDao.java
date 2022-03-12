@@ -30,6 +30,10 @@ public abstract class SessionDao {
     abstract DBSessionWithProfilesAndCourses getSessionWithProfilesAndCourses(String sessionName);
 
     @Transaction
+    @Query("SELECT * FROM DBSession WHERE dbSessionId=:sessionId")
+    abstract DBSessionWithProfilesAndCourses getSessionWithProfilesAndCoursesViaId(int sessionId);
+
+    @Transaction
     @Query("SELECT * FROM DBProfile WHERE profileSessionId=:sessionId AND profileId=:profileId")
     abstract DBProfileWithCourses getDBProfileWithCourses(int sessionId, String profileId);
 
@@ -153,6 +157,32 @@ public abstract class SessionDao {
         Log.e("insertProfile", "Profile courses size " + profile.getCourses().size());
         for(Course course:profile.getCourses()){
             insertCourse(sessionName, profile.getId(), course);
+        }
+
+
+
+        //Log.e("insertProfile", "Target Session profile size is " + targetSession.profiles.size());
+        //Log.e("insertProfile", "Target profile has session id " + targetProfile.dbProfile.profileSessionId);
+    }
+    @Transaction
+    public void insertProfileViaId(int sessionId, Profile profile) {
+        DBSessionWithProfilesAndCourses targetSession = getSessionWithProfilesAndCoursesViaId(sessionId);
+        if (targetSession == null) return;
+        //Log.e("insertProfile", "Target Session id is " + targetSession.session.sessionId);
+
+        DBProfileWithCourses targetProfile = getDBProfileWithCourses(targetSession.session.dbSessionId, profile.getId());
+        if (targetProfile != null){
+            deleteProfile(targetProfile.dbProfile);
+            for(DBCourseProfileCrossRef reference:getRefsInProfile(targetProfile.dbProfile.dbProfileId)) deleteReference(reference);
+        }
+
+        targetProfile = new DBProfileWithCourses(profile);
+        targetProfile.dbProfile.profileSessionId = targetSession.session.dbSessionId;
+
+        insertProfile(targetProfile.dbProfile);
+        Log.e("insertProfile", "Profile courses size " + profile.getCourses().size());
+        for(Course course:profile.getCourses()){
+            insertCourse(targetSession.session.sessionName, profile.getId(), course);
         }
 
 
