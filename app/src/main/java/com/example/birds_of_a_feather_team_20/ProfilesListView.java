@@ -32,8 +32,11 @@ public class ProfilesListView {
 //        this.nearbyManager = mainActivity.getNearbyManager();
 
         setup();
-
     }
+
+    /**
+     * Creates the adapter for the recycler view and sets it up
+     */
     private void setup() {
         RecyclerView basicRecycler = activity.findViewById(R.id.profile_list);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(activity);
@@ -96,13 +99,5 @@ public class ProfilesListView {
 
         Log.d("ProfileListView", "refreshProfileListView");
         setup();
-//        // Refresh on background thread
-//        Executors.newSingleThreadExecutor().submit(() -> {
-////            updateThumbnailsBackground(modifications, additions);
-//            activity.runOnUiThread(() -> {
-//                notifyAdapter(modifications, additions, movements);
-//            });
-//            return null;
-//        });
     }
 }

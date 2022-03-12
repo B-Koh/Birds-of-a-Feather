@@ -147,7 +147,6 @@ public class ProfilesViewAdapter extends RecyclerView.Adapter<ProfilesViewAdapte
 
         @Override
         public void onClick(View view) {
-            // TODO: Open profile details
             Context context = view.getContext();
             Intent intent = new Intent(context, DisplayProfile.class);
             intent.putExtra("index_in_profilesList", this.index);

@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
+/**
+ * This class holds the list of profiles for the current session.
+ */
 public class ProfilesCollection {
     private final List<Profile> profiles;
 //    private final List<MatchProfilePair> matchPairs;
@@ -50,8 +53,12 @@ public class ProfilesCollection {
         oldPositions = new HashMap<>();
     }
 
+    /**
+     * Inserts a new profile or updates an existing one depending on whether a profile is found
+     * with its id
+     * @param profile
+     */
     public void addOrUpdateProfile(Profile profile) {
-
 
         if (profile == null) return;
 

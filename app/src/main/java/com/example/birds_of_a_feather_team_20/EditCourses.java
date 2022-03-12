@@ -30,7 +30,7 @@ public class EditCourses extends AppCompatActivity {
     Integer[] yearList = {2022, 2021, 2020, 2019, 2018};
     String quarter;
 //    String[] quarterList = {"Fall", "Winter", "Spring", "Summer Session I", "Summer Session II"};
-    String[] quarterList = {"FA", "WI", "SP", "SS1", "SS2", "SSS"};
+    String[] quarterList = {Course.FA, Course.WI, Course.SP, Course.SS1, Course.SS2, Course.SSS};
     String subject;
     String courseNumber;
     CourseDatabase db;

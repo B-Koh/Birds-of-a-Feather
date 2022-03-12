@@ -19,7 +19,7 @@ public class Utilities {
     public static boolean debugToast = false; // instance variable that can turn on/off toasts
 
     /**
-     * Method helps determine whether a toast will appear depending on instance variable
+     * Prints a log and (if debugToast == true) displays a Toast
      * @param context - context of where toast will appear
      * @param message - message that toast will contain
      */
@@ -31,6 +31,9 @@ public class Utilities {
         toast(context, message);
     }
 
+    /**
+     * Displays a Toast
+     */
     public static void toast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
@@ -89,6 +92,9 @@ public class Utilities {
 
     };
 
+    /**
+     * Generates a profile with courses based on the predefined list of names and URLs
+     */
     public static Profile generateProfile(Context context) {
         Random rand = new Random();
 
@@ -100,6 +106,10 @@ public class Utilities {
         return profile;
 
     }
+
+    /**
+     * Generates a subset of the courses that are in myProfile
+     */
     public static List<Course> generateCourses(Profile myProfile) {
         Random rand = new Random();
         List<Course> myCourses = myProfile.getCourses();
@@ -115,10 +125,16 @@ public class Utilities {
         return courses;
     }
 
+    /**
+     * From a name with a first name and surname (and middle names), extracts the first name
+     */
     public static String getFirstName(String fullName) {
         return fullName.trim().split(" ")[0];
     }
 
+    /**
+     * @return random profile from the ProfilesCollection
+     */
     public static Profile pickRandomProfile() {
         List<Profile> profiles = ProfilesCollection.singleton().getProfiles();
         if (profiles.isEmpty())
@@ -126,6 +142,10 @@ public class Utilities {
         return profiles.get(new Random().nextInt(profiles.size()));
     }
 
+    /**
+     * Generates a string from the list of courses, including only the department and course number.
+     * E.g. "CSE 100, CSE 110, MATH 18"
+     */
     public static String coursesToString(List<Course> courses) {
 //        courses.sort();
         StringBuilder builder = new StringBuilder();

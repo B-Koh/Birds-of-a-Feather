@@ -21,6 +21,9 @@ import com.example.birds_of_a_feather_team_20.wave.WavePublisher;
 import java.util.List;
 import java.util.concurrent.Executors;
 
+/**
+ * Class for displaying MyProfile and the profile of others. Includes a button to wave.
+ */
 public class DisplayProfile extends AppCompatActivity {
 
     private RecyclerView coursesRecyclerView;
@@ -35,6 +38,9 @@ public class DisplayProfile extends AppCompatActivity {
 
     private ImageButton waveButton;
 
+    /**
+     * Initialize the activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +66,9 @@ public class DisplayProfile extends AppCompatActivity {
 
     }
 
+    /**
+     * Display the profile's name
+     */
     public void setName(){
         TextView nameView = (TextView)findViewById(R.id.name_textview);
         name = profile.getName();
@@ -71,6 +80,10 @@ public class DisplayProfile extends AppCompatActivity {
 
     }
 
+    /**
+     * Fetch and display the profile's image. This happens in a background thread, so the main
+     * thread is not halted while the image downloads.
+     */
     public void setImage(){
         Executors.newSingleThreadExecutor().submit(() -> {
             ImageView imageView = (ImageView) findViewById(R.id.profile_image);
@@ -88,6 +101,9 @@ public class DisplayProfile extends AppCompatActivity {
         });
     }
 
+    /**
+     * Initializes the adapter and recycler view that display the courses.
+     */
     public void setCourses(){
         courses = profile.getCourses();
 
@@ -100,14 +116,19 @@ public class DisplayProfile extends AppCompatActivity {
         coursesRecyclerView.setAdapter(coursesViewAdapter);
     }
 
+    /**
+     * Call this to close the activity
+     * @param view
+     */
     public void onBackClicked(View view) {
-//        Intent intent = new Intent(this, MainActivity.class);
-//        startActivity(intent);
         finish();
     }
 
+    /**
+     * Sends a wave to the student this profile belongs to.
+     * @param view
+     */
     public void onWaveClicked(View view) {
-        // Need to do some refactoring
         WavePublisher.singleton(this).sendWave(profile, this, (success) -> {
             if (success)
                 onWaveSuccess(view);
@@ -116,10 +137,17 @@ public class DisplayProfile extends AppCompatActivity {
         });
     }
 
+    /**
+     * Display the success Toast if message was sent.
+     */
     private void onWaveSuccess(View view) {
         Toast.makeText(this, "Wave sent!", Toast.LENGTH_LONG).show();
         ((ImageButton)view).setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_waving_hand_filled));
     }
+
+    /**
+     * Display error Toast if message failed.
+     */
     private void onWaveFailure(View view) {
         Toast.makeText(this, "Please try to wave again.", Toast.LENGTH_SHORT).show();
     }

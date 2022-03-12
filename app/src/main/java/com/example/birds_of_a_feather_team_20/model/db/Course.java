@@ -18,6 +18,15 @@ import java.util.Objects;
 
 @Entity(tableName = "courses")
 public class Course {
+
+    // Sessions
+    public static final String FA = "FA";
+    public static final String WI = "WI";
+    public static final String SP = "SP";
+    public static final String SS1 = "SS1";
+    public static final String SS2 = "SS2";
+    public static final String SSS = "SSS";
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "course_id")
     private int courseId = 0;
