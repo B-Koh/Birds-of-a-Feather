@@ -33,6 +33,11 @@ public class NearbyManager {
     private Message profileMessage;
     private boolean isScanning;
 
+    public void clearProfiles() {
+        ProfilesCollection.singleton().getProfiles().clear();
+        profilesListView.refreshProfileListView();
+    }
+
     public boolean getIsScanning() {
         return isScanning;
     }

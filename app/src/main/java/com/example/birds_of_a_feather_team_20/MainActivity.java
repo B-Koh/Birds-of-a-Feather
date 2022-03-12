@@ -106,7 +106,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void newSessionSetName(){
+    public void newSessionSetName() {
+        nearbyManager.clearProfiles();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date date = new Date();
         sessionName = formatter.format(date);
