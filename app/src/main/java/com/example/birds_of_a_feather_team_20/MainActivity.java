@@ -18,6 +18,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
+import com.example.birds_of_a_feather_team_20.model.db.DBSession;
+import com.example.birds_of_a_feather_team_20.model.db.SessionDao;
+import com.example.birds_of_a_feather_team_20.model.db.SessionDatabase;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -25,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
 
     private NearbyManager nearbyManager;
     private String sessionName;
+
+    private SessionDatabase db;
+    private SessionDao sessionDao;
 
     public NearbyManager getNearbyManager() {
         return nearbyManager;
@@ -112,6 +119,11 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date date = new Date();
         sessionName = formatter.format(date);
+
+        db = SessionDatabase.singleton(this);
+        sessionDao = db.sessionDao();
+        DBSession dbSession = new DBSession(sessionName);
+        sessionDao.insert(dbSession);
     }
 
     public void onLaunchFavoritesClicked(View view) {

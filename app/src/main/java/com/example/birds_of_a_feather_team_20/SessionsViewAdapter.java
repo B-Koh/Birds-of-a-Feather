@@ -59,6 +59,7 @@ public class SessionsViewAdapter extends RecyclerView.Adapter<SessionsViewAdapte
             this.sessionName = itemView.findViewById(R.id.sessions_row_name);
             this.context = context;
             this.adapter = adapter;
+            itemView.setOnClickListener(this);
         }
 
         public void setSession(DBSession session) {

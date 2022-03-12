@@ -3,6 +3,7 @@ package com.example.birds_of_a_feather_team_20;
 import android.content.Intent;
 import android.os.Bundle;
 import android.se.omapi.Session;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +35,9 @@ public class ViewSessionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_sessions);
+        setTitle("Sessions List");
+
+        Log.i(this.getClass().getSimpleName(), "Viewing sessions..");
 
         db = SessionDatabase.singleton(this);
         sessionDao = db.sessionDao();
