@@ -22,6 +22,10 @@ public abstract class SessionDao {
     public abstract List<DBSession> getAll();
 
     @Transaction
+    @Query("SELECT * FROM DBProfile")
+    public abstract List<DBProfileWithCourses> getAllProfiles();
+
+    @Transaction
     @Query("SELECT * FROM DBSession WHERE sessionName=:sessionName")
     abstract DBSessionWithProfilesAndCourses getSessionWithProfilesAndCourses(String sessionName);
 
@@ -78,6 +82,17 @@ public abstract class SessionDao {
         //Log.e("getProfiles no error", "Target session found");
         //Log.e("getProfiles", "Target Session profile size is " + targetSession.profiles.size());
         for(DBProfileWithCourses profile:targetSession.profiles){
+            if(profile.dbProfile.isFavorite) profiles.add(profile.toProfile());
+        }
+
+        return profiles;
+    }
+
+    @Transaction
+    public List<Profile> getAllFavorites(){
+        List<Profile> profiles = new ArrayList<Profile>();
+
+        for(DBProfileWithCourses profile:getAllProfiles()){
             if(profile.dbProfile.isFavorite) profiles.add(profile.toProfile());
         }
 

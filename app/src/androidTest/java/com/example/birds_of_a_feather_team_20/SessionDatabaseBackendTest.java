@@ -93,6 +93,18 @@ public class SessionDatabaseBackendTest {
 
         assertEquals(1, sessionDao.getFavoritesInSession("testSession").size());
         assertEquals("Bill Clinton", sessionDao.getFavoritesInSession("testSession").get(0).getName());
+
+        DBSession testSession2 = new DBSession("testSession2");
+
+        Profile barackObama = new Profile("Barack Obama",
+                "https://upload.wikimedia.org/wikipedia/commons/8/8d/President_Barack_Obama.jpg",
+                "barackId");
+        barackObama.setFavorite();
+
+        sessionDao.insert(testSession2);
+        sessionDao.insertProfile("testSession2", barackObama);
+
+        assertEquals(2, sessionDao.getAllFavorites().size());
     }
 
     @Test
