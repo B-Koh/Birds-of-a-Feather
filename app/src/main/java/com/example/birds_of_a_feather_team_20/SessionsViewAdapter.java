@@ -71,19 +71,15 @@ public class SessionsViewAdapter extends RecyclerView.Adapter<SessionsViewAdapte
             this.session = session;
             this.sessionName.setText(session.getSessionName());
 
-            deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            deleteButton.setOnClickListener((view) ->{
+                SessionDatabase db = SessionDatabase.singleton(context);
+                SessionDao sd = db.sessionDao();
+                int index = sd.getAll().indexOf(session);
+                if (index == -1) return;
 
-                    SessionDatabase db = SessionDatabase.singleton(context);
-                    SessionDao sd = db.sessionDao();
-                    int index = sd.getAll().indexOf(session);
-                    if (index == -1) return;
-
-                    sd.delete(session.getSessionName());
-                    adapter.sessions = sd.getAll();
-                    adapter.notifyItemRemoved(index);
-                }
+                adapter.sessions = sd.getAll();
+                adapter.notifyItemRemoved(index);
+                sd.delete(session.getSessionName());
             });
         }
 
