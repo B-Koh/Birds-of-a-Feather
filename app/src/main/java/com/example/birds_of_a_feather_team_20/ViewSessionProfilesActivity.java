@@ -56,7 +56,8 @@ public class ViewSessionProfilesActivity extends AppCompatActivity {
     }
 
     public void onReturnToSessionsClicked(View view) {
-        Intent intent = new Intent(this, ViewSessionsActivity.class);
-        startActivity(intent);
+        finish();
+//        Intent intent = new Intent(this, ViewSessionsActivity.class);
+//        startActivity(intent);
     }
 }

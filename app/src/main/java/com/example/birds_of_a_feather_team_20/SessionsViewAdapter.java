@@ -12,7 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.birds_of_a_feather_team_20.model.db.Course;
+import com.example.birds_of_a_feather_team_20.model.db.CourseDatabase;
 import com.example.birds_of_a_feather_team_20.model.db.DBSession;
+import com.example.birds_of_a_feather_team_20.model.db.SessionDao;
+import com.example.birds_of_a_feather_team_20.model.db.SessionDatabase;
 
 import java.util.List;
 
@@ -51,12 +54,14 @@ public class SessionsViewAdapter extends RecyclerView.Adapter<SessionsViewAdapte
         private final TextView sessionName;
         private final Context context;
         private final SessionsViewAdapter adapter;
+        private final Button deleteButton;
 
         private DBSession session;
 
         ViewHolder(View itemView, Context context, SessionsViewAdapter adapter) {
             super(itemView);
             this.sessionName = itemView.findViewById(R.id.sessions_row_name);
+            this.deleteButton = itemView.findViewById(R.id.delete_session_button);
             this.context = context;
             this.adapter = adapter;
             itemView.setOnClickListener(this);
@@ -65,6 +70,21 @@ public class SessionsViewAdapter extends RecyclerView.Adapter<SessionsViewAdapte
         public void setSession(DBSession session) {
             this.session = session;
             this.sessionName.setText(session.getSessionName());
+
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    SessionDatabase db = SessionDatabase.singleton(context);
+                    SessionDao sd = db.sessionDao();
+                    int index = sd.getAll().indexOf(session);
+                    if (index == -1) return;
+
+                    sd.delete(session.getSessionName());
+                    adapter.sessions = sd.getAll();
+                    adapter.notifyItemRemoved(index);
+                }
+            });
         }
 
         @Override
