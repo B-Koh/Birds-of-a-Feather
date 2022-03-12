@@ -69,6 +69,7 @@
             android:layout_weight="1"
             android:background="#00FFFFFF"
             android:contentDescription="session tab"
+            android:onClick="onViewSessionsClicked"
             android:foreground="?android:attr/selectableItemBackground"
             android:padding="15dp"
             android:scaleType="fitCenter"
