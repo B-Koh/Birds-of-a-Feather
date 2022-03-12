@@ -18,6 +18,7 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -77,6 +78,13 @@ public class Profile {
 //        }
         // Otherwise, update just the URL.
         this.photoURL = photoURL;
+    }
+
+    public static HashMap<String, Bitmap> imageCache;
+    public static HashMap<String, Bitmap> getImageCache() {
+        if (imageCache == null)
+            imageCache = new HashMap<String, Bitmap>();
+        return imageCache;
     }
 
     /**
@@ -218,6 +226,11 @@ public class Profile {
             Log.e("Thumbnail", "The thumbnail didn't need to be fetched again.");
             return;
         }
+        if (getImageCache().containsKey(thisURL)) {
+            thumbnail = getImageCache().get(thisURL);
+            if (thumbnail != null)
+                return;
+        }
 
         // Download fullsized image, for compression
         Bitmap fullPhoto = getPhoto();
@@ -231,7 +244,10 @@ public class Profile {
 //        thumbnail = Bitmap.createScaledBitmap(fullPhoto, 256, 256, true);
         thumbnail = Utilities.rescaleBitmap(fullPhoto, 256, 256);
         lastDownloadedURL = thisURL;
+
+        getImageCache().put(thisURL, thumbnail);
     }
+
     public Bitmap getPrefetchedThumbnail() {
         return thumbnail;
     }
