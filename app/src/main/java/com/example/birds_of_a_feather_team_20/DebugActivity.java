@@ -133,4 +133,10 @@ public class DebugActivity extends AppCompatActivity {
     public void onLaunchFriendsClicked(View view) {
         finish();
     }
+
+    public void onViewSessionsClicked(View view) {
+        onLaunchFriendsClicked(view);
+        Intent intent = new Intent(this, ViewSessionsActivity.class);
+        startActivity(intent);
+    }
 }
