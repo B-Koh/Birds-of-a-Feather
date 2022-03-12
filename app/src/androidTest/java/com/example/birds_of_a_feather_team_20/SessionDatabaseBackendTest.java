@@ -224,6 +224,27 @@ public class SessionDatabaseBackendTest {
     }
 
     @Test
+    public void renameSession(){
+        DBSession testSession = new DBSession("testSession");
+
+        Profile billClinton = new Profile("Bill Clinton",
+                "https://upload.wikimedia.org/wikipedia/commons/d/d3/Bill_Clinton.jpg",
+                "billId");
+
+        sessionDao.insert(testSession);
+        sessionDao.insertProfile("testSession", billClinton);
+
+        assertEquals(0, sessionDao.getCoursesInProfile("testSession", "billId").size());
+
+        sessionDao.renameSession("testSession", "newTestSession");
+
+        assertNotEquals(null, sessionDao.getSession("newTestSession"));
+        assertEquals(null, sessionDao.getSession("testSession"));
+
+        assertEquals(1, sessionDao.getProfilesInSession("newTestSession").size());
+    }
+
+    @Test
     public void duplicateProfile(){
         DBSession testSession = new DBSession("testSession");
 

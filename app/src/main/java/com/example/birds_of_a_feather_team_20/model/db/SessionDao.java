@@ -214,7 +214,13 @@ public abstract class SessionDao {
 
         if(possibleDuplicateSession != null) return;
 
+        Log.e("rename", "getting to the rename");
+        deleteSession(targetSession.session);
+
         targetSession.session.sessionName = newName;
+        targetSession.session.setSessionName(newName);
+
+        insertSession(targetSession.session);
     }
 
     @Transaction
